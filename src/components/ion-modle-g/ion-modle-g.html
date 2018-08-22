@@ -1,0 +1,17 @@
+<div class="moudle5">
+  <div class="style1">
+    <h4 class="fz-32">{{title}}</h4>
+  </div>
+  <div class="product">
+    <ion-row wrap>
+      <ion-col tappable col-6 *ngFor="let p of param" (click)="goDetails()">
+         <img src="{{p.img}}">
+        <p>{{p.picTitle}}</p>
+        <div class="list-price buy">
+          <span class="price-new"><i>￥</i>{{p.newPrice}}</span>
+          <i class="del">￥<span>{{p.oldPrice}}</span></i>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</div>

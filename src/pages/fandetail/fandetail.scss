@@ -1,0 +1,34 @@
+page-fandetail {
+    #sub_header{
+        height: 4rem;
+        line-height: 4rem;
+        top:4.3rem;
+        width: 100%;
+        border-bottom:1px solid #eee;
+        background: #fff;
+        margin-top: 0.6rem;
+        div{
+            flex: 1;
+            text-align: center;
+        }
+    }
+    .img{
+        width: 60px;
+        height: 60px;
+        display: flex;
+        border-radius: 64%;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-top: 1.4rem;
+    }
+    .col-demo:focus{
+        color: rgb(98, 145, 233);
+        text-decoration: underline;
+        cursor:pointer;
+        border-bottom: 1px solid rgb(98, 145, 233);
+        margin-top:-0.5rem;
+        // -webkit-tap-highlight-color:rgb(90, 90, 95);
+    }
+
+}

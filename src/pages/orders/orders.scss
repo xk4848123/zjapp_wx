@@ -1,0 +1,58 @@
+page-orders {
+    #sub_header{
+        height: 4rem;
+        line-height: 3.5rem;
+        top:4.3rem;
+        width: 100%;
+        border-bottom:1px solid rgb(223, 221, 221);
+        background: #fff;
+        margin-top: -0.6rem;
+        div{
+            flex: 1;
+            text-align: center;
+        }
+    }
+    .col-demo:focus{
+        color: rgb(98, 145, 233);
+        text-decoration: underline;
+        cursor:pointer;
+        border-bottom: 1px solid rgb(98, 145, 233);
+        margin-top:-0.5rem;
+    }
+    .transition{
+        background-color: #eeeeee;
+        height: 1rem;
+    }    
+    .interval{
+        height: 4rem;
+        text-align: left;
+        text-indent: 1.5rem;
+        line-height: 4rem;
+        font-size: 1.8rem;
+      }
+      .col_2{
+        background-color: #ffffff;
+        padding: 1rem;
+        border-top: 0.2rem solid #ddd;
+        border-bottom: 0.2rem solid #ddd;
+        font-size: 1.2rem;
+      }
+      ion-grid img{
+        height: 10rem;
+        width: 10rem;
+        display: block;
+        margin: 0 auto;
+        float: left;
+    }
+    .hp{
+        font-size: 1.6rem;
+        margin-top: 0.8rem;
+        margin-left: 11rem;
+    }
+    .count{
+        text-align: center;
+        font-size: 1.6rem;
+        border-bottom: 0.2rem solid #ddd;
+    }
+
+}

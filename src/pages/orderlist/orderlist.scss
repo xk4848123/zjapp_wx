@@ -1,0 +1,58 @@
+page-orderlist {
+.address{
+    width:100%;
+    height:8rem;
+    background-color: #eeeeee;
+    border:0.2rem dashed rgb(207, 33, 33);
+    margin-top: 0.8rem;
+}
+.message{
+    font-size: 1.6rem;
+    color:#727171;
+    padding-top:2.2rem;
+    margin-top:-1rem;
+    margin-left:1rem;
+}
+.ordis{
+    width: 20px;
+    height: 8px; 
+     transform:skew(-30deg);   
+     -webkit-transform: skew(-30deg);   
+     -moz-transform: skew(-30deg);   
+     -o-transform:skew(-30deg);   
+     -ms-transform:skew(-30deg);  
+      background-color: rgb(107, 150, 230); 
+      margin: 50px auto; 
+}
+.col{
+    font-size: 1.6rem;
+    color:#727171;
+}
+span{
+    padding-left: 2rem;
+}
+.transition{
+    background-color: #eeeeee;
+    height: 1rem;
+}    
+.row{
+    margin-top: 1rem;
+}
+.col-cc{
+    padding:0.6rem;
+    width:7rem;
+     height:2.5rem; 
+     border: 0.1rem solid #bdbaba;
+     -moz-border-radius: 1.5rem; 
+    -webkit-border-radius: 1.5rem;   
+      border-radius:1.5rem; 
+      color: red;
+      background-color:#fff; 
+        
+}
+.md-happy{
+    color: rgb(109, 203, 247);
+    padding-right: 1rem;
+    font-size: 2.2rem;
+}
+}

@@ -1,0 +1,86 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-segment mode="md">
+          <ion-segment-button navPop class="t-title1">
+              <ion-icon class="t-back" ios="ios-arrow-back" md="md-arrow-back"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button class="t-title" value="one">
+            商品
+          </ion-segment-button>
+          <ion-segment-button class="t-title" value="two">
+            评价
+          </ion-segment-button>
+          <ion-segment-button class="t-title" value="three">
+            详情
+          </ion-segment-button>
+          <ion-segment-button class="t-title" (tap)="share()">
+            <ion-icon  class="t-share" ios="md-share" md="md-share"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="adv">
+        <ion-slides *ngIf="focusList.length>0" pager loop="true" autoplay="3000">    
+            <ion-slide style="height: 100%" *ngFor="let item of focusList">
+                <img [src]="config.domain+item" (click)="say()"/>
+            </ion-slide>         
+        </ion-slides>
+    </div>
+    <div class="tproduct" *ngIf="product">
+      <p>{{product.productname}}</p>
+      <span><em style="font-style: inherit;font-size: 0.01rem;padding-right: 0.17rem">¥</em>{{product.price}}</span>
+      <div>
+          <ul>
+              <li><ion-icon style="color:red" ios="ios-redBack"></ion-icon>{{product.elecnum/2}}</li>
+              <li>库存{{product.stocknum}}件</li>
+              <li *ngIf="product.placeofdelivery!=''; else chain">{{product.placeofdelivery}}</li>
+              <ng-template #chain>
+                  <li style="float: right">中国</li>
+              </ng-template>           
+          </ul>
+      </div>
+    </div>
+    <div class="tchoice" tappable (click)="choiceSpec()">
+      <ul>
+        <li>请选择分类</li>
+        <li><img src="assets/icon/youjiantou.png"/></li>
+      </ul>
+    </div>
+    <div class="tchoice">
+        <ul>
+          <li>商品评价</li>
+          <li><img src="assets/icon/youjiantou.png"/></li>
+        </ul>
+    </div>
+    <div class="tproductText">
+      <span>
+        <ion-icon ios="ios-arrow-round-down" md="ios-arrow-round-down"></ion-icon>
+        <ion-icon ios="ios-arrow-round-down" md="ios-arrow-round-down"></ion-icon>
+        商品详情
+        <ion-icon ios="ios-arrow-round-down" md="ios-arrow-round-down"></ion-icon>
+        <ion-icon ios="ios-arrow-round-down" md="ios-arrow-round-down"></ion-icon>
+      </span>
+    </div>
+    <div [innerHTML]="assembleHTML(productText)"></div>
+</ion-content>
+<ion-footer>
+    <ion-toolbar style="padding: 0">
+      <div>
+        <div class="tfoot-left">
+          <a class="tfoot1" (tap)="goTel()">
+            <i><ion-icon class="t-back" ios="ios-客服"></ion-icon></i>
+            <p>客服</p>
+          </a>
+          <a class="tfoot2" (tap)="goShop()">
+            <i><ion-icon class="t-back" ios="ios-购物车"></ion-icon></i>
+            <p>购物车</p>
+          </a>
+        </div>  
+        <div class="tfoot-right">
+          <button class="join" ion-button color="danger" (tap)="joinShop()">加入购物车</button>
+          <button class="buy" ion-button (tap)="goBuy()">立即购买</button>
+        </div>
+      </div>
+      </ion-toolbar>
+  </ion-footer>
