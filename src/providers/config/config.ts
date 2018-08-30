@@ -16,12 +16,12 @@ export class ConfigProvider {
   //  public domain="https://appnew.zhongjianmall.com";
 
   开发环境
-   public apiUrl="http://192.168.1.105:8080/zjapp/";
-   public domain="http://192.168.1.71";
+  //  public apiUrl="http://192.168.1.109:8080/zjapp/";
+  //  public domain="http://192.168.1.71";
 
   //测试环境
-  //  public apiUrl="http://192.168.1.71/zjapp/";
-  //  public domain="http://192.168.1.71";
+   public apiUrl="http://192.168.1.71/zjapp/";
+   public domain="http://192.168.1.71";
 
 
 }

@@ -27,6 +27,6 @@ export class SettingPage {
   }
   
   aboutUs(){
-    this.webLink.goWeb("www.hao123.com");
+    this.webLink.goWeb(this.config.domain + '/html/sysaticle.html?id=2');
   }
 }
