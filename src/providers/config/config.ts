@@ -11,19 +11,17 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ConfigProvider {
 
-  //api请求地址
-  //public apiUrl="http://39.108.159.135/";
-
+  // 正式环境
   //  public apiUrl="https://appnew.zhongjianmall.com/zjapp/";
   //  public domain="https://appnew.zhongjianmall.com";
 
-  //地址失效请访问 API 接口实时更新地址：https://www.itying.com/article-11.html
-  //  public apiUrl="http://atwh8i.natappfree.cc/zjapp/";
+  开发环境
    public apiUrl="http://192.168.1.105:8080/zjapp/";
    public domain="http://192.168.1.71";
-  //  public apiUrl="http://192.168.1.251:8080/zjapp/";
-  //  public domain="https://appnew.zhongjianmall.com";
-  //  public apiUrl="http://127.0.0.1:8080/zjapp/";
+
+  //测试环境
+  //  public apiUrl="http://192.168.1.71/zjapp/";
+  //  public domain="http://192.168.1.71";
 
 
 }

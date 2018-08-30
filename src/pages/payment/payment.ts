@@ -6,6 +6,7 @@ import { ToastProvider } from '../../providers/toast/toast';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess'
 import { WeblinkProvider } from '../../providers/weblink/weblink';
 import { WechatProvider } from '../../providers/wechat/wechat';
+import { ConfigProvider } from '../../providers/config/config';
 /**
  * Generated class for the PaymentPage page.
  *
@@ -30,7 +31,7 @@ export class PaymentPage {
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: HttpServicesProvider, private storage: StorageProvider,
-    private noticeSer: ToastProvider, private rloginprocess: RloginprocessProvider, private webLink: WeblinkProvider, private wechat: WechatProvider) {
+    private noticeSer: ToastProvider, private rloginprocess: RloginprocessProvider, private webLink: WeblinkProvider, private wechat: WechatProvider,private config: ConfigProvider) {
     if (this.navParams.get('data')) {
       let tempData = this.navParams.get('data');
       this.payPara.orderNo = tempData["orderNo"];
@@ -85,7 +86,7 @@ export class PaymentPage {
                 let orderNo = this.payPara.orderNo;
                 let realpay = this.payPara.realpay;
                 let orderType = this.payPara.orderType;
-                let web_url: string = "http://atwh8i.natappfree.cc/zjapp/wechat/wechatauth?token=" + token + "&orderno=" + orderNo + "&realpay=" + realpay + "&ordertype=" + orderType;
+                let web_url: string = this.config.domain +"/zjapp/wechat/wechatauth?token=" + token + "&orderno=" + orderNo + "&realpay=" + realpay + "&ordertype=" + orderType;
                 this.webLink.goWeb(web_url);
               }
             }
