@@ -103,7 +103,7 @@ export class AddbankacountPage {
     let topSet = ionList.offsetHeight;
     let originalHeight = cardDiv.offsetHeight;
     this.renderer2.setStyle(cardDiv, 'left', leftSet + 'px');
-    this.renderer2.setStyle(cardDiv, 'top', topSet+20 + 'px');
+    this.renderer2.setStyle(cardDiv, 'top', topSet-20 + 'px');
     this.renderer2.setStyle(cardDiv, 'height', originalHeight + 'px');
   }
   closeSelect(){

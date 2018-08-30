@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, IonicPage } from 'ionic-angular';
+import { NavController} from 'ionic-angular';
 
 import { ConfigProvider } from '../../providers/config/config';
 import { StorageProvider } from '../../providers/storage/storage';
 
-@IonicPage()
+
 @Component({
   selector: 'page-cart',
   templateUrl: 'cart.html'

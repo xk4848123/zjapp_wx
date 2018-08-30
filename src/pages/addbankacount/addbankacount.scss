@@ -15,7 +15,7 @@ page-addbankacount {
         position:absolute;
         bottom: 0;
         background: #FFFFFF;
-        padding: 0.2rem 1rem;
+        padding: 0.5rem 1rem 0.2rem 1rem;
         // margin: 1.2rem auto 8rem auto;
         border-radius: 0.8rem;
         z-index: 3;
@@ -34,6 +34,13 @@ page-addbankacount {
         text-align: center;
         height: 4rem;
         line-height: 4rem; 
+        // width: 80%;
+    }
+    .card-line-first{
+        text-align: center;
+        height: 4rem;
+        line-height: 4rem; 
+        font-size: 18px;
         // width: 80%;
     }
     .head-span{

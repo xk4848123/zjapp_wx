@@ -23,7 +23,6 @@ export class WithdrawaccountPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: HttpServicesProvider,
     private storage: StorageProvider, private noticeSer: ToastProvider, private config: ConfigProvider,private rlogin:RloginprocessProvider,private alertCtrl:AlertController) {
-    console.log('构造WithdrawaccountPage');
     this.callback = this.navParams.get('callback');
   }
 
@@ -66,7 +65,7 @@ export class WithdrawaccountPage {
   }
 
   carryBank(key){
-    this.callback({type: 2,data: this.bankacounts[key]}).then(()=>{ this.navCtrl.pop() });
+    this.callback({type: 3,data: this.bankacounts[key]}).then(()=>{ this.navCtrl.pop() });
   }
 
   deleteAliAcount(key){

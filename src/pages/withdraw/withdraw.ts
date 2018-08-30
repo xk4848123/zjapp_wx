@@ -63,6 +63,7 @@ export class WithdrawPage {
   }
  
   tx(){
+   
     if(!this.obj){
       this.noticeSer.showToast('请选择提现账号');
       return;
@@ -73,12 +74,11 @@ export class WithdrawPage {
     }
     let token = this.storage.get('token');
     let api = 'v1/PersonalCenter/TxElecNum/' + token;
-    if(this.obj['type'] == 1){
       this.httpService.doFormPost(
         api
         ,{
         money: this.txmoney,
-        txType: 1,
+        txType: this.obj['type'],
         cardNo: this.obj['data'].account,
         trueName: this.obj['data'].name,
         },
@@ -86,7 +86,7 @@ export class WithdrawPage {
          if (res.error_code == 0) {
           this.noticeSer.showToast('提交成功，等待工作人员处理');
           //跳转至现金币记录页面
-
+          this.navCtrl.pop();
          } else if (res.error_code == 3) {
            //抢登处理
            this.rlogin.rLoginProcess(this.navCtrl);
@@ -98,7 +98,6 @@ export class WithdrawPage {
            this.noticeSer.showToast(res.error_message);
          }
        });
-    }
   }
 
   verifyPayPassword(payPassword){
