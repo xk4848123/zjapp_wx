@@ -30,7 +30,7 @@
           <dl class="cart_list" *ngFor="let item of p.productList">
               <dt>
                 <ion-checkbox color="danger" [(ngModel)]="item.checked" (ionChange)="changeCarts()"></ion-checkbox>
-                <img [src]="config.picUrl+item.product.productphotos[0].photo" />
+                <img [src]="config.domain+item.product.productphotos[0].photo" />
               </dt>      
               <dd>
                   <h2 class="cart_title">{{item.product.productname}}</h2>

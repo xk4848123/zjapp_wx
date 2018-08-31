@@ -59,8 +59,6 @@ import { FandetailPageModule } from '../pages/fandetail/fandetail.module';
 //全部订单
 import { OrdersPageModule} from '../pages/orders/orders.module';
 
-import { OrderPageModule} from '../pages/order/order.module';
-
 import { OrderlistPageModule} from '../pages/orderlist/orderlist.module';
 
 import { RechargePageModule } from '../pages/recharge/recharge.module';
@@ -85,32 +83,22 @@ import { ConfigProvider } from '../providers/config/config';
 import { HttpServicesProvider } from '../providers/http-services/http-services';
 
 import { StorageProvider } from '../providers/storage/storage';
-import { ToolsProvider } from '../providers/tools/tools';
 import { ThemeableBrowser} from '@ionic-native/themeable-browser';
 import { AlertProvider } from '../providers/alert/alert';
 import { ClearloginProvider } from '../providers/clearlogin/clearlogin';
-import { Camera } from '@ionic-native/camera';
-import { ImagePicker } from '@ionic-native/image-picker';
-import {File} from '@ionic-native/file';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
-import { ImgProvider } from '../providers/img/img';
 import { ToastProvider } from '../providers/toast/toast';
 import { RloginprocessProvider } from '../providers/rloginprocess/rloginprocess';
-// import { Alipay } from '@ionic-native/alipay';
 /**商品详情 */
 import { ProductDetailPageModule } from "../pages/product-detail/product-detail.module";
 import { PaysuccessPageModule } from "../pages/paysuccess/paysuccess.module";
 import { ElectransferPageModule } from "../pages/electransfer/electransfer.module";
 import { CallcenterPageModule } from "../pages/callcenter/callcenter.module";
-/**modal弹出框 */
-// import { isPartMatch } from '../../node_modules/ionic-angular/umd/navigation/url-serializer';
 /**分享 */
 import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
 //组件
 import { CarModalComponent } from '../components/car-modal/car-modal'; 
 import { ConfirmOrderPageModule } from '../pages/confirm-order/confirm-order.module';
-import { CarModalComponent } from '../components/car-modal/car-modal';
 import { WechatProvider } from '../providers/wechat/wechat';
 import { WeblinkProvider } from '../providers/weblink/weblink';
 import { VerifypasswordProvider } from '../providers/verifypassword/verifypassword';
@@ -151,7 +139,6 @@ import { VerifypasswordProvider } from '../providers/verifypassword/verifypasswo
     MywalletPageModule,
     FandetailPageModule,
     OrdersPageModule,
-    OrderPageModule,
     RechargePageModule,
     VippresentPageModule,
     VippresentdetailPageModule,
@@ -203,16 +190,9 @@ import { VerifypasswordProvider } from '../providers/verifypassword/verifypasswo
     ConfigProvider,
     HttpServicesProvider,
     StorageProvider,
-    ToolsProvider,
     ThemeableBrowser,
     AlertProvider,
     ClearloginProvider,
-    Camera,
-    ImagePicker,
-    File,
-    FileTransferObject,
-    FileTransfer,
-    ImgProvider,
     ToastProvider,
     RloginprocessProvider,
     AppshareProvider,

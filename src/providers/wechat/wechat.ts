@@ -1,4 +1,4 @@
-///<reference path="../../jsservices/jweixin.d.ts"/>
+///<reference path="../../services/jweixin.d.ts"/>
 import { Injectable } from '@angular/core';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 /*
