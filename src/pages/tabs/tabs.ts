@@ -8,7 +8,6 @@ import {UserPage } from '../../pages/user/user';
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-
   tab1Root = HomePage;
   tab2Root = CategoryPage;
   tab3Root = CartPage;
@@ -16,5 +15,8 @@ export class TabsPage {
 
   constructor() {
 
+  }
+  ionViewDidLoad() {
+    
   }
 }

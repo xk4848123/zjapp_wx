@@ -27,6 +27,7 @@
     "@ionic-native/file": "^4.11.0",
     "@ionic-native/file-transfer": "^4.11.0",
     "@ionic-native/image-picker": "^4.11.0",
+    "@ionic-native/keyboard": "^4.12.0",
     "@ionic-native/splash-screen": "4.9.1",
     "@ionic-native/status-bar": "4.9.1",
     "@ionic-native/themeable-browser": "^4.10.1",
@@ -44,5 +45,9 @@
     "@ionic/app-scripts": "3.1.10",
     "typescript": "~2.6.2"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "cordova": {
+    "platforms": [],
+    "plugins": {}
+  }
 }

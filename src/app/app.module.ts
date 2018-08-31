@@ -108,11 +108,12 @@ import { CallcenterPageModule } from "../pages/callcenter/callcenter.module";
 import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
 //组件
+import { CarModalComponent } from '../components/car-modal/car-modal'; 
+import { ConfirmOrderPageModule } from '../pages/confirm-order/confirm-order.module';
 import { CarModalComponent } from '../components/car-modal/car-modal';
 import { WechatProvider } from '../providers/wechat/wechat';
 import { WeblinkProvider } from '../providers/weblink/weblink';
 import { VerifypasswordProvider } from '../providers/verifypassword/verifypassword';
-
 @NgModule({
   declarations: [
     MyApp,
@@ -161,6 +162,7 @@ import { VerifypasswordProvider } from '../providers/verifypassword/verifypasswo
     AddaliacountPageModule,
     AddbankacountPageModule,
     OrderlistPageModule,
+    ConfirmOrderPageModule,
     PaysuccessPageModule,
     MoneyrecordPageModule,
     ElectransferPageModule,

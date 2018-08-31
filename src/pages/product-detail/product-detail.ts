@@ -9,6 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';/*转译html标签*/
 // import { CartPage } from '../cart/cart';
 import { CarModalComponent } from '../../components/car-modal/car-modal';
 import { ShareComponent } from '../../components/share/share';
+import { TabsPage } from '../tabs/tabs';
 @IonicPage()
 @Component({
   selector: 'page-product-detail',
@@ -19,14 +20,22 @@ export class ProductDetailPage {
   public product :(any);
   public productText :(string);
   public focusList=[];  /*数组 轮播图*/
+  public starList=[];/**星星个数 */
+  public comment :(string);
+  public commentDetail:(any);
   constructor(public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App) {
     this.id = navParams.get("id");
-    this.getFocus();
-    this.getPicText();
+    if(this.id==undefined){
+      this.app.getRootNav().push(TabsPage);
+    }else{
+      this.getFocus();
+      this.getPicText();
+    }
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProductDetailPage');
   }
+  /**获取商品详情 */
   getFocus(){
     var api = "v1/ProductManager/getProductDetails";
     var param = {"productId":this.id};
@@ -36,10 +45,32 @@ export class ProductDetailPage {
         return;
       }
       this.product = data.data.product;
+      console.log(this.product);
+      this.commentDetail = data.data.productComment;
+      if(this.commentDetail==null){
+        this.commentDetail={
+          "id": -1,
+          "createtime": "",
+          "memo": "还没有人评价呢，快来评价吧！",
+          "star": 0,
+          "productCommentPhotos": []
+        } 
+      }
+      this.comment = this.commentDetail.memo;
+      if(this.comment.length>42){
+        this.comment = this.comment.substring(0,41)+"...";
+      }
+      for(let i=0;i<this.commentDetail.star;i++){
+        this.starList.push(1);
+      }
       for(let i=0;i<data.data.product.productphotos.length;i++){
         this.focusList.push(data.data.product.productphotos[i].photo);
       }
     },param)
+  }
+  /**获取评论用户信息 */
+  getUserInfo(){
+
   }
   /*获取图文详情*/
   getPicText(){
@@ -80,7 +111,9 @@ export class ProductDetailPage {
   }
   /**跳转购物车 */
   goShop(){
-    this.navCtrl.push('CartPage');
+    this.navCtrl.push('CartPage',{
+      "isIndex":false
+    });
   }
   /**加入购物车 */
   joinShop(){
@@ -88,7 +121,9 @@ export class ProductDetailPage {
   }
   /**立即购买 */
   goBuy(){
-    this.alertProvider.showAlertM(CarModalComponent,this.product);
+    this.alertProvider.showAlertM(CarModalComponent,{
+      "product":this.product
+    });
   }
   choiceSpec(){
     this.alertProvider.showAlertM(CarModalComponent,this.product);

@@ -21,6 +21,7 @@ export class ConfigProvider {
 
   //测试环境
    public apiUrl="http://192.168.1.71/zjapp/";
+   public picUrl="http://192.168.1.71";
    public domain="http://192.168.1.71";
 
 
