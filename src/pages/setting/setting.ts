@@ -20,7 +20,9 @@ export class SettingPage {
 
   public UpdatepasswordPage='UpdatepasswordPage';
 
-  public AddressPage='AddressPage';
+  public AddressPage = 'AddressPage';
+
+  // public AddressPage='AddressPage';
 
   constructor(public navCtrl: NavController, private webLink: WeblinkProvider, public config: ConfigProvider) {
 
@@ -29,4 +31,5 @@ export class SettingPage {
   aboutUs(){
     this.webLink.goWeb(this.config.domain + '/html/sysaticle.html?id=2');
   }
+
 }

@@ -23,5 +23,17 @@ export class ConfigProvider {
    public apiUrl="http://192.168.1.71/zjapp/";
    public domain="http://192.168.1.71";
 
+   public static isLoadWxConfig = 0;
+
+   public static setWxConfig(){
+     this.isLoadWxConfig = 1;
+   } 
+   public static isloadWxConfig() :boolean{
+     if(this.isLoadWxConfig = 1){
+       return true;
+     }else{
+       return false;
+     }
+   }
 
 }

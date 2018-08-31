@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
+import { AddressmodelComponent } from './addressmodel/addressmodel';
 
 @NgModule({
-	declarations: [	
+	declarations: [AddressmodelComponent	
     ],
 	imports: [
 		
 	],
-	exports: [
+	exports: [AddressmodelComponent
 		
     ]
 })

@@ -5,6 +5,7 @@ import { ToastProvider } from '../../providers/toast/toast';
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
+
 @IonicPage()
 @Component({
   selector: 'page-personal',
@@ -26,7 +27,7 @@ export class PersonalPage {
   }
 
   ionViewDidLoad() {
-
+    
   }
 
   ionViewWillEnter() {

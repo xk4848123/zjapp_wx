@@ -15,18 +15,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class OperateaddressPage {
 
-  title:string;
+  title: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    if(this.navParams.get('id')){
+
+    if (this.navParams.get('id')) {
       this.title = '编辑地址';
-    }else{
+    } else {
       this.title = '添加新地址';
     }
-  }
-
-  ionViewDidLoad() {
-   
   }
 
 }

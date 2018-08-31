@@ -17,19 +17,19 @@
     <ion-list>
         <ion-item>
           <ion-label>收货人：</ion-label>
-          <ion-input type="text" [(ngModel)]="name"></ion-input>
+          <ion-input type="text" [(ngModel)]="name" placeholder="请输入姓名"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label>手&nbsp;机：</ion-label>
-          <ion-input type="number" [(ngModel)]="phoneNum"></ion-input>
+          <ion-input type="number" [(ngModel)]="phoneNum" placeholder="请输入手机号"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label>地&nbsp;区：</ion-label>
-            <ion-input type="number" [(ngModel)]="bankacount"></ion-input>
+            <ion-input type="text" [(ngModel)]="address" placeholder="请选择地区"></ion-input>
           </ion-item>
           <ion-item>
               <ion-label>地&nbsp;址：</ion-label>
-              <ion-input type="text" [(ngModel)]="phoneNum"></ion-input>
+              <ion-input type="text" [(ngModel)]="addressDetail" placeholder="街道号、楼牌号等"></ion-input>
             </ion-item>
       </ion-list>
 </ion-content>

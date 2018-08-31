@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController} from 'ionic-angular';
-
-
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 
@@ -24,8 +22,8 @@ export class CategoryPage {
   }
 
   ionViewWillEnter(){
-    //  console.log("2.0 ionViewWillEnter 顾名思义，当将要进入页面时触发 每次触发");
     this.getLeftCateData();/*左侧分类*/
+    
 
 }
   //左侧分类的方法

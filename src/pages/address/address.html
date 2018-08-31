@@ -9,15 +9,10 @@
     <ion-title>我的收货地址</ion-title>
     <div style="float:right;" (tap)="addOrEdit()">
       添加新地址
-    </div>
-
+   </div>
   </ion-navbar>
-
 </ion-header>
-
 <ion-content>
-
-
   <ion-list>
     <ion-item *ngFor="let item of datas" (tap)="backWithAdrress(item.Id)">
       <ion-avatar item-start>
