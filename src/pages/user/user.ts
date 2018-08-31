@@ -1,5 +1,5 @@
 import { Component, Renderer2, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
 import { StorageProvider } from '../../providers/storage/storage';
 
@@ -12,6 +12,7 @@ import { ClearloginProvider } from '../../providers/clearlogin/clearlogin';
 import { ConfigProvider } from '../../providers/config/config';
 
 import { ToastProvider } from '../../providers/toast/toast';
+import { NgIf } from '@angular/common';
 /**
  * Generated class for the UserPage page.
  *
@@ -19,7 +20,6 @@ import { ToastProvider } from '../../providers/toast/toast';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-user',
   templateUrl: 'user.html',
@@ -93,9 +93,35 @@ export class UserPage {
         type:'all'
       });
     }
+    if(moduleName == 'wporders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wp'
+      });
+    }
+    if(moduleName == 'wsorders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'ws'
+      });
+    }
+    if(moduleName == 'wrorders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wr'
+      });
+    }
+    if(moduleName == 'wcorders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wc'
+      });
+    }
     if(moduleName == 'vippresent'){
       this.navCtrl.push('VippresentPage');
     }
+    if(moduleName == 'callcenter'){
+      this.navCtrl.push('CallcenterPage');
+    }
+    // if(moduleName == 'paysuccesspage'){
+    //   this.navCtrl.push('PaysuccessPage');
+    // }
     //特殊的申请代理
     if(moduleName == 'proxyApply'){
       if(this.userInfo['personDataMap'].Lev==3 || (this.userInfo['personDataMap'].Lev==2 && this.userInfo['personDataMap'].IsSubProxy == 1)){
@@ -191,7 +217,6 @@ export class UserPage {
             this.canAgentApply = false;
             this.isAgentApply = true;
           }
-          console.log(this.isAgentApply);
           //实名认证栏目设置
           if(this.userInfo['isAlreadyAuth']){
             this.isAuth=true;
@@ -242,7 +267,7 @@ export class UserPage {
   // }
   // ionViewWillUnload(){
   //    console.log("6.0 ionViewWillUnload 当页面将要销毁同时页面上元素移除   时触发");
-
+  // }
 
   // }
   // ionViewCanEnter(){

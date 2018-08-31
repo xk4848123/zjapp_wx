@@ -2,7 +2,7 @@ page-setting{
 .card-div{
     background: #FFFFFF;
     padding: 0.2rem 1rem;
-    margin: 1.2rem 0.8rem 8rem 0.8rem;
+    margin: 1.2rem 0.8rem 5rem 0.8rem;
     border-radius: 0.8rem;
 }
 .card-line{
@@ -26,5 +26,9 @@ page-setting{
 .content-span{
     position: absolute;
     right:1.5rem;
+}
+.tip{
+    text-indent: 1em;
+    color: red;
 }
 }

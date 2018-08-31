@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, IonicPage } from 'ionic-angular';
+import { NavController} from 'ionic-angular';
 
 
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 
-@IonicPage()
 @Component({
   selector: 'page-category',
   templateUrl: 'category.html'

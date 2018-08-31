@@ -53,21 +53,29 @@ export class HomePage {
   
 
   constructor(public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider,private noticeSer: ToastProvider) {
-    this.testParams = [{"type":1,"sort":1,"title":"促/销/专/区","content1":{"pic":"assets/imgs/mod2.png","picType":1,"picUrl":""}},
-                       {"type":2,"sort":2,"title":"","content1":{"pic":"assets/imgs/modb1.png","picType":2,"picUrl":""},
-                       "content2":{"pic":"assets/imgs/modb2.png","picType":2,"picUrl":""},
-                       "content3":{"pic":"assets/imgs/modb3.png","picType":2,"picUrl":""}},
-                       {"type":3,"sort":3,"title":"畅/享/美/食","content1":{"pic":"assets/imgs/modc1.jpeg","picType":2,"picUrl":""},
-                      "content2":{"pic":"assets/imgs/modc2.jpeg","picType":2,"picUrl":""}},
-                      {"type":1,"sort":4,"title":"活/力/无/限","content1":{"pic":"assets/imgs/mod2.png","picType":1,"picUrl":""}},
-                      {"type":4,"sort":5,"title":"有/机/食/品","content1":{"pic":"assets/imgs/modb2.png","picType":2,"picUrl":""},
-                      "content2":{"pic":"assets/imgs/modb3.png","picType":2,"picUrl":""},
-                      "content3":{"pic":"assets/imgs/modb1.png","picType":2,"picUrl":""}},
-                      {"type":5,"sort":6,"title":"你/会/喜/欢","content1":{"pic":"assets/imgs/product2.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content2":{"pic":"assets/imgs/product1.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content3":{"pic":"assets/imgs/product3.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content4":{"pic":"assets/imgs/product4.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200}}
-                    ];
+   this.testParams = [{ "type": 1, "sort": 1, "title": "促/销/专/区", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 2, "sort": 2, "title": "", "content1": { "pic": "assets/imgs/modb1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modb2.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modb3.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
+    },
+    { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 5, "sort": 6, "title": "你/会/喜/欢", "content1": { "pic": "assets/imgs/product2.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content2": { "pic": "assets/imgs/product1.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content3": { "pic": "assets/imgs/product3.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content4": { "pic": "assets/imgs/product4.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 }
+    }
+    ];
     this.getindex();
   }
   ionViewWillEnter(){
@@ -191,21 +199,29 @@ export class HomePage {
   }
   //下拉刷型界面
 doRefresh($event){
-  this.testParams = [{"type":1,"sort":1,"title":"促/销/大/专/区","content1":{"pic":"assets/imgs/mod2.png","picType":1,"picUrl":""}},
-                       {"type":2,"sort":2,"title":"","content1":{"pic":"assets/imgs/modb1.png","picType":2,"picUrl":""},
-                       "content2":{"pic":"assets/imgs/modb2.png","picType":2,"picUrl":""},
-                       "content3":{"pic":"assets/imgs/modb3.png","picType":2,"picUrl":""}},
-                       {"type":3,"sort":3,"title":"畅/享/美/食","content1":{"pic":"assets/imgs/modc1.jpeg","picType":2,"picUrl":""},
-                      "content2":{"pic":"assets/imgs/modc2.jpeg","picType":2,"picUrl":""}},
-                      {"type":1,"sort":4,"title":"活/力/无/限","content1":{"pic":"assets/imgs/mod2.png","picType":1,"picUrl":""}},
-                      {"type":4,"sort":5,"title":"有/机/食/品","content1":{"pic":"assets/imgs/modb2.png","picType":2,"picUrl":""},
-                      "content2":{"pic":"assets/imgs/modb3.png","picType":2,"picUrl":""},
-                      "content3":{"pic":"assets/imgs/modb1.png","picType":2,"picUrl":""}},
-                      {"type":5,"sort":6,"title":"你/会/喜/欢","content1":{"pic":"assets/imgs/product2.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content2":{"pic":"assets/imgs/product1.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content3":{"pic":"assets/imgs/product3.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content4":{"pic":"assets/imgs/product4.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200}}
-                    ];
+  this.testParams = [{ "type": 1, "sort": 1, "title": "促/销/专/区", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 2, "sort": 2, "title": "", "content1": { "pic": "assets/imgs/modb1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modb2.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modb3.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
+    },
+    { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 5, "sort": 6, "title": "你/会/喜/欢", "content1": { "pic": "assets/imgs/product2.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content2": { "pic": "assets/imgs/product1.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content3": { "pic": "assets/imgs/product3.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content4": { "pic": "assets/imgs/product4.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 }
+    }
+    ];
   this.getindex();
   this.get();
   setTimeout(() => { 

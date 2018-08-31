@@ -1,17 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
 import { StorageProvider } from '../../providers/storage/storage';
-
 import { ToastProvider } from '../../providers/toast/toast';
-
 import { ImgProvider } from '../../providers/img/img';
-
 import { ConfigProvider } from '../../providers/config/config';
-
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
-import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess'
-
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 @IonicPage()
 @Component({
   selector: 'page-personal',
@@ -20,21 +14,20 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
 export class PersonalPage {
 
   public userInfo = {
-    userName:'',
-    nickName:'',
-    beInviteCode:'',
-    headPhoto:''
+    userName: '',
+    nickName: '',
+    beInviteCode: '',
+    headPhoto: ''
   }
 
   public test = '';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, private noticeSer: ToastProvider,
-    private imgSer: ImgProvider, private config: ConfigProvider, public httpService: HttpServicesProvider,private rlogin:RloginprocessProvider) {
+    private imgSer: ImgProvider, private config: ConfigProvider, public httpService: HttpServicesProvider, private rlogin: RloginprocessProvider) {
   }
 
   ionViewDidLoad() {
     this.initImgSer();
-    
   }
 
   ionViewWillEnter() {
@@ -60,7 +53,7 @@ export class PersonalPage {
   refreshUser() {
     let token = this.storage.get('token');
     if (token) {
-      let api = 'v1/PersonalCenter/initPersonalCenterData/' + token;
+      let api = 'v1/PersonalCenter/GetPersonalInfo/' + token;
       this.httpService.requestData(api, (data) => {
         if (data.error_code == 0) {//请求成功
           let tempData = data.data;
@@ -87,7 +80,7 @@ export class PersonalPage {
         this.noticeSer.showToast('更新头像成功');
       } else if (res.error_code == 3) {//token过期
         this.rlogin.rLoginProcess(this.navCtrl);
-      }else {
+      } else {
         this.noticeSer.showToast('错误：上传失败！' + res.error_message);
       }
     });

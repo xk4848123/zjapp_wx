@@ -94,16 +94,18 @@ page-user {
      
       }
       .rank{
-        font-size: 0.006rem;
+        height: 18px;
+        line-height: 18px;
+        font-size: 14px;
         word-break:keep-all;             /* 不换行 */
         white-space:nowrap;            /* 不换行 */
         position:absolute;
         background-color: #FF9900;
-        padding: 0.1rem;
-        width: 3.8rem;
+        width: 58px;
         text-align: center;
-        top:5rem;
-        left: 1.25rem;
+        bottom:1.5px;
+        left: 7px;
+        padding: 1px;
         border-radius: 0.5rem;
     
       }
@@ -112,8 +114,8 @@ page-user {
         background:url('../assets/imgs/usercenter.png');
       }
       .headimg{
-          height: 6rem;
-          width: 6rem;
+          height: 72px;
+          width: 72px;
           border: 0.2rem solid #ddd;
           border-radius: 50%;
       }
