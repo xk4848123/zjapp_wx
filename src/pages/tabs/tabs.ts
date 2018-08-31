@@ -5,7 +5,6 @@ import {HomePage } from '../../pages/home/home';
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-
   tab1Root = HomePage;
   tab2Root = 'CategoryPage';
   tab3Root = 'CartPage';
@@ -13,5 +12,8 @@ export class TabsPage {
 
   constructor() {
 
+  }
+  ionViewDidLoad() {
+    
   }
 }

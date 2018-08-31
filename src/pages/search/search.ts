@@ -77,10 +77,6 @@ export class SearchPage {
           if(infiniteScroll){
             //告诉ionic 请求数据完成
             infiniteScroll.complete();    
-            //  /*没有数据停止上拉更新*/
-            //  if(data.result<10){
-            //     this.hasData=false; 
-            //  }
           }
       })
   } 

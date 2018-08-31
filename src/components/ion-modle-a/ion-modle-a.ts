@@ -11,7 +11,19 @@ export class IonModleAComponent {
   constructor() {
    
   }
+  /**初始化 */
   ngOnInit(){
+    this.img = this.params[1];
+    this.title = this.params[0];
+    this.sort = this.params[2];
+    if(this.title==''){
+      let titleDom = document.querySelectorAll(".dis");
+      let titleDom1 = titleDom[this.sort-1].querySelectorAll(".style1");
+      titleDom1[0]['style'].display = "none";
+    }
+  }
+  /**参数改变 */
+  ngOnChanges(){
     this.img = this.params[1];
     this.title = this.params[0];
     this.sort = this.params[2];

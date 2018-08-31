@@ -102,6 +102,8 @@ import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
 //组件
 import { CarModalComponent } from '../components/car-modal/car-modal'; 
+//确认订单
+import { ConfirmOrderPageModule } from '../pages/confirm-order/confirm-order.module';
 @NgModule({
   declarations: [
     MyApp,
@@ -148,6 +150,7 @@ import { CarModalComponent } from '../components/car-modal/car-modal';
     AddaliacountPageModule,
     AddbankacountPageModule,
     OrderlistPageModule,
+    ConfirmOrderPageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
       tabsHideOnSubPages: 'true', //隐藏全部子页面 tabs

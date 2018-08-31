@@ -19,6 +19,7 @@ export class ConfigProvider {
 
   //地址失效请访问 API 接口实时更新地址：https://www.itying.com/article-11.html
    public apiUrl="http://192.168.1.71/zjapp/";
+   public picUrl="http://192.168.1.71";
    public domain="http://192.168.1.71";
 
   //  public apiUrl="http://127.0.0.1:8080/zjapp/";
