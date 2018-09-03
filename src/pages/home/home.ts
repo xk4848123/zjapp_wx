@@ -63,7 +63,7 @@ export class HomePage {
       "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
       "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
     },
-    { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    // { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
     {
       "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
       "content2": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" },
@@ -209,11 +209,11 @@ doRefresh($event){
       "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
       "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
     },
-    { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    // { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
     {
-      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
-      "content2": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" },
-      "content3": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" }
+      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" }
     },
     {
       "type": 5, "sort": 6, "title": "你/会/喜/欢", "content1": { "pic": "assets/imgs/product2.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
