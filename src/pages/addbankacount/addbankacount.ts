@@ -1,5 +1,5 @@
 import { Component, Renderer2, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { StorageProvider } from '../../providers/storage/storage';
 import { ToastProvider } from '../../providers/toast/toast';

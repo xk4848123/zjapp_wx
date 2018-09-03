@@ -102,6 +102,7 @@ import { ConfirmOrderPageModule } from '../pages/confirm-order/confirm-order.mod
 import { WechatProvider } from '../providers/wechat/wechat';
 import { WeblinkProvider } from '../providers/weblink/weblink';
 import { VerifypasswordProvider } from '../providers/verifypassword/verifypassword';
+import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
 @NgModule({
   declarations: [
     MyApp,
@@ -117,14 +118,14 @@ import { VerifypasswordProvider } from '../providers/verifypassword/verifypasswo
     HomePage,
     CategoryPage,
     CartPage,
-    UserPage
+    UserPage,
+    AddressmodelComponent
     
   ],
   imports: [
     BrowserModule,
     HttpModule, JsonpModule,
     ProductDetailPageModule,
- 
     LoginPageModule,
     RegisterPageModule,
     RegistersignPageModule,
@@ -180,8 +181,8 @@ import { VerifypasswordProvider } from '../providers/verifypassword/verifypasswo
     HomePage,
     CategoryPage,
     CartPage,
-    UserPage
-
+    UserPage,
+    AddressmodelComponent
   ],
   providers: [  /*引入了自定义的服务*/
     // StatusBar,

@@ -12,7 +12,6 @@ import { ClearloginProvider } from '../../providers/clearlogin/clearlogin';
 import { ConfigProvider } from '../../providers/config/config';
 
 import { ToastProvider } from '../../providers/toast/toast';
-import { NgIf } from '@angular/common';
 /**
  * Generated class for the UserPage page.
  *
@@ -56,12 +55,7 @@ export class UserPage {
     }, 1000);
     this.refreshUser();
   }
-  ionViewDidLoad() {
-    // console.log("1.0 ionViewDidLoad 当页面加载的时候触发，仅在页面创建的  时候触发一次，如果被缓存了，那么下次再打开这个页面则不会触发");
-    setTimeout(() => {
-      this.setDot();
-    }, 100);
-  }
+
   ionViewWillEnter() {
     if (!this.isFirst) {
       this.refreshUser();
