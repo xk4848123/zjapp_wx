@@ -17,11 +17,7 @@ export class IndexAdvPage {
   getFocus(){
     this.focusList=[
       {img:'assets/imgs/1.png'},
-      {img:'assets/imgs/2.png'},
-      {img:'assets/imgs/3.png'},
-      {img:'assets/imgs/4.jpg'},
-      {img:'assets/imgs/5.png'},
-      {img:'assets/imgs/6.png'}
+      {img:'assets/imgs/2.png'}
     ];
   }
 }
