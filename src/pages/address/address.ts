@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StorageProvider } from '../../providers/storage/storage';
 import { ToastProvider } from '../../providers/toast/toast';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
-import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess'
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 /**
  * Generated class for the AddressPage page.
  *

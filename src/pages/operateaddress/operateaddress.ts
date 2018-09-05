@@ -56,7 +56,7 @@ export class OperateaddressPage {
 
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     if (this.navParams.get('id')) {
       this.title = '编辑地址';
       this.type = 1;
@@ -115,7 +115,30 @@ export class OperateaddressPage {
   }
 
   save() {
-
+    if (!this.name) {
+      this.noticeSer.showToast('姓名不可为空');
+      return;
+    }
+    if (!this.phoneNum) {
+      this.noticeSer.showToast('手机号不可为空');
+      return;
+    }
+    if (!this.addressModal.provinceId) {
+      this.noticeSer.showToast('地区请选择完整');
+      return;
+    }
+    if (!this.addressModal.cityId) {
+      this.noticeSer.showToast('地区请选择完整');
+      return;
+    }
+    if (!this.addressModal.regionId) {
+      this.noticeSer.showToast('地区请选择完整');
+      return;
+    }
+    if (!this.addressDetail) {
+      this.noticeSer.showToast('请输入详细地址');
+      return;
+    }
     let token = this.storage.get('token');
     let isDefault = 0;
     if (this.isDefault) {

@@ -31,7 +31,8 @@ export class WechatProvider {
             'onMenuShareQQ',
             'onMenuShareQZone',
             'uploadImage',  //上传图片
-            'chooseWXPay'
+            'chooseWXPay',
+            'chooseImage'
           ]
         });
       }, { url: url });

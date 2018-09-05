@@ -119,7 +119,7 @@
           <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
         </div>
         <div class="line-div"></div>
-        <div class="card-line" *ngIf="userInfo.personDataMap.Lev == 3">
+        <div class="card-line" *ngIf="userInfo.personDataMap.Lev == 3" (tap)="viewSplit()">
             <img  src="assets/imgs/shunt.png">
             <span class="head-span">分流额度</span>
             <span class="content-span">{{userInfo.personDataMap.RemainStream}}</span>

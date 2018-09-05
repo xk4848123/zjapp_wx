@@ -113,13 +113,16 @@ export class UserPage {
     if(moduleName == 'callcenter'){
       this.navCtrl.push('CallcenterPage');
     }
+    if(moduleName == 'certification'){
+      this.navCtrl.push('CertificationPage');
+    }
     // if(moduleName == 'paysuccesspage'){
     //   this.navCtrl.push('PaysuccessPage');
     // }
     //特殊的申请代理
     if(moduleName == 'proxyApply'){
       if(this.userInfo['personDataMap'].Lev==3 || (this.userInfo['personDataMap'].Lev==2 && this.userInfo['personDataMap'].IsSubProxy == 1)){
-        console.log('进入申请代理页面');
+        this.navCtrl.push('ProxyapplyPage');
       }else{
         this.alertProvider.showAlert('您还不是代理哦', '', ['ok']);
       }

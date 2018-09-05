@@ -175,8 +175,13 @@ export class MywalletPage {
   viewLog(type){
     this.navCtrl.push('MoneyrecordPage',{
       type:type
-    })
+    });
   }
+
+  viewSplit(){
+    this.navCtrl.push('SplitinitPage');
+  }
+
   transferElec(){
     this.navCtrl.push('ElectransferPage');
   }

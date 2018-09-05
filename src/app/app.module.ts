@@ -77,6 +77,9 @@ import { MoneyrecordPageModule } from '../pages/moneyrecord/moneyrecord.module';
 import { UpdaterankPageModule } from '../pages/updaterank/updaterank.module';
 import { AddressPageModule } from '../pages/address/address.module';
 import { OperateaddressPageModule } from '../pages/operateaddress/operateaddress.module';
+import { CertificationPageModule } from '../pages/certification/certification.module';
+import { ProxyapplyPageModule } from '../pages/proxyapply/proxyapply.module';
+import { SplitinitPageModule } from '../pages/splitinit/splitinit.module';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { ConfigProvider } from '../providers/config/config';
@@ -93,6 +96,7 @@ import { ProductDetailPageModule } from "../pages/product-detail/product-detail.
 import { PaysuccessPageModule } from "../pages/paysuccess/paysuccess.module";
 import { ElectransferPageModule } from "../pages/electransfer/electransfer.module";
 import { CallcenterPageModule } from "../pages/callcenter/callcenter.module";
+import {SplitrecordPageModule} from '../pages/splitrecord/splitrecord.module';
 /**分享 */
 import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
@@ -158,6 +162,10 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     CallcenterPageModule,
     AddressPageModule,
     OperateaddressPageModule,
+    CertificationPageModule,
+    ProxyapplyPageModule,
+    SplitinitPageModule,
+    SplitrecordPageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
       tabsHideOnSubPages: 'true', //隐藏全部子页面 tabs
