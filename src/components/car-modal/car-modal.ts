@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams,ViewController } from 'ionic-angular';
+import { App,NavController, NavParams,ViewController } from 'ionic-angular';
 import { ConfigProvider } from '../../providers/config/config';
 import { StorageProvider } from '../../providers/storage/storage';
 import { AlertProvider } from '../../providers/alert/alert';
@@ -22,7 +22,7 @@ export class CarModalComponent {
   public specName:(string);
   public product:(any);
   public productArray = [];
-  constructor(public navCtrl :NavController,public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,public alert: AlertProvider,public httpservice:HttpServicesProvider) {
+  constructor(public appCtrl : App,public navCtrl :NavController,public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,public alert: AlertProvider,public httpservice:HttpServicesProvider) {
     this.product = params.get("product");
     this.productname = this.product.productname;
     this.num = this.product.stocknum;
@@ -58,15 +58,7 @@ export class CarModalComponent {
       }else{
         this.product.buynum = this.buyNumber;
         this.productArray.push(this.product);
-        this.navCtrl.push("ConfirmOrderPage",{
-          // "specname":this.specName,
-          // "specid":this.specId,
-          // "productid":this.id,
-          // "price":this.price,
-          // "productname":this.productname,
-          // "buynum":this.buyNumber,
-          // "img":this.img,
-          // "elec":this.elec,
+        this.appCtrl.getRootNav().push("ConfirmOrderPage",{
           "product":this.productArray
         });
         this.viewCrl.dismiss();
@@ -93,9 +85,6 @@ export class CarModalComponent {
     this.product.specId = specid;
     for(let i=0;i<this.productspecs.length;i++){
       if(this.productspecs[i].id==specid){
-        // this.price = this.productspecs[i].price;
-        // this.elec = this.productspecs[i].elecNum;
-        // this.specName = this.productspecs[i].specname;
         this.product.specPrice = this.productspecs[i].price;
         this.product.specElec = this.productspecs[i].elecNum;
         this.product.specName = this.productspecs[i].specname;

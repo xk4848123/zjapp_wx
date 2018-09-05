@@ -1,12 +1,13 @@
 ///<reference path="../../services/jquery.d.ts"/>
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,Events, Modal, ViewController } from 'ionic-angular';
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { StorageProvider } from '../../providers/storage/storage';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 import { AlertProvider } from '../../providers/alert/alert';
-
+import { ToastProvider } from '../../providers/toast/toast';
+import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
 @IonicPage()
 @Component({
   selector: 'page-confirm-order',
@@ -30,7 +31,6 @@ export class ConfirmOrderPage {
   public res:(any);
   public isup = false;
   public clientHeight:(any);
-  public realpay = 0;
   public token :(any);
   public addressName:(any);
   public addressPhone:(any);
@@ -42,21 +42,21 @@ export class ConfirmOrderPage {
   public productArray = [];
   public maxCoupon = 0;
   public allAmount = 0;
-  constructor(public alert:AlertProvider,public navCtrl: NavController, public navParams: NavParams,private event: Events, public config:ConfigProvider,public httpservice : HttpServicesProvider,public storage:StorageProvider,public rlogin:RloginprocessProvider) {
-    // this.clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-    this.productArray = navParams.get("product");
-    console.log("------");
-    console.log(this.productArray);
-    console.log("------");
+  public realpay = 0;
+  public isTwoAddress = false;
+  public memo = '';
+  public addressId = '';
+  constructor(public passwordProvider:VerifypasswordProvider,public toast: ToastProvider,public alert:AlertProvider,public navCtrl: NavController, public navParams: NavParams,private event: Events, public config:ConfigProvider,public httpservice : HttpServicesProvider,public storage:StorageProvider,public rlogin:RloginprocessProvider) {
+    this.productArray = this.navParams.get("product");
     /**总价 */
     for(var i=0;i<this.productArray.length;i++){
-      this.allAmount = this.allAmount+this.productArray[i].buynum*this.productArray[i].specPrice;
-    }
-    /**可使用红包数 */
-    for(var j=0;j<this.productArray.length;j++){
-      this.maxCoupon = this.maxCoupon + (this.productArray[j].specElec/2)*this.productArray[j].buynum;
-    }
-    console.log(this.maxCoupon);
+     this.allAmount = this.allAmount+this.productArray[i].buynum*this.productArray[i].specPrice;
+   }
+   this.realpay = this.allAmount;
+   /**可使用红包数 */
+   for(var j=0;j<this.productArray.length;j++){
+     this.maxCoupon = this.maxCoupon + (this.productArray[j].specElec/2)*this.productArray[j].buynum;
+   }
   }
   ionViewWillEnter(){
     this.token = this.storage.get("token");
@@ -73,9 +73,11 @@ export class ConfirmOrderPage {
           this.remainCoupon = this.res.redBak;
           this.remainPay = this.res.buy;
           this.remainCash = this.res.cash;
+          if(!this.isTwoAddress){
+            this.getDefaultAddress();
+          }
         }
     })
-    this.getDefaultAddress();
   }
   /**获取用户默认地址 */
   getDefaultAddress(){
@@ -85,12 +87,13 @@ export class ConfirmOrderPage {
     }
     this.httpservice.doFormPost(api,params,(data)=>{
       if(data.error_code==0){
+        this.addressId = data.data.Id;
         this.addressName = data.data.Name;
         this.addressPhone = data.data.Phone;
         this.address = data.data.ProvinceName+data.data.CityName+data.data.RegionName;
         this.addressDetail = data.data.DetailAddress;
-      }else{
-        // this.rlogin.rLoginProcessWithHistory(this.navCtrl);
+      }else if(data.error_code==-1){
+        this.addressName = "未设置默认地址";
       }
     })
   }
@@ -99,6 +102,7 @@ export class ConfirmOrderPage {
     var api = "v1/AddressManager/getAddressOfUserById/"+this.token+'/'+addressId;
     this.httpservice.requestData(api,(data)=>{
       if(data.error_code==0){
+        this.addressId = addressId;
         this.addressName = data.data.Name;
         this.addressPhone = data.data.Phone;
         this.address = data.data.ProvinceName+data.data.CityName+data.data.RegionName;
@@ -108,30 +112,23 @@ export class ConfirmOrderPage {
       }
     })
   }
+ action = (msg)=>{
+   this.isTwoAddress = true;
+    return new Promise((resolve,reject)=>{
+      if(msg!=undefined){
+        this.getUserAddress(msg);
+        resolve('ok');
+      }else{
+        reject(Error('error'));
+      }
+    });
+  }
   /**选择地址 */
   toAddress(){
-    let action = (msg)=>{
-      return new Promise((resolve,reject)=>{
-        if(msg!=undefined){
-          this.getUserAddress(msg);
-          resolve('ok');
-        }else{
-          reject(Error('error'));
-        }
-      });
-    }
-    this.navCtrl.push("AddressPage",{'action':action});
+    this.navCtrl.push("AddressPage",{'action':this.action});
   }
-  /**监听键盘弹出，收起 android */
   ionViewDidLoad() {
-  //   var that = this;
-  //   $(window).on('resize', function () {
-  //     $('body').height(that.clientHeight);
-  //     var nowClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-  //     if(that.clientHeight < nowClientHeight){
-  //       that.isup = true;
-  //     }
-  // });
+    
   }
   /**监听键盘弹出，收起 ios*/
   blurInput(){
@@ -287,5 +284,114 @@ export class ConfirmOrderPage {
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }
+  }
+  goBuy(){
+    var orderHeads = new Array();
+    var productList = new Array();
+    for(var i=0;i<this.productArray.length;i++){
+      if(i==0){
+        var _data = {
+          "producerno":this.productArray[i].producerno,
+          "list":[i]
+        };
+        orderHeads.push(_data);
+      }else{
+        for(var z=0;z<orderHeads.length;z++){
+          if(orderHeads[z].producerno==this.productArray[i].producerno){
+            orderHeads[z].list.push(i);
+            break;
+          }else if(orderHeads[z].producerno!=this.productArray[i].producerno && z==orderHeads.length-1){
+            var _data1 = {
+              "producerno":this.productArray[i].producerno,
+              "list":[i]
+            };
+            orderHeads.push(_data1);
+            break;
+          }
+        }
+      }
+    }
+    for(var j=0;j<orderHeads.length;j++){
+      var numlist = orderHeads[j].list;
+      var orderLines =[];
+      var payList = [];
+      var totalAmount=0;
+      var maxCoupon = 0;
+      for(var w=0;w<numlist.length;w++){
+        orderLines.push({
+          "productId":this.productArray[numlist[w]].id,
+          "productNum":this.productArray[numlist[w]].buynum,
+          "specId":this.productArray[numlist[w]].specId
+        });
+        payList.push({
+          "totalAmount":this.productArray[numlist[w]].buynum*this.productArray[numlist[w]].specPrice,
+          "maxCoupon":this.productArray[numlist[w]].buynum*this.productArray[numlist[w]].specElec/2,
+        });
+      }
+      for(var o =0;o<payList.length;o++){
+        totalAmount+=payList[o].totalAmount;
+        maxCoupon+=payList[o].maxCoupon;
+      }
+      var useCoupon = this.deduRedback>=maxCoupon ? maxCoupon : this.deduRedback;
+      var usePointNum = this.subDouble(totalAmount,useCoupon,2) >= this.dedubuy ? this.dedubuy : this.subDouble(totalAmount,useCoupon,2);
+      var useElecNum = this.subDouble3(totalAmount,useCoupon,usePointNum,2) >= this.deduCash ? this.deduCash : this.subDouble3(totalAmount,useCoupon,usePointNum,2);
+      var realpay = this.subDouble4(totalAmount,useCoupon,usePointNum,useElecNum,2);
+      productList.push({
+        "freight":0,
+        "memo":this.memo,
+        "orderLines":orderLines,
+        "producername":this.productArray[numlist[0]].producername,
+        "producerno":this.productArray[numlist[0]].producerno,
+        "producertel":this.productArray[numlist[0]].producertel,
+        "realPay":realpay,
+        "totalAmount":totalAmount,
+        "useCoupon":useCoupon,
+        "useElecNum":useElecNum,
+        "usePointNum":usePointNum,
+        "useVIPRemainNum":0
+      });
+    }
+    var params = {
+      "adrressId":this.addressId,
+      "orderHeads":productList
+    }
+    var api = "v2/PersonalCenter/createBOrder/"+this.token;
+    this.httpservice.doPost(api,params,(data)=>{
+      if(data.error_code==0){
+        if(data.data.type==1){
+          this.passwordProvider.execute(this.navCtrl,()=>{
+            var api = "v1/PersonalCenter/syncHandleOrderC/"+this.token;
+            var params = {
+              "orderNoC":data.data.datas
+            }
+            this.httpservice.doFormPost(api,params,(data)=>{
+              if(data.error_code==0){
+                this.navCtrl.push('PaysuccessPage',{
+                  "orderType":"1"
+                });
+              }else{
+                this.toast.showToast('服务器异常');
+              }
+            });
+          });
+        }else if(data.data.type==2){
+          this.navCtrl.push('PaymentPage',{
+            orderNo: data.data.orderNoC,
+            realpay: data.data.realpay,
+            orderType: data.data.orderType
+          });
+        }else if(data.data.type==3){
+          this.passwordProvider.execute(this.navCtrl,()=>{
+            this.navCtrl.push('PaymentPage',{
+              orderNo: data.data.orderNoC,
+              realpay: data.data.realpay,
+              orderType: data.data.orderType
+            });
+          });
+        }
+      }else{
+        this.toast.showToast('服务器异常');
+      }
+    })
   }
 }

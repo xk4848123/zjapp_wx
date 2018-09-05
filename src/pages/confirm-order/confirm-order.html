@@ -11,13 +11,13 @@
   <div class="taddress" tappable (click)="toAddress()">
       <ion-icon ios="ios-pin-outline" md="ios-pin-outline" class="addressicon"></ion-icon>
       <div class="tcontent">
+          <div class="tjian">
+              <ion-icon ios="ios-arrow-dropright" md="md-arrow-dropright"></ion-icon>
+          </div>
         <p class="tname">{{addressName}}</p>
         <p class="tphone">{{addressPhone}}</p>
         <p class="tadd">{{address}}</p>
         <p class="tadddetail">{{addressDetail}}</p>
-      </div>
-      <div class="tjian">
-          <ion-icon ios="ios-arrow-dropright" md="md-arrow-dropright"></ion-icon>
       </div>
   </div>
   <div class="tproduct">
@@ -40,7 +40,7 @@
           <p style="float: right;">包邮</p>
       </ion-item>
       <ion-item>
-          <ion-input style="font-size: 1.4rem" placeholder="买家留言" (ionBlur)="blurInput()" (ionFocus)="focusInput()">
+          <ion-input style="font-size: 1.4rem" placeholder="买家留言" (ionBlur)="blurInput()" (ionFocus)="focusInput()" [(ngModel)]="memo">
 
           </ion-input>
       </ion-item>
@@ -81,5 +81,5 @@
   <div class="tleft">
     <em>合计：</em><p>¥{{realpay}}元</p>
   </div>
-  <button class="buy" ion-button>提交订单</button>
+  <button class="buy" ion-button (tap)="goBuy()">提交订单</button>
 </div>

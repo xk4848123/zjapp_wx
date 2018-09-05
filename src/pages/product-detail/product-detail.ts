@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,App } from 'ionic-angular';
-// import{ IndexAdvPage } from '../index-adv/index-adv';
+import { IonicPage, NavController, NavParams,App, Navbar } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
-
 import { ConfigProvider } from '../../providers/config/config';
 import { AlertProvider } from '../../providers/alert/alert';
 import { DomSanitizer } from '@angular/platform-browser';/*转译html标签*/
-// import { CartPage } from '../cart/cart';
 import { CarModalComponent } from '../../components/car-modal/car-modal';
 import { ShareComponent } from '../../components/share/share';
-import { TabsPage } from '../tabs/tabs';
+import { StorageProvider } from '../../providers/storage/storage';
+import { CartPage } from '../../pages/cart/cart';
 @IonicPage()
 @Component({
   selector: 'page-product-detail',
@@ -23,17 +21,24 @@ export class ProductDetailPage {
   public starList=[];/**星星个数 */
   public comment :(string);
   public commentDetail:(any);
-  constructor(public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App) {
-    this.id = navParams.get("id");
-    if(this.id==undefined){
-      this.app.getRootNav().push(TabsPage);
-    }else{
-      this.getFocus();
-      this.getPicText();
-    }
+  constructor(public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
+
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProductDetailPage');
+      this.id = this.navParams.get("id");
+      if(this.id==undefined){
+
+      }else{
+        this.storage.setSessionStorage("productId",this.id);
+      }
+  }
+
+  ionViewWillEnter(){
+    if(this.id==undefined){
+      this.id = this.storage.getSessionStorage("productId");
+    }
+    this.getFocus();
+    this.getPicText();
   }
   /**获取商品详情 */
   getFocus(){
@@ -45,7 +50,6 @@ export class ProductDetailPage {
         return;
       }
       this.product = data.data.product;
-      console.log(this.product);
       this.commentDetail = data.data.productComment;
       if(this.commentDetail==null){
         this.commentDetail={
@@ -111,7 +115,7 @@ export class ProductDetailPage {
   }
   /**跳转购物车 */
   goShop(){
-    this.navCtrl.push('CartPage',{
+    this.navCtrl.push(CartPage,{
       "isIndex":false
     });
   }
