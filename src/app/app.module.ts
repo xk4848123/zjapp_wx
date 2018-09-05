@@ -58,6 +58,21 @@ import { FandetailPageModule } from '../pages/fandetail/fandetail.module';
 
 //全部订单
 import { OrdersPageModule} from '../pages/orders/orders.module';
+//申请退款
+import { RefundPageModule} from '../pages/refund/refund.module';
+
+//申请退货
+import { SalereturnPageModule} from '../pages/salereturn/salereturn.module';
+//查看物流
+import { InformationPageModule} from '../pages/information/information.module';
+//待评价
+import { CommentPageModule} from '../pages/comment/comment.module';
+
+//商学院
+import { CommercialPageModule} from '../pages/commercial/commercial.module';
+
+//课程详情
+import { CommercialdetailPageModule} from '../pages/commercialdetail/commercialdetail.module';
 
 import { OrderPageModule} from '../pages/order/order.module';
 
@@ -148,6 +163,12 @@ import { CarModalComponent } from '../components/car-modal/car-modal';
     AddaliacountPageModule,
     AddbankacountPageModule,
     OrderlistPageModule,
+    RefundPageModule,
+    RefundPageModule,
+    InformationPageModule,
+    CommentPageModule,
+    CommercialPageModule,
+    CommercialdetailPageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
       tabsHideOnSubPages: 'true', //隐藏全部子页面 tabs
