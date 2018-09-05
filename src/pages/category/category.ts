@@ -20,14 +20,15 @@ export class CategoryPage {
 
   public rightCate=[];  /*右侧分类数据*/
 
+
   constructor(public navCtrl: NavController,public config:ConfigProvider,public httpService:HttpServicesProvider) {
     
   }
 
   ionViewWillEnter(){
-    //  console.log("2.0 ionViewWillEnter 顾名思义，当将要进入页面时触发 每次触发");
-    this.getLeftCateData();/*左侧分类*/
 
+    this.getLeftCateData();/*左侧分类*/
+    // this.getRightCateData(this.firstId);
 }
   //左侧分类的方法
 
@@ -37,11 +38,17 @@ export class CategoryPage {
     //网络接口请求
     this.httpService.requestData(api,(data)=>{
         this.leftCate=data.data;
+        
         // let i:number=0;
-        for(let v in data.data){
+        for(let index=0; index < data.data.length  ; index ++){
+           if(index == 0){
+            this.rightCate =data.data[index].productSubCategories;
+           }
+          this.tempDatas[data.data[index].id]=data.data[index].productSubCategories;
+        }
+      
           // aaa.Id=n[productSubCategories];
-          this.tempDatas[data.data[v].id]=data.data[v].productSubCategories;
-      }
+          // this.tempDatas[data.data[v].id]=data.data[v].productSubCategories;
         //调用右侧分类
         //console.log(this.leftCate);
         //  this.getRightCateData(this.leftCate[0]['id']); 
@@ -52,10 +59,6 @@ export class CategoryPage {
   getRightCateData(id){
    this.rightCate=this.tempDatas[id];
 }
-
-// $('.list').on('click','.page',function(){
-//   $(this).addClass("current").siblings().removeClass("current");
-// });
 }
 
 

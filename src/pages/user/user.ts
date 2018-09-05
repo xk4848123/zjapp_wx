@@ -92,6 +92,22 @@ export class UserPage {
       this.navCtrl.push('OrdersPage',{
         type:'all'
       });
+    }else if(moduleName == 'pay'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wp'
+      });
+    }else if(moduleName == 'setGoods'){
+      this.navCtrl.push('OrdersPage',{
+        type:'ws'
+      });
+    }else if(moduleName == 'receiving'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wr'
+      });
+    }else if(moduleName == 'remain'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wc'
+      });
     }
     if(moduleName == 'vippresent'){
       this.navCtrl.push('VippresentPage');

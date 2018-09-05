@@ -94,25 +94,25 @@
   <div class="interval">
     我的订单
   </div>
-  <ion-grid style="padding: 0;width: 100%;">
+  <ion-grid style="padding: 0;width: 100%;" >
     <ion-row class="col_row">
       <ion-col class="col_2" style="width: 20%;"(click)="mainEntrance('allorders')">
         <img src="assets/imgs/myorder.png" />
         <span>全部订单</span>
       </ion-col>
-      <ion-col class="col_2" style="width: 20%;" (click)=pay()>
+      <ion-col class="col_2" style="width: 20%;"(click)="mainEntrance('pay')">
         <img src="assets/imgs/wp.png" />
         <span>待付款</span>
       </ion-col>
-      <ion-col class="col_2" style="width: 20%;" (click)=receiving()>
+      <ion-col class="col_2" style="width: 20%;" (click)="mainEntrance('setGoods')">
         <img src="assets/imgs/ws.png" />
         <span>待发货</span>
       </ion-col>
-      <ion-col class="col_2" style="width: 20%;"  (click)=shipments()>
+      <ion-col class="col_2" style="width: 20%;" (click)="mainEntrance('receiving')">
         <img src="assets/imgs/wr.png" />
         <span>待收货</span>
       </ion-col>
-      <ion-col class="col_2" style="width: 20%;" (click)=evaluated()>
+      <ion-col class="col_2" style="width: 20%;" (click)="mainEntrance('remain')">   
         <img src="assets/imgs/wc.png" />
         <span>待评价</span>
       </ion-col>
