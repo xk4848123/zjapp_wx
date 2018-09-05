@@ -1,5 +1,5 @@
 import { Component, Renderer2, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
 import { StorageProvider } from '../../providers/storage/storage';
 
@@ -19,7 +19,6 @@ import { ToastProvider } from '../../providers/toast/toast';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-user',
   templateUrl: 'user.html',
@@ -56,12 +55,7 @@ export class UserPage {
     }, 1000);
     this.refreshUser();
   }
-  ionViewDidLoad() {
-    // console.log("1.0 ionViewDidLoad 当页面加载的时候触发，仅在页面创建的  时候触发一次，如果被缓存了，那么下次再打开这个页面则不会触发");
-    setTimeout(() => {
-      this.setDot();
-    }, 100);
-  }
+
   ionViewWillEnter() {
     if (!this.isFirst) {
       this.refreshUser();
@@ -109,13 +103,42 @@ export class UserPage {
         type:'wc'
       });
     }
+    if(moduleName == 'wporders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wp'
+      });
+    }
+    if(moduleName == 'wsorders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'ws'
+      });
+    }
+    if(moduleName == 'wrorders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wr'
+      });
+    }
+    if(moduleName == 'wcorders'){
+      this.navCtrl.push('OrdersPage',{
+        type:'wc'
+      });
+    }
     if(moduleName == 'vippresent'){
       this.navCtrl.push('VippresentPage');
     }
+    if(moduleName == 'callcenter'){
+      this.navCtrl.push('CallcenterPage');
+    }
+    if(moduleName == 'certification'){
+      this.navCtrl.push('CertificationPage');
+    }
+    // if(moduleName == 'paysuccesspage'){
+    //   this.navCtrl.push('PaysuccessPage');
+    // }
     //特殊的申请代理
     if(moduleName == 'proxyApply'){
       if(this.userInfo['personDataMap'].Lev==3 || (this.userInfo['personDataMap'].Lev==2 && this.userInfo['personDataMap'].IsSubProxy == 1)){
-        console.log('进入申请代理页面');
+        this.navCtrl.push('ProxyapplyPage');
       }else{
         this.alertProvider.showAlert('您还不是代理哦', '', ['ok']);
       }
@@ -207,7 +230,6 @@ export class UserPage {
             this.canAgentApply = false;
             this.isAgentApply = true;
           }
-          console.log(this.isAgentApply);
           //实名认证栏目设置
           if(this.userInfo['isAlreadyAuth']){
             this.isAuth=true;
@@ -258,7 +280,7 @@ export class UserPage {
   // }
   // ionViewWillUnload(){
   //    console.log("6.0 ionViewWillUnload 当页面将要销毁同时页面上元素移除   时触发");
-
+  // }
 
   // }
   // ionViewCanEnter(){

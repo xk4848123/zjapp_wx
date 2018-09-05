@@ -12,47 +12,61 @@ page-orders {
             text-align: center;
         }
     }
-    .col-demo:focus{
-        color: rgb(98, 145, 233);
-        text-decoration: underline;
-        cursor:pointer;
-        border-bottom: 1px solid rgb(98, 145, 233);
-        margin-top:-0.5rem;
-    }
+
     .transition{
         background-color: #eeeeee;
-        height: 1rem;
+        height: 0.6rem;
     }    
     .interval{
         height: 4rem;
         text-align: left;
         text-indent: 1.5rem;
         line-height: 4rem;
-        font-size: 1.8rem;
+        font-size: 1.4rem;
+        margin-right: 1rem;
+        
       }
       .col_2{
         background-color: #ffffff;
         padding: 1rem;
-        border-top: 0.2rem solid #ddd;
-        border-bottom: 0.2rem solid #ddd;
-        font-size: 1.2rem;
+        border-top: 0.1rem solid #ddd;
+        border-bottom: 0.1rem solid #ddd;
+        height:9rem;
       }
       ion-grid img{
-        height: 10rem;
-        width: 10rem;
+        height: 7.5rem;
+        width: 7.5rem;
         display: block;
         margin: 0 auto;
         float: left;
+        margin-top:-4.2px;
     }
     .hp{
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         margin-top: 0.8rem;
         margin-left: 11rem;
+       
     }
     .count{
         text-align: center;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         border-bottom: 0.2rem solid #ddd;
     }
+    .btn{
+        float: right;
+        width:7rem;
+         height:2.8rem;
+         line-height: 2.8rem;
+         border: 0.1rem solid #bdbaba;
+         -moz-border-radius: 1.5rem; 
+         -webkit-border-radius: 1.5rem;   
+         border-radius:1.5rem; 
+        color: #000;
+        background-color:#fff; 
+        margin:0.6rem;
+    }
 
+    .fix_header{
+        padding-top: 1rem;
+    }
 }

@@ -4,6 +4,7 @@ import { ConfigProvider } from '../../providers/config/config';
 import { StorageProvider } from '../../providers/storage/storage';
 import { AlertProvider } from '../../providers/alert/alert';
 import { LoginPage } from '../../pages/login/login';
+import { HttpServicesProvider } from '../../providers/http-services/http-services';
 @Component({
   selector: 'car-modal',
   templateUrl: 'car-modal.html'
@@ -15,20 +16,24 @@ export class CarModalComponent {
   public img:(any);
   public num:(any);
   public id:(any);
-  public productspecs:(any);
+  public productspecs = new Array();
   public buyNumber = 1;
   public specId:(number);
-  constructor(public navCtrl :NavController,public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,public alert: AlertProvider) {
-    this.productname = params.get("productname");
-    this.num = params.get("stocknum");
-    this.price = params.get("price");
-    this.elec = params.get("elecnum");
-    this.id = params.get("id");
-    this.img = params.get("productphotos");
-    this.productspecs = params.get("productspecs");
+  public specName:(string);
+  public product:(any);
+  public productArray = [];
+  constructor(public navCtrl :NavController,public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,public alert: AlertProvider,public httpservice:HttpServicesProvider) {
+    this.product = params.get("product");
+    this.productname = this.product.productname;
+    this.num = this.product.stocknum;
+    this.price = this.product.price;
+    this.elec = this.product.elecnum;
+    this.id = this.product.id;
+    this.img = this.product.productphotos;
+    this.productspecs = this.product.productspecs;
   }
   /**立即购买 */
-  buynow(){
+  buynow(){ 
     if(this.storage.get("token")==null){
       var title="未登录";
       var content = "小主，去登陆吧？";
@@ -42,16 +47,28 @@ export class CarModalComponent {
       text:"确认",
       role:"destructive",
       handler:()=>{
-        this.navCtrl.push(LoginPage);
+        this.navCtrl.push(LoginPage,{history:'history'});
         this.viewCrl.dismiss();
       }
     }];
     this.alert.showMoreAlert(title,content,ass,buttons);
     }else{
-      console.log(this.specId);
       if(this.specId == null){
         this.alert.showAlert('未选择规格','',['ok']);
       }else{
+        this.product.buynum = this.buyNumber;
+        this.productArray.push(this.product);
+        this.navCtrl.push("ConfirmOrderPage",{
+          // "specname":this.specName,
+          // "specid":this.specId,
+          // "productid":this.id,
+          // "price":this.price,
+          // "productname":this.productname,
+          // "buynum":this.buyNumber,
+          // "img":this.img,
+          // "elec":this.elec,
+          "product":this.productArray
+        });
         this.viewCrl.dismiss();
       }
     }
@@ -73,6 +90,17 @@ export class CarModalComponent {
   /**选择规格 */
   choiceSpec(specid){
     this.specId = specid;
+    this.product.specId = specid;
+    for(let i=0;i<this.productspecs.length;i++){
+      if(this.productspecs[i].id==specid){
+        // this.price = this.productspecs[i].price;
+        // this.elec = this.productspecs[i].elecNum;
+        // this.specName = this.productspecs[i].specname;
+        this.product.specPrice = this.productspecs[i].price;
+        this.product.specElec = this.productspecs[i].elecNum;
+        this.product.specName = this.productspecs[i].specname;
+      }
+    }
   }
   /**加入购物车 */
   addCart(){
@@ -89,16 +117,25 @@ export class CarModalComponent {
       text:"确认",
       role:"destructive",
       handler:()=>{
-        this.navCtrl.push(LoginPage);
+        this.navCtrl.push(LoginPage,{history:'history'});
         this.viewCrl.dismiss();
       }
     }];
     this.alert.showMoreAlert(title,content,ass,buttons);
     }else{
-      console.log(this.specId);
       if(this.specId == null){
         this.alert.showAlert('未选择规格','',['ok']);
       }else{
+        var api = 'v1/PersonalCenter/updateShoppingCartInfo/'+this.id+'/'+this.specId;
+        var params = {
+          "token":this.storage.get("token"),
+          "productNum":this.buyNumber
+        };
+        this.httpservice.doFormPost(api,params,(data)=>{
+          if(data.error_code==0){
+            this.alert.showAlert("加入购物车成功","",['确定']);
+          }
+        })
         this.viewCrl.dismiss();
       }
     }

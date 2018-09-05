@@ -5,6 +5,7 @@ import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import {Jsonp} from "@angular/http";
 
+import { ToastProvider } from '../../providers/toast/toast';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -51,22 +52,61 @@ export class HomePage {
   public isRed = false;
   
 
-  constructor(public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider) {
-    this.testParams = [{"type":1,"sort":1,"title":"促/销/专/区","content1":{"pic":"assets/imgs/mod2.png","picType":1,"picUrl":""}},
-                       {"type":2,"sort":2,"title":"","content1":{"pic":"assets/imgs/modb1.png","picType":2,"picUrl":""},
-                       "content2":{"pic":"assets/imgs/modb2.png","picType":2,"picUrl":""},
-                       "content3":{"pic":"assets/imgs/modb3.png","picType":2,"picUrl":""}},
-                       {"type":3,"sort":3,"title":"畅/享/美/食","content1":{"pic":"assets/imgs/modc1.jpeg","picType":2,"picUrl":""},
-                      "content2":{"pic":"assets/imgs/modc2.jpeg","picType":2,"picUrl":""}},
-                      {"type":1,"sort":4,"title":"活/力/无/限","content1":{"pic":"assets/imgs/mod2.png","picType":1,"picUrl":""}},
-                      {"type":4,"sort":5,"title":"有/机/食/品","content1":{"pic":"assets/imgs/modb2.png","picType":2,"picUrl":""},
-                      "content2":{"pic":"assets/imgs/modb3.png","picType":2,"picUrl":""},
-                      "content3":{"pic":"assets/imgs/modb1.png","picType":2,"picUrl":""}},
-                      {"type":5,"sort":6,"title":"你/会/喜/欢","content1":{"pic":"assets/imgs/product2.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content2":{"pic":"assets/imgs/product1.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content3":{"pic":"assets/imgs/product3.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200},
-                      "content4":{"pic":"assets/imgs/product4.png","picType":2,"picUrl":"","picTitle":"西门双子冰箱","oldPrice":1500,"newPrice":1200}}
-                    ];
+  constructor(public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider,private noticeSer: ToastProvider) {
+   this.testParams = [{ "type": 1, "sort": 1, "title": "促/销/专/区", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 2, "sort": 2, "title": "", "content1": { "pic": "assets/imgs/modb1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modb2.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modb3.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
+    },
+    // { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 5, "sort": 6, "title": "你/会/喜/欢", "content1": { "pic": "assets/imgs/product2.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content2": { "pic": "assets/imgs/product1.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content3": { "pic": "assets/imgs/product3.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content4": { "pic": "assets/imgs/product4.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 }
+    }
+    ];
+    this.getindex();
+  }
+  ionViewWillEnter(){
+    this.get();
+    this.content.ionScroll.subscribe(($event: any) => {
+      this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
+          let length = $event.scrollTop;//当前滑动的距离
+          if(length>=219.4){
+            this.isRed = true;
+          }else{
+            this.isRed = false;
+          }
+          this.search.nativeElement//获取html中标记为one的元素
+      })
+  })
+  }
+  ionViewDidEnter() {
+    this.content.ionScroll.subscribe(($event: any) => {
+      this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
+          let length = $event.scrollTop;//当前滑动的距离
+          if(length>=219.4){
+            this.isRed = true;
+          }else{
+            this.isRed = false;
+          }
+          this.search.nativeElement//获取html中标记为one的元素
+      })
+  })
+  }
+  //加载首页收据
+  getindex(){
     for(let i=0;i<this.testParams.length;i++){
       if(this.testParams[i].type==1){
         if(i==0){
@@ -152,26 +192,43 @@ export class HomePage {
         }
       }
     }
-   
-  }
-  ionViewDidLoad() {
-    this.get();
-    this.content.ionScroll.subscribe(($event: any) => {
-      this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
-          let length = $event.scrollTop;//当前滑动的距离
-          if(length>=219.4){
-            this.isRed = true;
-          }else{
-            this.isRed = false;
-          }
-          this.search.nativeElement//获取html中标记为one的元素
-      })
-  })
   }
   //测试方法
   say(){
     console.log("设计师设计时尚");
   }
+  //下拉刷型界面
+doRefresh($event){
+  this.testParams = [{ "type": 1, "sort": 1, "title": "促/销/专/区", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 2, "sort": 2, "title": "", "content1": { "pic": "assets/imgs/modb1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modb2.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modb3.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
+    },
+    // { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
+    {
+      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" },
+      "content2": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
+      "content3": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" }
+    },
+    {
+      "type": 5, "sort": 6, "title": "你/会/喜/欢", "content1": { "pic": "assets/imgs/product2.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content2": { "pic": "assets/imgs/product1.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content3": { "pic": "assets/imgs/product3.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
+      "content4": { "pic": "assets/imgs/product4.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 }
+    }
+    ];
+  this.getindex();
+  this.get();
+  setTimeout(() => { 
+     $event.complete();
+      this.noticeSer.showToast('加载成功');
+  }, 1000);
+}
    //操作dom
    get(){
     var a = document.querySelectorAll('.dis');

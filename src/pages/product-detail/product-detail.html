@@ -52,6 +52,18 @@
           <li>商品评价</li>
           <li><img src="assets/icon/youjiantou.png"/></li>
         </ul>
+        <div style="margin-top: 1rem;overflow: auto">
+          <div style="float: left;margin-left: 1rem">
+              <ion-icon ios="md-person" md="md-person"></ion-icon>
+              <p style="display: inline;margin-left: 0.5rem;color: #666666;">温暖</p>
+          </div>
+          <div style="float: right;margin-right: 0.5rem" *ngFor="let item of starList">
+             <ion-icon ios="ios-star" md="ios-star" style="color: red"></ion-icon>
+          </div>
+        </div>
+        <div style="margin-top: 0.4rem;margin-left: 0.8rem;margin-bottom: 1rem;overflow: auto">
+        {{comment}}
+        </div>
     </div>
     <div class="tproductText">
       <span>

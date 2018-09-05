@@ -40,8 +40,9 @@ page-cart{
 
         .cart_title{
             font-size: 1.4rem;
-            padding:.5rem;
-            margin: 0px;            
+            padding:.8rem;
+            margin: 0px;
+            color: #3e3b3b;
         }
        
 
@@ -53,7 +54,8 @@ page-cart{
 
                 flex:1;
                 line-height: 2.8rem;
-
+                padding-left: 0.8rem;
+                color:red;
             }
 
             .cart_num{
@@ -86,7 +88,15 @@ page-cart{
 
     }
 }
-
+.cart_spec1{
+    display: inline;
+    padding-left: 0.8rem;
+    color: 3e3b3b;
+}
+.cart_spec2{
+    display: inline;
+    color: 3e3b3b;
+}
 /*底部*/
 .all_price{
     height: 4.4rem;

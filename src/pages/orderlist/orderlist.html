@@ -12,30 +12,74 @@
 </ion-header>
 <ion-content>
   <ion-grid style="padding: 0;width: 100%;">
-  <div style="margin-top:1.5rem;font-size:16px"><ion-icon ios="ios-happy-outline" md="md-happy" class="md-happy"></ion-icon>订单已取消</div>
-    <ion-row class="col_row">
+  <div style="margin-top:1.5rem;font-size:14px;color:red">
+      <span *ngIf="tempData.curstatus == -3">退货成功</span>
+    <span *ngIf="tempData.curstatus==-2">订单已取消</span>
+    <span *ngIf="tempData.curstatus==-1">等待买家付款</span>
+    <span *ngIf="tempData.curstatus==0">待发货</span>
+    <span *ngIf="tempData.curstatus==1">待收货</span>
+    <span *ngIf="tempData.curstatus==2">待评价</span>
+    <span *ngIf="tempData.curstatus == 3">完成</span>
+    <span *ngIf="tempData.curstatus == 4">申请退货中</span>
+    <span *ngIf="tempData.curstatus == 5">申请退款中</span>
+  </div>
+  <ion-row class="col_row">
       <ion-col class="col_2" style="width: 100%;margin-top:-10px"  >
-        <div class="address">
-          <p class="message">{{tempData.receivername}}<span>{{tempData.receiverphone}}</span><br  /><br  />{{tempData.provincename}}{{tempData.cityname}}{{tempData.regionname}}{{tempData.address}}</p>
-        </div>
-        <div class="row" *ngFor="let item1 of tempData.orderlines">
-              <img style="width:120px;height:120px" [src]="config.domain+item1.photo" /><span>{{item1.productname}} <br  /><br  /><span style="color:red;float:right">￥{{item1.price}}</span><span style="float:right"> ×{{item1.productnum}}</span></span>
-        </div>
-        <ion-list > 
-            <ion-item></ion-item>
-            <ion-item>商品总额<span style="float:right" class="cc">￥{{tempData.totalamount}}</span></ion-item> 
-            <ion-item>运费<span style="float:right;color:red"  class="cc">包邮</span></ion-item> 
-            <ion-item>现金红包抵扣<span style="float:right;color:red" class="cc">{{tempData.usecoupon}}</span></ion-item> 
-            <ion-item>现金币抵扣<span style="float:right;color:red" class="cc">{{tempData.useelecnum}}</span></ion-item> 
-            <ion-item>购物币抵扣<span style="float:right;color:red" class="cc">{{tempData.usevipremainnum}}</span></ion-item> 
-            <ion-item>消费积分抵扣<span style="float:right;color:red" class="cc">{{tempData.freight}}</span></ion-item> 
-            <ion-item>实付款<span style="float:right;color:red" class="cc">￥{{tempData.realpay}}</span></ion-item>
-            <div class="transition">
-            </div> 
-            <ion-item>订单号<p style="float:right" class="cc">{{tempData.orderno}}</p></ion-item>
-            <ion-item><button style="float:right" class="col-cc">订单已取消</button></ion-item>  
-        </ion-list>
+          <div class="address">
+              <p class="message">{{tempData.receivername}}<span>{{tempData.receiverphone}}</span><br  /><br  />{{tempData.provincename}}{{tempData.cityname}}{{tempData.regionname}}{{tempData.address}}</p>
+            </div>
       </ion-col>
-      </ion-row>
+  </ion-row>
+  <ion-row class="col_row">
+      <ion-col class="col_2" style="width: 100%"  *ngFor="let item1 of tempData.orderlines">
+          <img class="img" [src]="config.domain+item1.photo">
+             <div style="padding-top:12px;font-size:14px"> {{item1.productname}}</div><br />
+                  <div style="float:right;padding-top:-120px;"><span  style="color:red;font-size:14px;">￥{{item1.price}}</span> <span>×{{item1.productnum}}</span></div>  
+         
+      </ion-col>
+  </ion-row>
+      <ion-list> 
+          <ion-item style="font-size:14px">商品总额<span style="float:right;font-size:14px" class="cc">￥{{tempData.totalamount}}</span></ion-item> 
+          <ion-item style="font-size:14px">运费<span style="float:right;color:red;font-size:14px"  class="cc">包邮</span></ion-item> 
+          <ion-item style="font-size:14px">现金红包抵扣<span style="float:right;color:red;font-size:14px" class="cc">{{tempData.usecoupon}}</span></ion-item> 
+          <ion-item style="font-size:14px">现金币抵扣<span style="float:right;color:red;font-size:14px" class="cc">{{tempData.useelecnum}}</span></ion-item> 
+          <ion-item style="font-size:14px">购物币抵扣<span style="float:right;color:red;font-size:14px" class="cc">{{tempData.usevipremainnum}}</span></ion-item> 
+          <ion-item style="font-size:14px">消费积分抵扣<span style="float:right;color:red;font-size:14px" class="cc">{{tempData.freight}}</span></ion-item> 
+          <ion-item style="font-size:14px">实付款<span style="float:right;color:red;font-size:14px" class="cc">￥{{tempData.realpay}}</span></ion-item>
+          <div class="transition">
+          </div> 
+          <ion-item style="font-size:14px">订单号<p style="float:right" class="cc">{{tempData.orderno}}</p></ion-item><br />
+          <div *ngIf="tempData.curstatus==-3">
+              <button style="float:right;font-size:14px" class="col-cc">完成</button>
+              </div>
+          <div *ngIf="tempData.curstatus==-2">
+              <button style="float:right;font-size:14px" class="col-cc">订单已取消</button>
+              </div>
+              <div *ngIf="tempData.curstatus==-1">
+              <button style="float:right" class="col-cc" (tap)="pushcancelOrder(tempData,tempData.id)">取消订单</button>
+              <button style="float:right;color:red" class="col-cc" (tap)="payNow()">立即支付</button>
+              </div>
+              <div *ngIf="tempData.curstatus==0">
+              <button style="float:right" class="col-cc" (tap)="pushrefund(tempData.orderno,tempData)">申请退款</button>
+              </div>
+              <div *ngIf="tempData.curstatus==1">
+              <button style="float:right" class="col-cc"(tap)="information(tempData.id,tempData.orderno,tempData)">查看物流</button>
+              <button style="float:right" class="col-cc" (tap)="pushsale(tempData.orderno,tempData)">申请退货</button>
+              <button style="float:right" class="col-cc" (tap)="confirmorder(tempData)">确认收货</button>
+              </div>
+              <div *ngIf="tempData.curstatus==2">
+              <button style="float:right" class="col-cc">评价</button>
+              </div>
+              <div *ngIf="tempData.curstatus==3">
+                  <button style="float:right" class="col-cc">完成</button>
+                  </div>
+               <div *ngIf="tempData.curstatus==4">
+                     <button style="float:right" class="col-cc">申请退货中</button>
+                      </div>
+               <div *ngIf="tempData.curstatus==5">
+                     <button style="float:right" class="col-cc">申请退款中</button>
+                          </div>
+      </ion-list>
   </ion-grid>
+ 
 </ion-content>

@@ -14,8 +14,6 @@
 
 
 <ion-content style="background: #eeeeee;">
-  
-  
   <div class="card-div">
     <div class="card-line" [navPush]='SetpaypasswordPage'>
         <span class="head-span">设置支付密码</span>
@@ -27,20 +25,15 @@
           <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
       </div>
       <div class="line-div"></div>
-      <div class="card-line">
+      <div class="card-line" [navPush]='AddressPage'>
             <span class="head-span">地址管理</span>
             <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
       </div>
-      <div class="line-div"></div>
+       <div class="line-div"></div>
       <div class="card-line" (tap)="aboutUs()">
             <span class="head-span">关于我们</span>
             <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
       </div>
-      <div class="line-div"></div>
-      <div class="card-line">
-            <span class="head-span">版本更新</span>
-            <span class="content-span">V3.0.0</span>
-            <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
-      </div>
     </div>     
+    <div class="tip">注意：初始支付密码和登录密码保持一致</div>
 </ion-content>

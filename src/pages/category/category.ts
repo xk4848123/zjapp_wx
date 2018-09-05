@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, IonicPage } from 'ionic-angular';
-
-
+import { NavController} from 'ionic-angular';
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 
-@IonicPage()
 @Component({
   selector: 'page-category',
   templateUrl: 'category.html'
@@ -28,7 +25,7 @@ export class CategoryPage {
   ionViewWillEnter(){
 
     this.getLeftCateData();/*左侧分类*/
-    // this.getRightCateData(this.firstId);
+    
 }
   //左侧分类的方法
 

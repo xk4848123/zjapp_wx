@@ -7,12 +7,15 @@ page-category{
     .cate_left{
         width: 100px;
         height: 100%;
-        border-right: 1rem solid #eee;
+        border-right: 0.2rem solid #eee;
         overflow-y: auto;
         color: #666;
 
         ion-label{
-            font-size: 1.4rem;
+            font-size: 1rem;
+            overflow: visible;
+            white-space: normal ;
+            //position:absolute;
         }
 
 
@@ -22,7 +25,7 @@ page-category{
         flex:1;
         overflow-y: auto;
         ion-label{
-            font-size: 1.4rem;
+            font-size: 1rem;
         }
 
         ion-col{
@@ -45,15 +48,22 @@ page-category{
         }
         
     }
-    ion-item:focus{
-        border-radius:50px;
-        background: rgb(128, 163, 240);
-        width:90px;
-        height:10px;
-        text-align: center;
-        line-height: 100px;
-        margin: 5px;
+    .list:focus{
+        // border-radius:50px;
+        // background:rgba(235, 48, 48, 0.644);
+        // width:80px;
+        // height:20px;
+        // text-align: center;
+        // line-height: 100px;
+        // margin:0 auto;
+        // padding :0 ;
+        // position:relative;
+        //color:red;      
+        color:  red;  
     }
     
+}
+.label-ios{
+    margin:0 auto;
 }
 }

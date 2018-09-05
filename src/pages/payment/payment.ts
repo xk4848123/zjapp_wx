@@ -4,7 +4,9 @@ import { HttpServicesProvider } from '../../providers/http-services/http-service
 import { StorageProvider } from '../../providers/storage/storage';
 import { ToastProvider } from '../../providers/toast/toast';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess'
-declare let cordova;
+import { WeblinkProvider } from '../../providers/weblink/weblink';
+import { WechatProvider } from '../../providers/wechat/wechat';
+import { ConfigProvider } from '../../providers/config/config';
 /**
  * Generated class for the PaymentPage page.
  *
@@ -19,76 +21,131 @@ declare let cordova;
 })
 export class PaymentPage {
 
+  public way = 1;
+  public payPara = {
+    openid: 'init',
+    orderNo: '',
+    realpay: '',
+    orderType: ''
+  };
 
-  public aliSignature = '';
 
-  public way = 2;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: HttpServicesProvider, private storage: StorageProvider, private noticeSer: ToastProvider,private rloginprocess:RloginprocessProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: HttpServicesProvider, private storage: StorageProvider,
+    private noticeSer: ToastProvider, private rloginprocess: RloginprocessProvider, private webLink: WeblinkProvider, private wechat: WechatProvider,private config: ConfigProvider) {
+    if (this.navParams.get('data')) {
+      let tempData = this.navParams.get('data');
+      this.payPara.orderNo = tempData["orderNo"];
+      this.payPara.realpay = tempData["realpay"];
+      this.payPara.orderType = tempData["orderType"];
+    } else {
+      let qs = this.getQueryString();
+      this.payPara.openid = qs["openid"];
+      this.payPara.orderNo = qs["orderno"];
+      this.payPara.realpay = qs["realpay"];
+      this.payPara.orderType = qs["ordertype"];
+    }
   }
-
 
   ionViewWillEnter() {
-    this.aliSignature = '';
+    this.wechat.wxConfig();
   }
 
-  unescapeHTML(a) {
-    let aNew = "" + a;
-    return aNew.replace(/</g, "<").replace(/>/g, ">").replace(/&/g, "&").replace(/"/g, '"').replace(/'/g, "'");
-  }
+  getQueryString() {
+    let qs = location.search.substr(1), // 获取url中"?"符后的字串  
+      args = {}, // 保存参数数据的对象
+      items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+      item = null,
+      len = items.length;
 
-
-  wxpay() {
-    this.noticeSer.showToast('该方式正在开通中');
-  }
-
-  alipay() {
-    if (this.aliSignature == '') {
-      let token = this.storage.get('token');
-      this.httpService.doFormPost('/v1/MemberShip/createCOrder/' + token, { money: this.navParams.data.money }, (data) => {
-        if (data.error_code == 0) {//登录成功
-          this.aliSignature = data.data;//保存签名页面至页面退出
-          let payInfo = this.unescapeHTML(data.data);
-          cordova.plugins.alipay.payment(payInfo, (success) => {
-            if (success.resultStatus === "9000") {
-              this.noticeSer.showToast('支付成功');
-              this.navCtrl.pop();
-            } else {
-              this.noticeSer.showToast('支付失败');
-            }
-          }, (error) => {
-            //支付失败
-            this.noticeSer.showToast('支付失败');
-          });
-        } else if(data.error_code == 3){
-            this.rloginprocess.rLoginProcess(this.navCtrl);
-        }else {
-          this.noticeSer.showToast(data.error_message);
-
-        }
-      });
-    } else {
-      let payInfo = this.unescapeHTML(this.aliSignature);
-      cordova.plugins.alipay.payment(payInfo, (success) => {
-        if (success.resultStatus === "9000") {
-          this.noticeSer.showToast('支付成功');
-          this.navCtrl.pop();
-        } else {
-          this.noticeSer.showToast('支付失败');
-        }
-      }, (error) => {
-        //支付失败
-       
-      });
+    for (let i = 0; i < len; i++) {
+      item = items[i].split("=");
+      let name = decodeURIComponent(item[0]),
+        value = decodeURIComponent(item[1]);
+      if (name) {
+        args[name] = value;
+      }
     }
+    return args;
+  }
+  wxpay() {
+    if (this.payPara.openid = 'init') {
+      let token = this.storage.get('token');
+      if (token) {
+        let api = 'v1/PersonalCenter/GetPersonalInfo/' + token;
+        this.httpService.requestData(api, (data) => {
+          if (data.error_code == 0) {//请求成功
+            let tempData = data.data;
+            if (tempData['personDataMap'].WxOpenId != '') {
+              //调支付
+              this.payPara.openid = tempData['personDataMap'].WxOpenId;
+              this.openWexinClient();
+            } else {
+              //微信授权获取openid
+              let token = this.storage.get('token');
+              if (token) {
+                let orderNo = this.payPara.orderNo;
+                let realpay = this.payPara.realpay;
+                let orderType = this.payPara.orderType;
+                let web_url: string = this.config.domain +"/zjapp/wechat/wechatauth?token=" + token + "&orderno=" + orderNo + "&realpay=" + realpay + "&ordertype=" + orderType;
+                this.webLink.goWeb(web_url);
+              }
+            }
+          } else if (data.error_code == 3) {//token过期
+            this.rloginprocess.rLoginProcessWithHistory(this.navCtrl);
+          }
+          else {
+            this.noticeSer.showToast('数据获取异常：' + data.error_message);
+          }
+        });
+      }
+    } else {
+      //调支付
+      this.openWexinClient();
+    }
+
+  }
+
+  openWexinClient() {
+    let apiUrl = "wechat/createwxpayparam";
+    this.httpService.doPost(apiUrl, {
+      total_fee: this.payPara.realpay,
+      out_trade_no: this.payPara.orderNo,
+      type: this.payPara.orderType,
+      openid: this.payPara.openid
+    }, (data) => {
+      if (data.error_code == 0) {
+        let tempData = data.data;
+        wx.chooseWXPay({
+          appId: tempData.appId,
+          timestamp: tempData.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+          nonceStr: tempData.nonceStr, // 支付签名随机串，不长于 32 位
+          package: tempData.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+          signType: tempData.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+          paySign: tempData.paySign, // 支付签名
+          success: (res) => {
+            this.goToSuccess();
+          },
+          cancel: (res) => {
+            this.noticeSer.showToast("支付取消");
+          }
+        });
+      } else {
+        this.noticeSer.showToast("后台签名微信支付异常");
+      }
+
+    });
   }
 
   pay() {
-
     if (this.way == 1) {
       this.wxpay();
-    } else if (this.way == 2) {
-      this.alipay();
     }
+  }
+
+
+  goToSuccess() {
+    this.navCtrl.push('PaysuccessPage', {
+      orderType: this.payPara.orderType
+    });
   }
 }

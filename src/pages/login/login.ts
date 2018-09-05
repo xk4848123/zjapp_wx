@@ -64,7 +64,7 @@ public history='';
             this.noticeSer.showToast(data.error_message);
 
           }
-        })
+        });
      }
 
   }
