@@ -43,7 +43,6 @@ export class CategoryPage {
            }
           this.tempDatas[data.data[index].id]=data.data[index].productSubCategories;
         }
-      
           // aaa.Id=n[productSubCategories];
           // this.tempDatas[data.data[v].id]=data.data[v].productSubCategories;
         //调用右侧分类

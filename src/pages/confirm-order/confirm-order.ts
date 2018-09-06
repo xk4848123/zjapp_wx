@@ -107,8 +107,10 @@ export class ConfirmOrderPage {
         this.addressPhone = data.data.Phone;
         this.address = data.data.ProvinceName+data.data.CityName+data.data.RegionName;
         this.addressDetail = data.data.DetailAddress;
-      }else{
+      }else if(data.error_code==3){
         this.rlogin.rLoginProcessWithHistory(this.navCtrl);
+      }else{
+        this.toast.showToast(data.error_message);
       }
     })
   }
@@ -370,7 +372,7 @@ export class ConfirmOrderPage {
                   "orderType":"1"
                 });
               }else{
-                this.toast.showToast('服务器异常');
+                this.toast.showToast(data.error_message);
               }
             });
           });
