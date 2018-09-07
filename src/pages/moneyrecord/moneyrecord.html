@@ -10,14 +10,11 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of datas">
-      <h2 class="memo">{{item.memo}}</h2>
-      <p class="right">{{item.createTime}}</p>
-      <p class="left">{{item.addSub}}{{item.amount}}</p>
-    </ion-item>
-  </ion-list>
+<ion-content style="background: #eeeeee;">
+  <div class="parent" *ngFor="let item of datas">
+      <div class="up">{{item.memo}}</div>
+      <div class="down"><span>{{item.addSub}}{{item.amount}}</span><span>{{item.createTime}}</span></div>
+      </div>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)" threshold="50px" *ngIf="enable">
     <ion-infinite-scroll-content
         loadingSpinner="bubbles"

@@ -107,8 +107,10 @@ export class ConfirmOrderPage {
         this.addressPhone = data.data.Phone;
         this.address = data.data.ProvinceName+data.data.CityName+data.data.RegionName;
         this.addressDetail = data.data.DetailAddress;
-      }else{
+      }else if(data.error_code==3){
         this.rlogin.rLoginProcessWithHistory(this.navCtrl);
+      }else{
+        this.toast.showToast(data.error_message);
       }
     })
   }
@@ -370,22 +372,22 @@ export class ConfirmOrderPage {
                   "orderType":"1"
                 });
               }else{
-                this.toast.showToast('服务器异常');
+                this.toast.showToast(data.error_message);
               }
             });
           });
         }else if(data.data.type==2){
           this.navCtrl.push('PaymentPage',{
-            orderNo: data.data.orderNoC,
-            realpay: data.data.realpay,
-            orderType: data.data.orderType
+            orderNo: data.data.datas.orderNoC,
+            realpay: data.data.datas.realpay,
+            orderType: data.data.datas.orderType
           });
         }else if(data.data.type==3){
           this.passwordProvider.execute(this.navCtrl,()=>{
             this.navCtrl.push('PaymentPage',{
-              orderNo: data.data.orderNoC,
-              realpay: data.data.realpay,
-              orderType: data.data.orderType
+              orderNo: data.data.datas.orderNoC,
+              realpay: data.data.datas.realpay,
+              orderType: data.data.datas.orderType
             });
           });
         }

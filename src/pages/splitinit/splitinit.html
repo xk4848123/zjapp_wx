@@ -16,7 +16,7 @@
 <ion-content style="background: #eeeeee;">
   <div class="all">
     <div class="up">
-      <div><span style="font-size:15px;">￥</span>444</div>
+      <div><span style="font-size:15px;">￥</span>{{data}}</div>
       <div>分流余额</div>
     </div>
     <div class="down">
@@ -25,9 +25,9 @@
           <img src="assets/imgs/shunt.png">
           <span>分流记录</span>
         </li>
-        <li>
+        <li (tap)="choose()">
           <img src="assets/imgs/shunt.png">
-          <span>分流额度</span>
+          <span>我要分流</span>
         </li>
       </ul>
     </div>

@@ -31,6 +31,7 @@ export class SplitrecordPage {
 
   initData(){
       //请求数据
+     
       let token = this.storage.get('token');
       if (token) {
         let api = 'v1/MemberShip/SplitStreamRecord/' + token;

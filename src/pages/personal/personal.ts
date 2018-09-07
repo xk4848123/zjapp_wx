@@ -13,6 +13,7 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
 })
 export class PersonalPage {
 
+  public UpdatephonenumPage = 'UpdatephonenumPage';
   public userInfo = {
     userName: '',
     nickName: '',
@@ -26,9 +27,6 @@ export class PersonalPage {
     private config: ConfigProvider, public httpService: HttpServicesProvider, private rlogin: RloginprocessProvider) {
   }
 
-  ionViewDidLoad() {
-    
-  }
 
   ionViewWillEnter() {
     this.refreshUser();
@@ -43,6 +41,7 @@ export class PersonalPage {
         if (data.error_code == 0) {//请求成功
           let tempData = data.data;
           this.userInfo.userName = tempData['personDataMap'].UserName;
+          console.log(this.userInfo.userName);
           this.userInfo.nickName = tempData['personDataMap'].NickName;
           this.userInfo.beInviteCode = tempData['personDataMap'].BeInviteCode;
           this.userInfo.headPhoto = tempData['personDataMap'].HeadPhoto;
@@ -56,7 +55,9 @@ export class PersonalPage {
     }
   }
 
-
+  setAttr(type){
+      this.navCtrl.push('SetattrPage',{type:type});
+  }
   loginOut() {
 
     //用户信息保存在localstorage

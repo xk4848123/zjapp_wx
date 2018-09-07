@@ -18,7 +18,7 @@
         <img  [src]="config.domain+userInfo.headPhoto" onerror="this.src='assets/imgs/user.png'" style="float: right;margin-top: 0.5rem;">
       </div>
       <div class="line-div"></div>
-      <div class="card-line">
+      <div class="card-line" (tap)="setAttr(1)">
           <span class="head-span">昵称</span>
           <span class="content-span">{{userInfo.nickName}}</span>
           <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
@@ -27,15 +27,15 @@
         <div class="card-line" *ngIf="userInfo.beInviteCode != 0">
             <span class="head-span">推荐人</span>
             <span class="content-span">{{userInfo.beInviteCode}}</span>
-            <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
+            
         </div>
-        <div class="card-line" *ngIf="userInfo.beInviteCode == 0">
+        <div class="card-line" *ngIf="userInfo.beInviteCode == 0" (tap)="setAttr(2)">
           <span class="head-span">推荐人</span>
-          <span class="content-span"></span>
-          <!-- <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon> -->
+          <span class="content-span">去设置</span>
+          <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
       </div>
         <div class="line-div"></div>
-        <div class="card-line">
+        <div class="card-line" [navPush]='UpdatephonenumPage'>
               <span class="head-span">更换手机号</span>
               <span class="content-span">{{userInfo.userName}}</span>
               <ion-icon class="arrows" name="ios-arrow-forward"></ion-icon>
