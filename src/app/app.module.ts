@@ -24,10 +24,7 @@ import { CartPage} from '../pages/cart/cart';
 import { UserPage} from '../pages/user/user';
 //登录
 import { LoginPageModule } from '../pages/login/login.module';
-//注册
-import { RegisterPageModule } from '../pages/register/register.module';
-import { RegistersignPageModule } from '../pages/registersign/registersign.module';
-import { RegisterpasswordPageModule } from '../pages/registerpassword/registerpassword.module';
+
 //搜索页面
 import { SearchPageModule } from '../pages/search/search.module';
 
@@ -36,7 +33,6 @@ import { SearchPageModule } from '../pages/search/search.module';
 import { ProductlistPageModule } from '../pages/productlist/productlist.module';
 
 //商品详情
-import { PcontentPageModule } from '../pages/pcontent/pcontent.module';
 
 //账户管理
 
@@ -95,6 +91,7 @@ import { OperateaddressPageModule } from '../pages/operateaddress/operateaddress
 import { CertificationPageModule } from '../pages/certification/certification.module';
 import { ProxyapplyPageModule } from '../pages/proxyapply/proxyapply.module';
 import { SplitinitPageModule } from '../pages/splitinit/splitinit.module';
+import { SplitimmediatelyPageModule } from '../pages/splitimmediately/splitimmediately.module';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { ConfigProvider } from '../providers/config/config';
@@ -112,6 +109,9 @@ import { PaysuccessPageModule } from "../pages/paysuccess/paysuccess.module";
 import { ElectransferPageModule } from "../pages/electransfer/electransfer.module";
 import { CallcenterPageModule } from "../pages/callcenter/callcenter.module";
 import {SplitrecordPageModule} from '../pages/splitrecord/splitrecord.module';
+import {SetattrPageModule} from '../pages/setattr/setattr.module';
+import {UpdatephonenumPageModule }from '../pages/updatephonenum/updatephonenum.module';
+import {UpdatephonenumnextPageModule } from '../pages/updatephonenumnext/updatephonenumnext.module';
 /**分享 */
 import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
@@ -146,12 +146,8 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     HttpModule, JsonpModule,
     ProductDetailPageModule,
     LoginPageModule,
-    RegisterPageModule,
-    RegistersignPageModule,
-    RegisterpasswordPageModule,
     SearchPageModule,
     ProductlistPageModule,
-    PcontentPageModule,
     PersonalPageModule,
     PaymentPageModule,
     SettingPageModule,
@@ -187,6 +183,10 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     ProxyapplyPageModule,
     SplitinitPageModule,
     SplitrecordPageModule,
+    SplitimmediatelyPageModule,
+    SetattrPageModule,
+    UpdatephonenumPageModule,
+    UpdatephonenumnextPageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
       tabsHideOnSubPages: 'true', //隐藏全部子页面 tabs

@@ -14,3 +14,18 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+.global-root{
+    border-radius:50%;
+    height:40px;
+    width:40px;
+    background-color: #777777;
+    opacity:0.5;
+    top:80%;
+    left: 0;
+    opacity:0.5;
+    position:absolute;
+    z-index:100;
+    text-align: center;
+    color: #fff;
+    line-height: 40px;
+}

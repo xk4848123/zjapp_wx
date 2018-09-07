@@ -44,7 +44,7 @@ export class RechargePage {
           this.renderer2.setStyle(children[j], 'box-shadow', '0 0.1rem 0.1rem #888888');
         }
       }
-      this.renderer2.setStyle(moneyDiv, 'border', '1px solid red');
+      this.renderer2.setStyle(moneyDiv, 'border', '1px solid #f53d3d');
       this.renderer2.setStyle(moneyDiv, 'box-shadow', '0 0');
     }
   }

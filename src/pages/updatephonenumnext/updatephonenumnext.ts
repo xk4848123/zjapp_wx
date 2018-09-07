@@ -5,9 +5,8 @@ import { StorageProvider } from '../../providers/storage/storage';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 import { ToastProvider } from '../../providers/toast/toast';
 import { AlertProvider } from '../../providers/alert/alert';
-
 /**
- * Generated class for the SetpaypasswordPage page.
+ * Generated class for the UpdatephonenumnextPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -15,10 +14,10 @@ import { AlertProvider } from '../../providers/alert/alert';
 
 @IonicPage()
 @Component({
-  selector: 'page-setpaypassword',
-  templateUrl: 'setpaypassword.html',
+  selector: 'page-updatephonenumnext',
+  templateUrl: 'updatephonenumnext.html',
 })
-export class SetpaypasswordPage {
+export class UpdatephonenumnextPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: HttpServicesProvider,
     private storage: StorageProvider, private rlogin: RloginprocessProvider, private noticeSer: ToastProvider, private el: ElementRef,
@@ -33,22 +32,6 @@ export class SetpaypasswordPage {
   private interval: any = null;
 
   private verifycode: number;
-
-  ionViewDidLoad() {
-    let token = this.storage.get('token');
-    let api = 'v1/PersonalCenter/initPersonalCenterData/' + token;
-    this.httpService.requestData(api, (res) => {
-      if (res.error_code == 0) {//请求成功
-        this.phoneNum = res.data['personDataMap'].UserName;
-        // this.phoneNum = 18055126049;
-      } else if (res.error_code == 3) {//token过期
-        this.rlogin.rLoginProcess(this.navCtrl);
-      }
-      else {
-        this.noticeSer.showToast('数据获取异常：' + res.error_message);
-      }
-    });
-  }
 
   getVerifyCode() {
     let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode'
@@ -70,49 +53,27 @@ export class SetpaypasswordPage {
         }, 1000);
       } 
       else {
-        this.noticeSer.showToast('服务异常：' + res.error_message);
+        this.noticeSer.showToast( res.error_message);
       }
     });
   }
-  next() {
-    let apiUrl = 'v1/LoginAndRegister/verify'
+  confirm() {
+    let apiUrl = 'v1/LoginAndRegister/verifyUpdateUserName/' + this.navParams.get('Certficate');
     let token = this.storage.get('token');
+    if(this.phoneNum.toString().length !=11){
+      this.noticeSer.showToast("手机号格式不正确");
+      return;
+    }
     if (this.verifycode && this.verifycode.toString().length == 4) {
-      this.httpService.doPost(apiUrl, { token: token, verifyCode: this.verifycode }, (res) => {
+      this.httpService.doFormPost(apiUrl, { token: token, verifyCode: this.verifycode ,userName: this.phoneNum}, (res) => {
         if (res.error_code == 0) {//请求成功
-          this.alert.showPrompt('设置支付密码',
-            [
-              {
-                text: '取消',
-                handler: data => {
-
-                }
-              },
-              {
-                text: '确定',
-                handler: data => {
-                  apiUrl = 'v1/LoginAndRegister/verify/' + res.data;
-                  this.httpService.doPost(apiUrl, { token: token, paypassword: data[0] }, (result) => {
-                    console.log(result);
-                    if (result.error_code == 0) {//请求成功
-                      this.noticeSer.showToast('支付密码设置成功');
-                      this.navCtrl.pop();
-                    } else if (result.error_code == 3) {//token过期
-                      this.rlogin.rLoginProcess(this.navCtrl);
-                    }
-                    else {
-                      this.noticeSer.showToast('服务异常：' + result.error_message);
-                    }
-                  });
-                }
-              }
-            ]
-          );
+          console.log(this.navCtrl.length());
+          this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length() -  3));
         } else if (res.error_code == 3) {//token过期
           this.rlogin.rLoginProcess(this.navCtrl);
         }
         else {
-          this.noticeSer.showToast('服务异常：' + res.error_message);
+          this.noticeSer.showToast(res.error_message);
         }
       });
     } else {
@@ -126,4 +87,5 @@ export class SetpaypasswordPage {
       clearInterval(this.interval);
     }
   }
+
 }
