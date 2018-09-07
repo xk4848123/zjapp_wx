@@ -1,8 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-searchbar></ion-searchbar>
-    
-  
+    <ion-searchbar tappable (click)="goSearch()" class="search"></ion-searchbar>
   </ion-navbar>
 </ion-header>
 
@@ -12,8 +10,8 @@
       <div class="cate_left" >
       
           <ion-list>
-            <ion-item   tabindex="1"   class="list" *ngFor="let item of leftCate" (tap)="getRightCateData(item['id'])">
-              {{item.categoryname}}
+            <ion-item   tabindex="1"  class="list" *ngFor="let item of leftCate" (tap)="getRightCateData(item['id'])">
+              <p [ngStyle]="{'color':leftId === item.id ? 'red' : '' }">{{item.categoryname}}</p>
             </ion-item>
           </ion-list>
       </div>
@@ -21,7 +19,7 @@
       <div class="cate_right">
           <ion-row>
              <img style="width:100%; height: 100px;" src="../assets/imgs/slide03.jpg" />
-              <ion-col col-4 *ngFor="let item of rightCate" [navPush]='ProductlistPage' [navParams]="{'id':item['id']}">              
+              <ion-col col-4 *ngFor="let item of rightCate" [navPush]='ProductlistPage' [navParams]="{'id':item['id'],'categoryname':item['categoryname']}">              
                 
                     <img [src]="config.domain+item.icon" />
                     <p>{{item.categoryname}}</p>                        

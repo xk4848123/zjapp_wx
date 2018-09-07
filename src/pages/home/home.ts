@@ -254,7 +254,6 @@ doRefresh($event){
   }
   //定义一个跳转到搜索页面的方法
   goSearch(){
-
     this.navCtrl.push('SearchPage');
   }
 

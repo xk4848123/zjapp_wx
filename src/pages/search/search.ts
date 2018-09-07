@@ -44,7 +44,7 @@ export class SearchPage {
 
   public elecFlag = false; /*积分排序方式，默认正序 */
   
-  public selectTag = "sale";
+  public selectTag = "sale";/**默认按销量排序 */
 
   constructor(public ele:ElementRef,public render2:Renderer2,public navCtrl: NavController, public navParams: NavParams,public config:ConfigProvider,public httpService:HttpServicesProvider,public storage:StorageProvider,public alertCtrl: AlertController) {
       
@@ -52,8 +52,8 @@ export class SearchPage {
     this.getHistory();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SearchPage');
+  ionViewDidLoad() { 
+    
   }
 
 
@@ -83,7 +83,6 @@ export class SearchPage {
               this.render2.setStyle(sub,"top",headerHeight+'px');
             },100)
             // console.log(sub);
-            
           }
           if(infiniteScroll){
             //告诉ionic 请求数据完成
