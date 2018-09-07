@@ -48,22 +48,21 @@ page-category{
         }
         
     }
-    .list:focus{
-        // border-radius:50px;
-        // background:rgba(235, 48, 48, 0.644);
-        // width:80px;
-        // height:20px;
-        // text-align: center;
-        // line-height: 100px;
-        // margin:0 auto;
-        // padding :0 ;
-        // position:relative;
-        //color:red;      
-        color:  red;  
+    .list{
+        p{
+        font-size: 1rem;
+        color: black;
+        }
     }
-    
 }
-.label-ios{
-    margin:0 auto;
-}
+    .label-ios{
+        margin:0 auto;
+    }
+    .search{
+        div{
+            div{
+                top:11px !important;
+            }
+        }
+    }
 }

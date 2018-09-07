@@ -8,6 +8,8 @@ import { HttpServicesProvider } from '../../providers/http-services/http-service
 import { ToastProvider } from '../../providers/toast/toast';
 import { ConfigProvider } from '../../providers/config/config';
 import { AlertController } from 'ionic-angular';
+import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 //申请退款
 import { RefundPage } from '../refund/refund';
 
@@ -33,11 +35,12 @@ export class OrderlistPage {
 
   @ViewChild(Navbar) navBar: Navbar;
 
-  public tempData = '';
+  public tempData='';
   public pageStackLength = 0; 
   public cancer='';
   public confirm='';
-  constructor(public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider, private config: ConfigProvider, private alertCtrl: AlertController) {
+  public orderData:(any);
+  constructor(public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider, private config: ConfigProvider, private alertCtrl: AlertController) {
     this.pageStackLength  = this.navCtrl.length();
   }
 
@@ -59,6 +62,7 @@ export class OrderlistPage {
         console.log(data);
         if (data.error_code == 0) {
           this.tempData = data.data;
+          this.orderData = data.data;
           console.log(this.tempData);
         } else if(data.error_code == 3){
           //抢登处理
@@ -107,35 +111,81 @@ export class OrderlistPage {
          }
       });
     }
-}
-//确认收货
-confirmorder(item){
-  this.confirm=item.orderno;
-  console.log(this.confirm);
-  let token = this.storage.get('token');
-  if (token) {
-    //api请求
-    let api = 'v1/PersonalCenter/confirmOrder/' +token;
-     //发送请求提交退款申请
-     this.httpService.doFormPost(api,{orderNo:this.confirm } ,(data) => {
-      console.log(data);
-        if (data.error_code == 0) {
-          this.navCtrl.pop();
-       } else if(data.error_code == 3){
-         //抢登处理
-       }
-       else {
-         this.toast.showToast(data.error_message);
-       }
+  }
+  //确认收货
+  confirmorder(item){
+    this.confirm=item.orderno;
+    console.log(this.confirm);
+    let token = this.storage.get('token');
+    if (token) {
+      //api请求
+      let api = 'v1/PersonalCenter/confirmOrder/' +token;
+      //发送请求提交退款申请
+      this.httpService.doFormPost(api,{orderNo:this.confirm } ,(data) => {
+        console.log(data);
+          if (data.error_code == 0) {
+            this.navCtrl.pop();
+        } else if(data.error_code == 3){
+          //抢登处理
+        }
+        else {
+          this.toast.showToast(data.error_message);
+        }
+      });
+    }
+  }
+  //查看物流
+  information(orderId,orderNo,item){
+    this.navCtrl.push('InformationPage',
+    {orderId: orderId,
+    orderNo: orderNo,
+    item:item 
     });
   }
-}
-//查看物流
-information(orderId,orderNo,item){
-  this.navCtrl.push('InformationPage',
-  {orderId: orderId,
-   orderNo: orderNo,
-   item:item 
-  });
-}
+  //立即支付
+  payNow(){
+    var api = "v2/PersonalCenter/HandleEOrder/"+this.storage.get('token');
+    var params = {
+      "orderNo":this.orderData.orderno
+    }
+    this.httpService.doFormPost(api,params,(data)=>{
+      console.log(data);
+      if(data.data.type==1){
+        //使用虚拟货币未使用钱 
+        this.passwordProvider.execute(this.navCtrl,()=>{
+          var api = "v1/PersonalCenter/syncHandleOrder/"+this.storage.get('token');
+          var params = {
+            "orderNo":data.data.datas
+          }
+          this.httpService.doFormPost(api,params,(data)=>{
+            if(data.error_code==0){
+              this.navCtrl.push('PaysuccessPage',{
+                "orderType":"1"
+              });
+            }else if(data.error_code==3){
+              this.rlogin.rLoginProcess(this.navCtrl);
+            }else{
+              this.toast.showToast(data.error_message);
+            }
+          });
+        });
+      }else if(data.data.type==2){
+        //使用钱
+        this.navCtrl.push('PaymentPage',{
+          orderNo: data.data.datas.orderNo,
+          realpay: data.data.datas.realpay,
+          orderType: data.data.datas.orderType
+        });
+      }else if(data.data.type==3){
+        //使用虚拟货币使用钱
+        this.passwordProvider.execute(this.navCtrl,()=>{
+          this.navCtrl.push('PaymentPage',{
+            orderNo: data.data.datas.orderNo,
+            realpay: data.data.datas.realpay,
+            orderType: data.data.datas.orderType
+          });
+        });
+      }
+    });
+  }
 }

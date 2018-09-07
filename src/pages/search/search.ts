@@ -1,4 +1,4 @@
-import { Component,ViewChild } from '@angular/core';
+import { Component,ViewChild,ElementRef,Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams,Content,AlertController  } from 'ionic-angular';
 
 
@@ -44,16 +44,16 @@ export class SearchPage {
 
   public elecFlag = false; /*积分排序方式，默认正序 */
   
-  public selectTag = "sale";
+  public selectTag = "sale";/**默认按销量排序 */
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public config:ConfigProvider,public httpService:HttpServicesProvider,public storage:StorageProvider,public alertCtrl: AlertController) {
+  constructor(public ele:ElementRef,public render2:Renderer2,public navCtrl: NavController, public navParams: NavParams,public config:ConfigProvider,public httpService:HttpServicesProvider,public storage:StorageProvider,public alertCtrl: AlertController) {
       
     //获取历史记录
     this.getHistory();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SearchPage');
+  ionViewDidLoad() { 
+    
   }
 
 
@@ -74,9 +74,19 @@ export class SearchPage {
             this.list=this.list.concat(data.data);  /*拼接数据*/
           }         
           this.flag=true;  /*显示商品列表*/
+          if(this.flag==true){
+            let header = this.ele.nativeElement.querySelector('.tsearch');
+            let headerHeight = header.offsetHeight;
+            setTimeout(()=>{
+              let sub = this.ele.nativeElement.querySelector('.sub_header');
+              headerHeight = headerHeight+6;
+              this.render2.setStyle(sub,"top",headerHeight+'px');
+            },100)
+            // console.log(sub);
+          }
           if(infiniteScroll){
             //告诉ionic 请求数据完成
-            infiniteScroll.complete();    
+            infiniteScroll.complete();
           }
       })
   } 

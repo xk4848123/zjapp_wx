@@ -5,7 +5,8 @@ import { ConfigProvider } from '../../providers/config/config';
 import { StorageProvider } from '../../providers/storage/storage';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { ToastProvider } from '../../providers/toast/toast';
-
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
+import { HomePage }from '../home/home';
 
 @Component({
   selector: 'page-cart',
@@ -29,7 +30,9 @@ export class CartPage {
 
   public productArray = [];
 
-  constructor(public navCtrl: NavController,public navParams: NavParams,public config:ConfigProvider,public storage:StorageProvider,public httpservice :HttpServicesProvider,public toast:ToastProvider) {
+  public num = 1;/**记录第几次进入购物车且未登陆 */
+
+  constructor(public rlogin:RloginprocessProvider,public navCtrl: NavController,public navParams: NavParams,public config:ConfigProvider,public storage:StorageProvider,public httpservice :HttpServicesProvider,public toast:ToastProvider) {
     this.isIndex = navParams.get("isIndex");
     if(this.isIndex==undefined){
       this.isIndex = true;
@@ -49,7 +52,6 @@ export class CartPage {
     this.httpservice.requestData(api,(data)=>{
       if(data.error_code==0){
         this.list = data.data;
-        console.log(this.list);
         for(var i=0;i<this.list.length;i++){
           if(this.list[i].producerName=='' || this.list[i].producerName==null){
             this.list[i].producerName="平台自营";
@@ -70,8 +72,15 @@ export class CartPage {
           this.list=[];
           this.hasData=false;
         }
+      }else if(data.error_code==3){
+        if(this.num==2){
+          this.num=1;
+        }else{
+          this.num++;
+          this.navCtrl.push('LoginPage');
+        }  
       }else{
-        this.toast.showToast("服务端异常");
+        this.toast.showToast(data.error_message);
       }
     },params);
     this.isChencked = false;
@@ -113,7 +122,7 @@ export class CartPage {
           --item.productnum;
           this.sumPrice(); 
         }else{
-          this.toast.showToast("服务端异常");
+          this.toast.showToast(data.error_message);
         }
       });
     }
@@ -130,7 +139,7 @@ export class CartPage {
         ++item.productnum;
         this.sumPrice();  
       }else{
-        this.toast.showToast("服务端异常");
+        this.toast.showToast(data.error_message);
       }
     });
   }
@@ -219,7 +228,7 @@ export class CartPage {
           this.list=noCheckProduct;
           this.list.length>0?this.hasData=true:this.hasData=false;
            }else{
-            this.toast.showToast("服务端异常");
+            this.toast.showToast(data.error_message);
            }
          });    
   }
