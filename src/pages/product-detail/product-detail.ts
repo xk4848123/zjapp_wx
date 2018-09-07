@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ElementRef,Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams,App, Navbar } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { ConfigProvider } from '../../providers/config/config';
@@ -21,10 +21,16 @@ export class ProductDetailPage {
   public starList=[];/**星星个数 */
   public comment :(string);
   public commentDetail:(any);
-  constructor(public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
+  constructor(private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
 
   }
   ionViewDidLoad() {
+      let footer = this.eleref.nativeElement.querySelector('.tfoot-left');
+      let footerHeight = footer.offsetHeight;
+      let buy = this.eleref.nativeElement.querySelector('.buy');
+      let join = this.eleref.nativeElement.querySelector('.join');
+      this.renderer2.setStyle(buy,'height',footerHeight+'px');
+      this.renderer2.setStyle(join,'height',footerHeight+'px');
       this.id = this.navParams.get("id");
       if(this.id==undefined){
 

@@ -5,6 +5,7 @@ import { StorageProvider } from '../../providers/storage/storage';
 import { AlertProvider } from '../../providers/alert/alert';
 import { LoginPage } from '../../pages/login/login';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 @Component({
   selector: 'car-modal',
   templateUrl: 'car-modal.html'
@@ -22,7 +23,7 @@ export class CarModalComponent {
   public specName:(string);
   public product:(any);
   public productArray = [];
-  constructor(public appCtrl : App,public navCtrl :NavController,public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,public alert: AlertProvider,public httpservice:HttpServicesProvider) {
+  constructor(public rlogin :RloginprocessProvider,public appCtrl : App,public navCtrl :NavController,public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,public alert: AlertProvider,public httpservice:HttpServicesProvider) {
     this.product = params.get("product");
     this.productname = this.product.productname;
     this.num = this.product.stocknum;
@@ -42,6 +43,7 @@ export class CarModalComponent {
       text:"取消",
       role:'cancle',
       handler:()=>{
+        this.viewCrl.dismiss();
       }
     },{
       text:"确认",
@@ -101,6 +103,7 @@ export class CarModalComponent {
       text:"取消",
       role:'cancle',
       handler:()=>{
+        this.viewCrl.dismiss();
       }
     },{
       text:"确认",
@@ -123,9 +126,11 @@ export class CarModalComponent {
         this.httpservice.doFormPost(api,params,(data)=>{
           if(data.error_code==0){
             this.alert.showAlert("加入购物车成功","",['确定']);
+            this.viewCrl.dismiss();
+          }else if(data.error_code==3){
+            this.rlogin.rLoginProcessWithHistory(this.navCtrl);
           }
         })
-        this.viewCrl.dismiss();
       }
     }
   }
