@@ -19,7 +19,6 @@ import { ToastProvider } from '../../providers/toast/toast';
 export class MoneyrecordPage {
 
   public type: string = 'elec';
-  public token: string = '';
   public datas = [];
   public page = 0;
   public pageNum = 10;
@@ -46,11 +45,6 @@ export class MoneyrecordPage {
 
   }
 
-  ionViewDidLoad() {
-    if (this.storage.get('token')) {
-      this.token = this.storage.get('token');
-    }
-  }
 
   ionViewWillEnter() {
     //初始化数据
@@ -60,8 +54,9 @@ export class MoneyrecordPage {
 
   getData(): boolean {
     let enable = true;
-    if (this.token != '') {
-      let api = 'v1/PersonalCenter/accountBill/' + this.token;
+    let token = this.storage.get('token');
+    if (token) {
+      let api = 'v1/PersonalCenter/accountBill/' + token;
       this.httpService.requestData(api, (data) => {
         if (data.error_code == 0) {//请求成功
           let dataLength = data.data.length;

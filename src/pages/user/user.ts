@@ -1,3 +1,4 @@
+///<reference path="../../services/user_defined.d.ts"/>
 import { Component, Renderer2, ElementRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
@@ -57,6 +58,7 @@ export class UserPage {
   }
 
   ionViewWillEnter() {
+    global_wxFunciton.hideGoRoot();
     if (!this.isFirst) {
       this.refreshUser();
     }
@@ -69,6 +71,7 @@ export class UserPage {
   }
 
   ionViewWillLeave(){
+    global_wxFunciton.showGoRoot();
     this.clearDot();
   }
 
@@ -275,20 +278,9 @@ export class UserPage {
       this.canAgentApply = false;
     }
   }
-  // ionViewDidLeave(){
-  //     console.log("5.0 ionViewDidLeave 离开页面时触发");
-  // }
-  // ionViewWillUnload(){
-  //    console.log("6.0 ionViewWillUnload 当页面将要销毁同时页面上元素移除   时触发");
-  // }
-
-  // }
-  // ionViewCanEnter(){
-  //    console.log("ionViewCanEnter");
-  // }
-  // ionViewCanLeave(){
-  //      console.log("ionViewCanLeave");
-  // }
+  register(){
+    this.navCtrl.push('LoginPage',{type:2});
+  }
 doRefresh($event){
   this.refreshUser();
 

@@ -26,6 +26,18 @@ export class VippresentPage {
   public type: string = '';
   public list: Array<any> = [];
 
+  getData = () =>
+  {
+    return new Promise((resolve, reject) => {
+      if(this.type == 'possessor'){
+        this.getPossessor();
+      }else{
+        this.getAlreadyGive();
+      }
+      resolve();
+    });
+  }
+
   ionViewWillEnter() {
     this.type = 'possessor'; 
   }
@@ -70,7 +82,8 @@ export class VippresentPage {
 
   GiveImmediately(sendHeadId){
      this.navCtrl.push('VippresentdetailPage',{
-       sendHeadId: sendHeadId
+       sendHeadId: sendHeadId,
+       callback: this.getData
      })
   }
 

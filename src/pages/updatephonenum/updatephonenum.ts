@@ -7,7 +7,7 @@ import { ToastProvider } from '../../providers/toast/toast';
 import { AlertProvider } from '../../providers/alert/alert';
 
 /**
- * Generated class for the SetpaypasswordPage page.
+ * Generated class for the UpdatephonenumPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -15,10 +15,10 @@ import { AlertProvider } from '../../providers/alert/alert';
 
 @IonicPage()
 @Component({
-  selector: 'page-setpaypassword',
-  templateUrl: 'setpaypassword.html',
+  selector: 'page-updatephonenum',
+  templateUrl: 'updatephonenum.html',
 })
-export class SetpaypasswordPage {
+export class UpdatephonenumPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: HttpServicesProvider,
     private storage: StorageProvider, private rlogin: RloginprocessProvider, private noticeSer: ToastProvider, private el: ElementRef,
@@ -45,7 +45,7 @@ export class SetpaypasswordPage {
         this.rlogin.rLoginProcess(this.navCtrl);
       }
       else {
-        this.noticeSer.showToast('数据获取异常：' + res.error_message);
+        this.noticeSer.showToast(res.error_message);
       }
     });
   }
@@ -70,49 +70,22 @@ export class SetpaypasswordPage {
         }, 1000);
       } 
       else {
-        this.noticeSer.showToast('服务异常：' + res.error_message);
+        this.noticeSer.showToast( res.error_message);
       }
     });
   }
   next() {
-    let apiUrl = 'v1/LoginAndRegister/verify'
+    let apiUrl = 'v1/LoginAndRegister/verifyUpdateUserName';
     let token = this.storage.get('token');
     if (this.verifycode && this.verifycode.toString().length == 4) {
       this.httpService.doPost(apiUrl, { token: token, verifyCode: this.verifycode }, (res) => {
         if (res.error_code == 0) {//请求成功
-          this.alert.showPrompt('设置支付密码',
-            [
-              {
-                text: '取消',
-                handler: data => {
-
-                }
-              },
-              {
-                text: '确定',
-                handler: data => {
-                  apiUrl = 'v1/LoginAndRegister/verify/' + res.data;
-                  this.httpService.doPost(apiUrl, { token: token, paypassword: data[0] }, (result) => {
-                    console.log(result);
-                    if (result.error_code == 0) {//请求成功
-                      this.noticeSer.showToast('支付密码设置成功');
-                      this.navCtrl.pop();
-                    } else if (result.error_code == 3) {//token过期
-                      this.rlogin.rLoginProcess(this.navCtrl);
-                    }
-                    else {
-                      this.noticeSer.showToast('服务异常：' + result.error_message);
-                    }
-                  });
-                }
-              }
-            ]
-          );
+          this.navCtrl.push('UpdatephonenumnextPage',{Certficate:res.data})
         } else if (res.error_code == 3) {//token过期
           this.rlogin.rLoginProcess(this.navCtrl);
         }
         else {
-          this.noticeSer.showToast('服务异常：' + res.error_message);
+          this.noticeSer.showToast(res.error_message);
         }
       });
     } else {
@@ -126,4 +99,5 @@ export class SetpaypasswordPage {
       clearInterval(this.interval);
     }
   }
+
 }
