@@ -9,9 +9,8 @@
   <ion-navbar>
     <ion-title>商学院</ion-title>
   </ion-navbar>
-  <div class="nav" style="position:fixed;top:40px;left:0;width:100%">
   <div class="img">
-      <img style="width:100%; height: 124px;"   [src]="config.domain+commercialData.commercialCollegePic" />
+      <img style="width:100%; height:200px;"   [src]="config.domain+commercialData.commercialCollegePic" />
   </div>
   <div class="fix_header">
       <div class="row" id="sub_header">
@@ -19,27 +18,28 @@
           <div class="col-demo" >众健科技</div>
           <div class="col-demo" >金牌教师</div>
       </div>
-      <div class="transition">
-      </div>
-  </div>
   </div>
 </ion-header>
-<div class="transition">
-  </div>
 
-<ion-content style="margin-top:175px;">
+
+<ion-content>
+    <ion-list>
         <ion-item  *ngFor="let item of typeData" (tap)="pushDetail(item.id)">
-            <img class="imgs" [src]="config.domain+item.coursePhotos.photo"/>
-            <div class="title-font"><h3>{{item.coursename}}</h3></div><br /><br />
-            <div class="div-font">{{item.coursebrief}}</div>
-        </ion-item>
+
+            <ion-avatar item-start  class="itemImg">
+                <img [src]="config.domain+item.coursePhotos[0].photo">
+              </ion-avatar>
+            <div class="title-font"><h3>{{item.coursename}}</h3><p>{{item.coursebrief}}</p></div>
+       </ion-item>
+       </ion-list>
+       <!-- <div>的</div> -->
       <!-- 下拉刷新 -->
     <ion-refresher (ionRefresh)="doRefresh($event)" threshold="50px">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="下拉刷新" refreshingSpinner="circles" refreshingText="刷新...">
+     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="下拉刷新" refreshingSpinner="circles" refreshingText="刷新...">
         </ion-refresher-content>
         <ion-refresher-content>
         </ion-refresher-content>
-    </ion-refresher>
+    </ion-refresher> 
     <!--上滑的时候，加载数据-->
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)" thr>
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="加载中...">

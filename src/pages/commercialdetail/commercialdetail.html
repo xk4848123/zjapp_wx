@@ -9,20 +9,30 @@
   <ion-navbar>
     <ion-title>课程详情</ion-title>
   </ion-navbar>
-  <div class="nav" style="position:fixed;top:40px;left:0;width:100%">
-      <div class="img">
-          <img style="width:100%; height: 124px;" src="../assets/imgs/07.jpg" />
-      </div>
-      </div>
-      <div class="fix_header">
-          <div class="row" id="sub_header">
-              <div class="col-demo" >众健科技财富通峰会--第四期</div>
-             
-          </div>
-          <div class="transition">
-          </div>
-      </div>
 </ion-header>
 <ion-content padding>
-     
+        <div class="img" *ngFor="let item of detailPage.coursePhotos">
+            <img [src]="config.domain+item.photo" />
+        </div>
+        <div class="fix_header">
+            <div class="row" id="sub_header">
+                <div class="col-demo" >{{detailPage.coursename}}</div>
+            </div>
+            <div class="transition">
+              </div>
+            <div class="row" id="sub_header">
+                <div class="col-demo-div" style="color:#999797">开课时间：{{detailPage.coursestarttime}}<br />
+                                      开课地点：{{detailPage.coursesite}}
+              </div>
+            </div>
+            <div class="transition">
+              </div>
+        </div>
+        <div> 
+         <p>简介</p>
+         <p *ngIf="detailPage.coursetype==3" (tap)="pushDetail(detailPage.id)" style="color:#999797;">{{detailPage.coursename}}</p>
+         <div [innerHTML]="assembleHTML(tempData)">
+         </div>
+        
+        </div>
 </ion-content>

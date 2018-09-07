@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { CommercialPage } from '../commercial/commercial';
+
 
 @Component({
   selector: 'page-index-adv',
@@ -20,5 +22,8 @@ export class IndexAdvPage {
       {img:'assets/imgs/2.png'},
       {img:'assets/imgs/3.png'}
     ];
+  }
+  commercial(){
+    this.navCtrl.push('CommercialPage')
   }
 }
