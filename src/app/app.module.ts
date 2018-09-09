@@ -114,6 +114,7 @@ import {SplitrecordPageModule} from '../pages/splitrecord/splitrecord.module';
 import {SetattrPageModule} from '../pages/setattr/setattr.module';
 import {UpdatephonenumPageModule }from '../pages/updatephonenum/updatephonenum.module';
 import {UpdatephonenumnextPageModule } from '../pages/updatephonenumnext/updatephonenumnext.module';
+import {OrderhandletransferPageModule} from '../pages/orderhandletransfer/orderhandletransfer.module';
 /**分享 */
 import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
@@ -190,6 +191,7 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     SetattrPageModule,
     UpdatephonenumPageModule,
     UpdatephonenumnextPageModule,
+    OrderhandletransferPageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
       tabsHideOnSubPages: 'true', //隐藏全部子页面 tabs

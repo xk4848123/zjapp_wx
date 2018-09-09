@@ -7,6 +7,7 @@ import { HttpServicesProvider } from '../../providers/http-services/http-service
 
 import { ToastProvider } from '../../providers/toast/toast';
 import { ConfigProvider } from '../../providers/config/config';
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 
 /**
  * Generated class for the SalereturnPage page.
@@ -25,15 +26,12 @@ export class SalereturnPage {
   public  getSelectedText='';
   oderId:number;
   orderNo:string;
-  constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,
+    public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,private rclogin: RloginprocessProvider) {
     this.oderId = this.navParams.get('orderId');
     this.temp=this.navParams.get('item');
     this.orderNo = this.navParams.get('orderNo');
   }
-  goToOrderlist(){
-    this.navCtrl.push('OrderlistPage',{orderId:this.oderId,behindHandle:true});
-  }
-
   confirm(){
     let token = this.storage.get('token');
     if (token) {
@@ -44,9 +42,11 @@ export class SalereturnPage {
        this.httpService.doFormPost(api,{orderNo:this.orderNo,memo: this.getSelectedText} ,(data) => {
         console.log(data);
           if (data.error_code == 0) {
-            this.goToOrderlist();
+            //申请退货后处理
+            this.navCtrl.push('OrderhandletransferPage',{type: '4',behindHandle:'behindHandle'});
          } else if(data.error_code == 3){
            //抢登处理
+           this.rclogin.rLoginProcess(this.navCtrl);
          }
          else {
            this.toast.showToast(data.error_message);

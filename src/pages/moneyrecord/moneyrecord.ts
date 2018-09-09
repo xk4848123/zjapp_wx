@@ -22,8 +22,9 @@ export class MoneyrecordPage {
   public datas = [];
   public page = 0;
   public pageNum = 10;
-  public enable = true;
   public title = '';
+
+  infiniteScroll:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private rlogin: RloginprocessProvider,
     private httpService: HttpServicesProvider, private storage: StorageProvider, private noticeSer: ToastProvider) {
@@ -45,15 +46,12 @@ export class MoneyrecordPage {
 
   }
 
-
   ionViewWillEnter() {
     //初始化数据
-    let enable: boolean = this.getData();
-    this.enable = enable;
+   this.getData();
   }
 
-  getData(): boolean {
-    let enable = true;
+  getData() {
     let token = this.storage.get('token');
     if (token) {
       let api = 'v1/PersonalCenter/accountBill/' + token;
@@ -61,28 +59,32 @@ export class MoneyrecordPage {
         if (data.error_code == 0) {//请求成功
           let dataLength = data.data.length;
           if (dataLength < this.pageNum) {
-            enable = false;
+            this.datas = this.datas.concat(data.data);
+            this.page ++;
+          }else{
+            this.datas = this.datas.concat(data.data);
+            if(this.infiniteScroll){
+              this.infiniteScroll.enable(true);
+            }
+            this.page++;
           }
-          for (let index = 0; index < dataLength; index++) {
-            this.datas.push(data.data[index]);
-          }
-          this.page++;
         } else if (data.error_code == 3) {//token过期
           this.rlogin.rLoginProcessWithHistory(this.navCtrl);
+          this.infiniteScroll.enable(true);
         }
         else {
           this.noticeSer.showToast('数据获取异常：' + data.error_message);
+          this.infiniteScroll.enable(true);
         }
       }, { type: this.type, page: this.page, pageNum: this.pageNum });
-    } else {
-      enable = false;
-    }
-    return enable;
+    } 
+
   }
 
   doInfinite(infiniteScroll) {
-    let enable: boolean = this.getData();
+    this.infiniteScroll = infiniteScroll;
+    this.getData();
     infiniteScroll.complete();
-    infiniteScroll.enable(enable);
+    infiniteScroll.enable(false);
   }
 }

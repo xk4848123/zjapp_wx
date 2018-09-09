@@ -5,42 +5,28 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-navbar>
-        <ion-title>查看粉丝</ion-title>
-      </ion-navbar>
-  </ion-header>
-  
-  
-  <ion-content>  
-      <div class="row" id="sub_header">
-          <div class="col">
-            <div class="col-demo" tabindex="1">红粉</div>
-          </div>
-          <div class="col">
-            <div class="col-demo" tabindex="2">黄粉</div>
-          </div>
-          <div class="col">
-            <div class="col-demo" tabindex="3">蓝粉</div>
-          </div>
-        </div>
-        <div class="row">
-            <div class="col ">
-              <div class="img">
-                      <img src="../assets/imgs/01.jpg" />
-              </div>
-            </div>
-            <div class="col">
-              <div class="col-demo"><br/>
-                SysID:106907<br/><br/>
-                UserName:12345678
-              </div>
-            </div>
-            <div class="col">
-                <div class="col-demo"></div>
-              </div>
-              <div class="col">
-                  <div class="col-demo"><br /><br/>amount:4.26</div>
-                </div>
-          </div>
-  </ion-content>
-  
+  <ion-navbar>
+    <ion-title>查看粉丝</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content style="background: #eeeeee;">
+    <div class="card-line-head" *ngFor="let item of tempData">
+      <img [src]="config.domain + item.HeadPhoto" onerror="this.src='assets/imgs/user.png'">
+      <div class="center_content">
+        众健号：<span>{{item.SysID}}</span>
+      </div>
+      <div class="right_content">
+        贡献：<span>{{item.amount}}</span>
+      </div>
+    </div>
+
+  <div class="up" (tap)="toChange('Red')">红粉</div>
+  <div class="center" (tap)="toChange('Yellow')">黄粉</div>
+  <div class="down" (tap)="toChange('Blue')">蓝粉</div>
+  <!--上滑的时候，加载数据-->
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" threshold="50px">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="加载中...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

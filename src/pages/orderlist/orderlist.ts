@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Navbar } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { StorageProvider } from '../../providers/storage/storage';
 
@@ -7,16 +7,8 @@ import { HttpServicesProvider } from '../../providers/http-services/http-service
 
 import { ToastProvider } from '../../providers/toast/toast';
 import { ConfigProvider } from '../../providers/config/config';
-import { AlertController } from 'ionic-angular';
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
-//申请退款
-import { RefundPage } from '../refund/refund';
-
-//申请退货
-import { SalereturnPage } from '../salereturn/salereturn';
-//查看物流
-import { InformationPage } from '../information/information';
 
 
 /**
@@ -33,25 +25,16 @@ import { InformationPage } from '../information/information';
 })
 export class OrderlistPage {
 
-  @ViewChild(Navbar) navBar: Navbar;
-
   public tempData='';
   public pageStackLength = 0; 
   public cancer='';
   public confirm='';
   public orderData:(any);
-  constructor(public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider, private config: ConfigProvider, private alertCtrl: AlertController) {
+  constructor(public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider, private config: ConfigProvider) {
     this.pageStackLength  = this.navCtrl.length();
   }
 
-  ionViewDidLoad() {
-    if (this.navParams.get('behindHandle')) {
-      console.log('注册回退重写');
-      this.navBar.backButtonClick = ()=>{
-        this.navCtrl.popTo(this.navCtrl.getByIndex(this.pageStackLength-2));
-      }
-    }
-  }
+
   ionViewWillEnter() {
     //接受从订单列表页传过来的参数
     let token = this.storage.get('token');
@@ -59,13 +42,12 @@ export class OrderlistPage {
       //api请求
       let api = 'v1/PersonalCenter/getOrderDetails/' + token + '/' + this.navParams.get('orderId');
       this.httpService.requestData(api, (data) => {
-        console.log(data);
         if (data.error_code == 0) {
           this.tempData = data.data;
           this.orderData = data.data;
-          console.log(this.tempData);
         } else if(data.error_code == 3){
           //抢登处理
+          this.rlogin.rLoginProcess(this.navCtrl);
         }
         else {
           this.toast.showToast(data.error_message);
@@ -93,18 +75,19 @@ export class OrderlistPage {
    //取消订单
    pushcancelOrder(item) {
     this.cancer=item.orderno;
-    console.log(this.cancer);
     let token = this.storage.get('token');
     if (token) {
       //api请求
       let api = 'v1/PersonalCenter/cancelOrder/' +token;
        //发送请求提交退款申请
        this.httpService.doFormPost(api,{orderNo:this.cancer } ,(data) => {
-        console.log(data);
           if (data.error_code == 0) {
-             this.navCtrl.pop();
+
+            //取消订单后
+            this.navCtrl.push('OrderhandletransferPage',{type: '1'});
          } else if(data.error_code == 3){
            //抢登处理
+           this.rlogin.rLoginProcess(this.navCtrl);
          }
          else {
            this.toast.showToast(data.error_message);
@@ -115,18 +98,19 @@ export class OrderlistPage {
   //确认收货
   confirmorder(item){
     this.confirm=item.orderno;
-    console.log(this.confirm);
     let token = this.storage.get('token');
     if (token) {
       //api请求
       let api = 'v1/PersonalCenter/confirmOrder/' +token;
       //发送请求提交退款申请
       this.httpService.doFormPost(api,{orderNo:this.confirm } ,(data) => {
-        console.log(data);
           if (data.error_code == 0) {
-            this.navCtrl.pop();
+           //确认收货后处理
+           this.navCtrl.push('OrderhandletransferPage',{type: '2'})
+        
         } else if(data.error_code == 3){
           //抢登处理
+          this.rlogin.rLoginProcess(this.navCtrl);
         }
         else {
           this.toast.showToast(data.error_message);
@@ -149,7 +133,6 @@ export class OrderlistPage {
       "orderNo":this.orderData.orderno
     }
     this.httpService.doFormPost(api,params,(data)=>{
-      console.log(data);
       if(data.data.type==1){
         //使用虚拟货币未使用钱 
         this.passwordProvider.execute(this.navCtrl,()=>{

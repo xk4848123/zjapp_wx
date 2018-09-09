@@ -13,6 +13,7 @@ page-fans {
 }
 .head-span{
     float: left;
+    font-size: 1.8rem;
 }
 .arrows{
     position: absolute;
@@ -22,7 +23,10 @@ page-fans {
 .line-div{
     border-top: 0.1rem solid #eeeeee
 }
-p{
-    padding-left: 28rem,;
+.content-span{
+    position: absolute;
+    right:1.5rem;
+    color: #333333;
+    font-size: 1.5rem;
 }
 }

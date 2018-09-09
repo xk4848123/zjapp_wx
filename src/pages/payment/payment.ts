@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { StorageProvider } from '../../providers/storage/storage';
 import { ToastProvider } from '../../providers/toast/toast';
-import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess'
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 import { WeblinkProvider } from '../../providers/weblink/weblink';
 import { WechatProvider } from '../../providers/wechat/wechat';
 import { ConfigProvider } from '../../providers/config/config';
