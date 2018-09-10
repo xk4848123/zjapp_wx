@@ -6,6 +6,7 @@ import { StorageProvider } from '../../providers/storage/storage';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 
 import { ToastProvider } from '../../providers/toast/toast';
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 import { ConfigProvider } from '../../providers/config/config';
 
 /**
@@ -23,17 +24,12 @@ import { ConfigProvider } from '../../providers/config/config';
 export class RefundPage {
 public  temp='';
 public  getSelectedText='';
-  constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,public storage: StorageProvider,
+     public httpService: HttpServicesProvider, public toast: ToastProvider,private rclogin: RloginprocessProvider) {
 
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RefundPage');
-  }
 
-  goToOrderlist(){
-    this.navCtrl.push('OrderlistPage',{orderId:this.navParams.get('orderId'),behindHandle:true});
-  }
   ionViewWillEnter() {
     this.temp=this.navParams.get('item');
     console.log(this.temp)
@@ -51,9 +47,12 @@ public  getSelectedText='';
         console.log(data);
           if (data.error_code == 0) {
             
-           this.goToOrderlist();
+           //申请退款处理
+
+           this.navCtrl.push('OrderhandletransferPage',{type: '3',behindHandle:'behindHandle'});
          } else if(data.error_code == 3){
            //抢登处理
+           this.rclogin.rLoginProcess(this.navCtrl);
          }
          else {
            this.toast.showToast(data.error_message);

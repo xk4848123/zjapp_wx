@@ -1,34 +1,77 @@
 page-fandetail {
-    #sub_header{
-        height: 4rem;
-        line-height: 4rem;
-        top:4.3rem;
-        width: 100%;
-        border-bottom:1px solid #eee;
-        background: #fff;
-        margin-top: 0.6rem;
-        div{
-            flex: 1;
-            text-align: center;
+
+    .card-line-head{
+        background-color: #fff;
+        height: 80px;
+        position: relative;
+        margin: 5px;
+        border-radius: 8px;
+
+        img{
+            position: absolute;
+            height: 48px;
+            width: 48px;
+            border-radius: 20px;
+            top: 16px;
+            left: 16px;
+        }
+        .center_content{
+            height: 80px;
+            position: absolute;
+            left: 70px;
+            line-height: 80px;
+
+        }
+        .right_content{
+            height: 60px;
+            line-height: 80px;
+            position: absolute;
+            top:20px;
+            right: 16px;
+            color: #f53d3d;
+            span{
+                font-size: 20px;
+               
+            }
+          
         }
     }
-    .img{
-        width: 60px;
-        height: 60px;
-        display: flex;
-        border-radius: 64%;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        margin-top: 1.4rem;
-    }
-    .col-demo:focus{
-        color: rgb(98, 145, 233);
-        text-decoration: underline;
-        cursor:pointer;
-        border-bottom: 1px solid rgb(98, 145, 233);
-        margin-top:-0.5rem;
-        // -webkit-tap-highlight-color:rgb(90, 90, 95);
-    }
 
+    .up{
+        background-color: #aaaaaa;
+        color: #fff;
+        position: fixed;
+        z-index: 10;
+        text-align: center;
+        top:200px;
+        height: 35px;
+        line-height: 35px;
+        opacity:0.7;
+        border-radius: 10px 10px 0 0;
+        width: 30px;
+    }
+    .center{
+        background-color: #aaaaaa;
+        color: #fff;
+        position: fixed;
+        z-index: 10;
+        top:235px;
+        height: 35px;
+        line-height: 35px;
+        opacity:0.7;
+        width: 30px;
+
+    }
+    .down{
+        background-color: #aaaaaa;
+        color: #fff;
+        position: fixed;
+        z-index: 10;
+        top:270px;
+        height: 35px;
+        line-height: 35px;
+        opacity:0.7;
+        width: 30px;
+        border-radius: 0 0 10px 10px;
+    }
 }

@@ -117,6 +117,7 @@ import {UpdatephonenumnextPageModule } from '../pages/updatephonenumnext/updatep
 import { MembersProductPageModule } from '../pages/members-product/members-product.module';
 import { ConfirmVipOrderPageModule } from '../pages/confirm-vip-order/confirm-vip-order.module';
 import { ProductCommentPageModule } from '../pages/product-comment/product-comment.module';
+import {OrderhandletransferPageModule} from '../pages/orderhandletransfer/orderhandletransfer.module';
 /**分享 */
 import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
@@ -198,6 +199,7 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     MembersProductPageModule,
     ConfirmVipOrderPageModule,
     ProductCommentPageModule,
+    OrderhandletransferPageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
       tabsHideOnSubPages: 'true', //隐藏全部子页面 tabs

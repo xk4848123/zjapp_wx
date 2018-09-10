@@ -8,97 +8,70 @@
     <ion-navbar>
         <ion-title>我的订单</ion-title>
     </ion-navbar>
-    <div class="fix_header">
-        <div class="row" id="sub_header">
-            <div class="col-demo" tabindex="1">全部</div>
-            <div class="col-demo" tabindex="2">待付款</div>
-            <div class="col-demo" tabindex="3">待发货</div>
-            <div class="col-demo" tabindex="4">待收货</div>
-            <div class="col-demo" tabindex="5">待评价</div>
-        </div>
-        <div class="transition">
-        </div>
+    <div class="row" id="sub_header">
+        <div class="col-demo" tabindex="1">全部</div>
+        <div class="col-demo" tabindex="2">待付款</div>
+        <div class="col-demo" tabindex="3">待发货</div>
+        <div class="col-demo" tabindex="4">待收货</div>
+        <div class="col-demo" tabindex="5">待评价</div>
+    </div>
+    <div class="transition">
     </div>
 </ion-header>
-<ion-content>
-    <div *ngFor="let item of temp">
-        <div class="interval">
-            {{item.createtime}}
-            <a style="float:right;text-decoration: none;">
-                <span *ngIf="item.curstatus == -3">退货成功</span>
-                <span *ngIf="item.curstatus == -2">交易取消</span>
-                <span *ngIf="item.curstatus == -1">待付款</span>
-                <span *ngIf="item.curstatus == 0">待发货</span>
-                <span *ngIf="item.curstatus == 1">待收货</span>
-                <span *ngIf="item.curstatus == 2">待评价</span>
-                <span *ngIf="item.curstatus == 3">完成</span>
-                <span *ngIf="item.curstatus == 4">申请退货中</span>
-                <span *ngIf="item.curstatus == 5">申请退款中</span>
-            </a>
+
+
+<ion-content style="background: #eeeeee;">
+    <div class="cardDiv" *ngFor="let item of temp">
+        <div class="head" *ngIf="item.curstatus == -3">退货成功</div>
+        <div class="head" *ngIf="item.curstatus == -2">交易取消</div>
+        <div class="head" *ngIf="item.curstatus == -1">待付款</div>
+        <div class="head" *ngIf="item.curstatus == 0">待发货</div>
+        <div class="head" *ngIf="item.curstatus == 1">待收货</div>
+        <div class="head" *ngIf="item.curstatus == 2">待评价</div>
+        <div class="head" *ngIf="item.curstatus == 3">完成</div>
+        <div class="head" *ngIf="item.curstatus == 4">申请退货中</div>
+        <div class="head" *ngIf="item.curstatus == 5">申请退款中</div>
+        <div class="center" *ngFor="let item1 of item.orderlines" (tap)="pushdetail(item.id,item.orderno,item)">
+            <img [src]="config.domain+item1.photo" />
+            <div class="productName">{{item1.productname}}</div>
+            <div class="productPrice">
+                ￥<span>{{item1.price}}</span>
+            </div>
+            <div class="productNum">
+                <span>x{{item1.productnum}}</span>
+            </div>
         </div>
-        <ion-grid style="padding: 0;width: 100%;">
-            <ion-row class="col_row" *ngFor="let item1 of item.orderlines" (tap)="pushdetail(item.id,item.orderno,item)">
-                <ion-col class="col_2" style="width: 100%">
-                    <img [src]="config.domain+item1.photo" />
-                    <div class="hp">
-                        <div style=" width:150px;overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{item1.productname}}</div>
-                            <div style="float:right;margin-top:-20px;">{{item1.price}}元</div>  
-                    </div>
-                    <br />
-                    <br />
-                    <span class="hp" style="float:right">×{{item1.productnum}}</span>
-                </ion-col>
-            </ion-row>
-            <ion-row class="col_row">
-                <ion-col class="count" style="width: 100%">
-                    共{{item.tolnum}}件商品 合计：￥{{item.totalamount}}
-                </ion-col>
-            </ion-row>
 
-            <div *ngIf="item.curstatus==-1">
-            <ion-row class="col_row">
-                <ion-col class="count" style="width: 100%">
-                    <div class="btn" (tap)="pushcancelOrder(item,item.id)">取消订单</div>
-                    <div class="btn" style="color:red" (tap)="payNow(item.orderno)">立即支付</div>
-                </ion-col>
-            </ion-row>
-              </div>
-              <div *ngIf="item.curstatus==0">
-            <ion-row class="col_row">
-                <ion-col class="count" style="width: 100%">
-                    <div class="btn"   style="color:red"  (tap)="pushrefund(item.id,item.orderno,item)">申请退款</div>
-                </ion-col>
-            </ion-row>
-             </div>
-             <div *ngIf="item.curstatus==1">
-            <ion-row class="col_row">
-                <ion-col class="count" style="width: 100%">
-                    <div class="btn" (tap)="information(item.id,item.orderno,item)">查看物流</div>
-                    <div class="btn"  style="color:red" (tap)="confirmorder(item)">确认收货</div>
-                    <div class="btn"   style="color:red" (tap)="pushsale(item.id,item.orderno,item)">申请退货</div>
-                </ion-col>
-            </ion-row>
-            </div>
-            <div *ngIf="item.curstatus==2">
-            <ion-row class="col_row">
-                <ion-col class="count" style="width: 100%">
-                    <div class="btn"   style="color:red" (tap)="comment(item.id,item.orderno.item)">评价</div>
-                </ion-col>
-            </ion-row>
-            </div>
-        </ion-grid>
-        <!-- <div class="interval"> </div> -->
+        <div class="foot">共{{item.tolnum}}件商品&nbsp;合计:￥<span>{{item.totalamount}}</span></div>
+        <div class="btnDiv" *ngIf="item.curstatus==-1">
+            <div class="btn" (tap)="pushcancelOrder(item,item.id)">取消订单</div>
+            <div class="btn" (tap)="payNow(item.orderno)">立即支付</div>
+        </div>
 
+        <div class="btnDiv" *ngIf="item.curstatus==0">
+            <div class="btn" (tap)="pushrefund(item.id,item.orderno,item)">申请退款</div>
+        </div>
+        <div class="btnDiv" *ngIf="item.curstatus==1">
+            <div class="btn" (tap)="information(item.id,item.orderno,item)">查看物流</div>
+            <div class="btn" (tap)="confirmorder(item)">确认收货</div>
+            <div class="btn" (tap)="pushsale(item.id,item.orderno,item)">申请退货</div>
+        </div>
+        <div class="btnDiv" *ngIf="item.curstatus==2">
+            <div class="btn" (tap)="comment(item.id,item.orderno.item)">评价</div>
+        </div>
     </div>
+
+
     <!-- 下拉刷新 -->
     <ion-refresher (ionRefresh)="doRefresh($event)" threshold="50px">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="下拉刷新" refreshingSpinner="circles" refreshingText="刷新...">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="下拉刷新" refreshingSpinner="circles"
+            refreshingText="刷新...">
         </ion-refresher-content>
         <ion-refresher-content>
         </ion-refresher-content>
     </ion-refresher>
     <!--上滑的时候，加载数据-->
-    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" thr>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" threshold="50px">
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="加载中...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>

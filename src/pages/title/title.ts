@@ -39,8 +39,8 @@ public content='';
     console.log('ionViewDidLoad TitlePage');
   }
   ionViewWillEnter() {
-    let apis='v2/commercialcollege/coursedetailbrief?' + 'courseid=' + this.navParams.get('curId'); 
-    this.httpService.requestData(apis, (data) => {
+    let api='v2/commercialcollege/coursedetailbrief?' + 'courseid=' + this.navParams.get('curId'); 
+    this.httpService.requestData(api, (data) => {
       if(data.error_code==0){
        this.title=data.data['coursedatalist'];
           for(let i of data.data['coursedatalist']){

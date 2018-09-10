@@ -1,13 +1,16 @@
 page-paysuccess {
 
     .img{
-        margin: 10% auto 10% auto;
+        margin: 0 auto 0 auto;
         display: block;
     }
-    .nav_button{
-        text-align: center;
+   
         .home_button{
-            margin-right: 15%;
+            width: 80%;
+            margin: 0 auto 15px auto;
         }
-    }
+        .other_button{
+            width: 80%;
+            margin: 0 auto 15px auto;
+        }
 }

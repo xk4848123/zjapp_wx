@@ -15,7 +15,7 @@
       <div class="up">{{item.memo}}</div>
       <div class="down"><span>{{item.addSub}}{{item.amount}}</span><span>{{item.createTime}}</span></div>
       </div>
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" threshold="50px" *ngIf="enable">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" threshold="50px">
     <ion-infinite-scroll-content
         loadingSpinner="bubbles"
         loadingText="Loading more data...">

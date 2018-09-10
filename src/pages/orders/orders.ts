@@ -1,18 +1,5 @@
 import { Component, Renderer2, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-//订单详情页
-import { OrderlistPage } from '../orderlist/orderlist';
-
-//申请退款
-import { RefundPage } from '../refund/refund';
-
-//申请退货
-import { SalereturnPage } from '../salereturn/salereturn';
-
-//查看物流
-import { InformationPage } from '../information/information';
-//待评价
-import { CommentPage } from '../comment/comment';
 
 import { StorageProvider } from '../../providers/storage/storage';
 
@@ -20,6 +7,7 @@ import { HttpServicesProvider } from '../../providers/http-services/http-service
 
 import { ToastProvider } from '../../providers/toast/toast';
 import { ConfigProvider } from '../../providers/config/config';
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 
 import { ToastController } from 'ionic-angular';
 
@@ -51,11 +39,10 @@ export class OrdersPage {
   public confirm='';
   constructor(public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,
     private config: ConfigProvider, private toastCtrl: ToastController, private alertCtrl: AlertController,
-    private re: Renderer2, private el: ElementRef) {
+    private re: Renderer2, private el: ElementRef,private rclogin: RloginprocessProvider) {
     if (this.navParams.get('type')) {
       this.typeData = this.navParams.get('type');
     }
-    console.log('初始化页面');
   }
   //从订单页面到订单详情页
   pushdetail(orderId,orderno,item) {
@@ -69,17 +56,13 @@ export class OrdersPage {
 
   changeCss(attrOne, attrs) {
     for (let index = 0; index < attrs.length; index++) {
-      this.re.setStyle(attrs[index], 'color', 'rgb(0, 0, 0)');
-      this.re.setStyle(attrs[index], 'text-decoration', 'none');
-      this.re.setStyle(attrs[index], 'margin-top', '0');
+      this.re.setStyle(attrs[index], 'color', '#555555');
       this.re.setStyle(attrs[index], 'border-bottom', '0');
       this.re.setStyle(attrs[index], 'cursor ', 'auto');
     }
 
-    this.re.setStyle(attrOne, 'color', 'rgb(98, 145, 233)');
-    this.re.setStyle(attrOne, 'text-decoration', 'underline');
-    this.re.setStyle(attrOne, 'margin-top', '-0.5rem');
-    this.re.setStyle(attrOne, 'border-bottom', '1px solid rgb(98, 145, 233)');
+    this.re.setStyle(attrOne, 'color', '#f53d3d');
+    this.re.setStyle(attrOne, 'border-bottom', '1px solid #f53d3d');
     this.re.setStyle(attrOne, 'cursor ', 'pointer');
   }
 
@@ -164,6 +147,9 @@ export class OrdersPage {
           if (data.data.length < this.pageNum) {
             //没有更多数据了
             this.enable = false;
+            if(this.infiniteScroll){
+              this.infiniteScroll.enable(false);
+            }
           } 
          
             this.page++;
@@ -194,20 +180,17 @@ export class OrdersPage {
   //取消订单
   pushcancelOrder(item,orderId) {
       this.cancer=item.orderno;
-      console.log(this.cancer);
       let token = this.storage.get('token');
       if (token) {
         //api请求
         let api = 'v1/PersonalCenter/cancelOrder/' +token;
          
          this.httpService.doFormPost(api,{orderNo:this.cancer } ,(data) => {
-          console.log(data);
             if (data.error_code == 0) {
-              this.navCtrl.push('OrderlistPage',{
-                orderId:orderId
-              });
+              this.navCtrl.push('OrderhandletransferPage',{type: '1'});
            } else if(data.error_code == 3){
              //抢登处理
+             this.rclogin.rLoginProcess(this.navCtrl);
            }
            else {
              this.toast.showToast(data.error_message);
@@ -216,8 +199,9 @@ export class OrdersPage {
       }
   }
   //支付订单
+
   payNow(orderno) {
-    console.log('取消订单')
+
     let alert = this.alertCtrl.create({
       subTitle: '确定支付订单吗？',
       buttons: ['取消',
@@ -296,18 +280,17 @@ export class OrdersPage {
   //确认收货
 confirmorder(item){
   this.confirm=item.orderno;
-  console.log(this.confirm);
   let token = this.storage.get('token');
   if (token) {
     //api请求
     let api = 'v1/PersonalCenter/confirmOrder/' +token;
      //发送请求提交退款申请
      this.httpService.doFormPost(api,{orderNo:this.confirm } ,(data) => {
-      console.log(data);
         if (data.error_code == 0) {
-          // this.navCtrl.pop();
+          this.navCtrl.push('OrderhandletransferPage',{type: '2'});
        } else if(data.error_code == 3){
          //抢登处理
+         this.rclogin.rLoginProcess(this.navCtrl);
        }
        else {
          this.toast.showToast(data.error_message);
@@ -343,8 +326,8 @@ comment(orderId,orderNo,item){
   }
   //下拉刷新界面
   doRefresh($event) {
-    this.initData();
     setTimeout(() => {
+      this.initData();
       $event.complete();
       this.toast.showToast('加载成功');
     }, 1000);
