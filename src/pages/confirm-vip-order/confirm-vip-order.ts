@@ -8,12 +8,13 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
 import { AlertProvider } from '../../providers/alert/alert';
 import { ToastProvider } from '../../providers/toast/toast';
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
+
 @IonicPage()
 @Component({
-  selector: 'page-confirm-order',
-  templateUrl: 'confirm-order.html',
+  selector: 'page-confirm-vip-order',
+  templateUrl: 'confirm-vip-order.html',
 })
-export class ConfirmOrderPage {
+export class ConfirmVipOrderPage {
   public elec:(number);
   public specname:(any);
   public specid:(any);
@@ -25,9 +26,11 @@ export class ConfirmOrderPage {
   public deduRedback = 0;
   public dedubuy = 0;
   public deduCash = 0;
+  public deduVip = 0;
   public redBak:(boolean) = false;
   public buy:(boolean) = false;
   public cash:(boolean) = false;
+  public vip:(boolean) = false;
   public res:(any);
   public isup = false;
   public clientHeight:(any);
@@ -39,6 +42,7 @@ export class ConfirmOrderPage {
   public remainCoupon:(any);
   public remainPay:(any);
   public remainCash:(any);
+  public remainVip:(any);
   public productArray = [];
   public maxCoupon = 0;
   public allAmount = 0;
@@ -48,6 +52,9 @@ export class ConfirmOrderPage {
   public addressId = '';
   constructor(public passwordProvider:VerifypasswordProvider,public toast: ToastProvider,public alert:AlertProvider,public navCtrl: NavController, public navParams: NavParams,private event: Events, public config:ConfigProvider,public httpservice : HttpServicesProvider,public storage:StorageProvider,public rlogin:RloginprocessProvider) {
     this.productArray = this.navParams.get("product");
+    console.log("-----------");
+    console.log(this.productArray);
+    console.log("-----------");
     /**处理商品名 */
     for(var z=0;z<this.productArray.length;z++){
       this.productname = this.productArray[z].productname;
@@ -65,6 +72,10 @@ export class ConfirmOrderPage {
      this.maxCoupon = this.maxCoupon + (this.productArray[j].specElec/2)*this.productArray[j].buynum;
    }
   }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ConfirmVipOrderPage');
+  }
   ionViewWillEnter(){
     this.token = this.storage.get("token");
     var api = "v1/PersonalCenter/GetPersonalAccountBalance/"+this.token;
@@ -72,14 +83,19 @@ export class ConfirmOrderPage {
         if(data.error_code==3){
           this.rlogin.rLoginProcessWithHistory(this.navCtrl);
         }else{
+          console.log("-----------");
+          console.log(data);
+          console.log("-----------");
           this.res={
             "redBak":data.data.personDataMap.Coupon,
             "buy":data.data.personDataMap.RemainPoints,
-            "cash":data.data.personDataMap.RemainElecNum
+            "cash":data.data.personDataMap.RemainElecNum,
+            "vip":data.data.personDataMap.RemainVIPAmount
           }
           this.remainCoupon = this.res.redBak;
           this.remainPay = this.res.buy;
           this.remainCash = this.res.cash;
+          this.remainVip = this.res.vip;
           if(!this.isTwoAddress){
             this.getDefaultAddress();
           }
@@ -121,23 +137,20 @@ export class ConfirmOrderPage {
       }
     })
   }
- action = (msg)=>{
-   this.isTwoAddress = true;
-    return new Promise((resolve,reject)=>{
-      if(msg!=undefined){
-        this.getUserAddress(msg);
-        resolve('ok');
-      }else{
-        reject(Error('error'));
-      }
-    });
-  }
+  action = (msg)=>{
+    this.isTwoAddress = true;
+     return new Promise((resolve,reject)=>{
+       if(msg!=undefined){
+         this.getUserAddress(msg);
+         resolve('ok');
+       }else{
+         reject(Error('error'));
+       }
+     });
+   }
   /**选择地址 */
   toAddress(){
     this.navCtrl.push("AddressPage",{'action':this.action});
-  }
-  ionViewDidLoad() {
-    
   }
   /**监听键盘弹出，收起 ios*/
   blurInput(){
@@ -147,61 +160,77 @@ export class ConfirmOrderPage {
     this.isup = true;
   }
   /**处理减法精度丢失 */
-    subDouble(f,s,digit){
-      var m = Math.pow(10, digit);
-      return Math.round((f*m-s*m))/m;
-    }
-    /**处理三个数减法精度丢失 */
-    subDouble3(f,s,t,digit){
-      var m = Math.pow(10, digit);
-      var middle =  Math.round((f*m-s*m))/m;
-      return Math.round((middle*m-t*m))/m;
-    }
-     /**处理四个数减法精度丢失 */
-     subDouble4(f,s,t,fouth,digit){
-      var m = Math.pow(10, digit);
-      var middle =  Math.round((f*m-s*m))/m;
-      var middle1 = Math.round((middle*m-t*m))/m;
-      return Math.round((middle1*m-fouth*m))/m;
-    }
+  subDouble(f,s,digit){
+    var m = Math.pow(10, digit);
+    return Math.round((f*m-s*m))/m;
+  }
+  /**处理三个数减法精度丢失 */
+  subDouble3(f,s,t,digit){
+    var m = Math.pow(10, digit);
+    var middle =  Math.round((f*m-s*m))/m;
+    return Math.round((middle*m-t*m))/m;
+  }
+   /**处理四个数减法精度丢失 */
+   subDouble4(f,s,t,fouth,digit){
+    var m = Math.pow(10, digit);
+    var middle =  Math.round((f*m-s*m))/m;
+    var middle1 = Math.round((middle*m-t*m))/m;
+    return Math.round((middle1*m-fouth*m))/m;
+  }
   /**监听币值切换 */
   clickcash(){
     if(this.redBak==true && this.buy==true && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==false && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  0;
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==true && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback  = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==false && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  0;
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==false && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy = 0;
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==false && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy = 0;
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==true && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else{
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy = this.allAmount-this.deduRedback>=this.res.buy ? this.res.buy: this.allAmount - this.deduRedback;
       this.deduCash = 0;
@@ -210,41 +239,57 @@ export class ConfirmOrderPage {
   }
   clickred(){
     if(this.redBak==true && this.buy==true && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==false && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy = 0;
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==true && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==false && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy = 0;
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==false && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy = 0;
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==false && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy = 0;
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==true && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else{
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
@@ -253,45 +298,73 @@ export class ConfirmOrderPage {
   }
   clickbuy(){
     if(this.redBak==true && this.buy==true && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  0;
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==false && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==true && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  0;
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==true && this.buy==false && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = this.res.redBak>=this.maxCoupon ? this.maxCoupon : this.res.redBak;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==false && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy =  this.subDouble(this.allAmount,this.deduRedback,2)>=this.res.buy ? this.res.buy: this.subDouble(this.allAmount,this.deduRedback,2);
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==false && this.cash==true){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy = this.allAmount-this.deduRedback>=this.res.buy ? this.res.buy: this.allAmount - this.deduRedback;
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else if(this.redBak==false && this.buy==true && this.cash==false){
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy =  0;
       this.deduCash = 0;
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
     }else{
+      this.vip = false;
+      this.deduVip = 0;
       this.deduRedback = 0;
       this.dedubuy = 0;
       this.deduCash = this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2)>=this.res.cash ? this.res.cash : this.subDouble3(this.allAmount,this.deduRedback,this.dedubuy,2);
       this.realpay = this.subDouble4(this.allAmount,this.deduRedback,this.dedubuy,this.deduCash,2);
+    }
+  }
+  clickvip(){
+    if(this.vip == false){
+      this.redBak = false;
+      this.buy = false;
+      this.cash = false;
+      this.deduRedback = 0;
+      this.dedubuy = 0;
+      this.deduCash = 0;
+      this.deduVip = this.allAmount>=this.remainVip ? this.remainVip : this.allAmount;
+      this.realpay = this.subDouble(this.allAmount,this.deduVip,2);
     }
   }
   goBuy(){
@@ -345,6 +418,7 @@ export class ConfirmOrderPage {
       var usePointNum = this.subDouble(totalAmount,useCoupon,2) >= this.dedubuy ? this.dedubuy : this.subDouble(totalAmount,useCoupon,2);
       var useElecNum = this.subDouble3(totalAmount,useCoupon,usePointNum,2) >= this.deduCash ? this.deduCash : this.subDouble3(totalAmount,useCoupon,usePointNum,2);
       var realpay = this.subDouble4(totalAmount,useCoupon,usePointNum,useElecNum,2);
+      realpay = this.subDouble(realpay,this.deduVip,2);
       productList.push({
         "freight":0,
         "memo":this.memo,
@@ -357,7 +431,7 @@ export class ConfirmOrderPage {
         "useCoupon":useCoupon,
         "useElecNum":useElecNum,
         "usePointNum":usePointNum,
-        "useVIPRemainNum":0
+        "useVIPRemainNum":this.deduVip
       });
     }
     var params = {
@@ -399,7 +473,7 @@ export class ConfirmOrderPage {
           });
         }
       }else{
-        this.toast.showToast('服务器异常');
+        this.toast.showToast(data.error_message);
       }
     })
   }

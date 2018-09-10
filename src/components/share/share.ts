@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular';
 import { AppshareProvider } from '../../providers/appshare/appshare';
 import { AlertProvider } from '../../providers/alert/alert';
+import { WechatProvider } from '../../providers/wechat/wechat';
 /**
  * Generated class for the ShareComponent component.
  *
@@ -17,7 +18,7 @@ export class ShareComponent {
 
   text: string;
 
-  constructor(public viewCrl:ViewController,public appshare :AppshareProvider,public alert:AlertProvider) {
+  constructor(public wechat:WechatProvider,public viewCrl:ViewController,public appshare :AppshareProvider,public alert:AlertProvider) {
     console.log('Hello ShareComponent Component');
     this.text = 'Hello World';
   }
@@ -27,7 +28,8 @@ export class ShareComponent {
   /**分享 */
   share(num){
     if(num==1){
-      this.appshare.wxShare(0);
+      this.wechat.wxConfig();
+      // this.appshare.wxShare(0);
     }else if(num==2){
       this.appshare.wxShare(1);
     }else if(num==3){

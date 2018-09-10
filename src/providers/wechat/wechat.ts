@@ -35,10 +35,27 @@ export class WechatProvider {
             'chooseImage'
           ]
         });
+        
       }, { url: url });
     }
     wx.ready(() => {
-      global_wxFunciton.setWxConfig();
+      // global_wxFunciton.setWxConfig();
+      wx.onMenuShareTimeline({
+        title:"测试分享",
+        link:"",
+        imgUrl:"",
+        success:function(){
+          console.log("分享成功");
+        },
+        cancle:function(){
+          console.log("取消分享");
+        }
+      })
+      wx.console.error(function(res){
+        console.log(res);
+      });
+      
     });
   }
+
 }

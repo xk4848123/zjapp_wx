@@ -1,4 +1,4 @@
-car-modal {
+car-member {
     .blank{
         height: 100%;
     }
@@ -10,7 +10,7 @@ car-modal {
         left: 0;
         right: 0;
         background: #FFF;
-        height: 65%;
+        height: 60%;
         .tcontain{
             height: 87%;
             overflow: scroll;
@@ -43,7 +43,7 @@ car-modal {
                 font-size: 1.536rem;
                 margin-top:1rem; 
                 min-height: 0.75rem;
-                max-width: 80%;
+                max-width: 15rem;
             }
             dd{
                 height: 1rem;
@@ -87,19 +87,9 @@ car-modal {
         display: flex;
         bottom: 0;
         height: 13%;
-        .join{
-             float: left;
-             width: 50%;
-             border-radius: 0;
-             margin: 0;
-             span{
-                 font-size: 1.4rem;
-             }
-             height: 100%;
-         }
          .buy{
              float: right;
-             width: 50%;
+             width: 100%;
              border-radius: 0;
              margin: 0;
              span{

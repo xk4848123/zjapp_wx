@@ -1,27 +1,15 @@
 import { Component,ViewChild,ElementRef,Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams,Content } from 'ionic-angular';
-
-import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
-import { StorageProvider } from '../../providers/storage/storage';
-/**
- * Generated class for the ProductlistPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
+import { ConfigProvider } from '../../providers/config/config';
 @IonicPage()
 @Component({
-  selector: 'page-productlist',
-  templateUrl: 'productlist.html',
+  selector: 'page-members-product',
+  templateUrl: 'members-product.html',
 })
-export class ProductlistPage {
+export class MembersProductPage {
   @ViewChild(Content) content: Content;
-
   public list=[];  /*模拟商品数据*/
-
-  public cid='';/*获取分类id*/
 
   public page=0; /*分页*/
 
@@ -36,22 +24,8 @@ export class ProductlistPage {
   public tag = 1;
 
   public infiniteScroll:(any);
-
-  public categoryname:(string);/**分类名 */
-
-  constructor(public storage:StorageProvider, public ele:ElementRef,public render2:Renderer2,public navCtrl: NavController, public config:ConfigProvider,public navParams: NavParams,public httpService:HttpServicesProvider) {
-      //获取传值
-      this.cid=this.navParams.get('id');
-      this.categoryname = this.navParams.get('categoryname');
-      if(this.cid!=undefined){
-        storage.setSessionStorage("catoryId",this.cid);
-        storage.setSessionStorage("catoryname",this.categoryname);
-      }
-      if(this.cid==undefined){
-        this.cid = this.storage.getSessionStorage("catoryId");
-        this.categoryname = this.storage.getSessionStorage("catoryname");
-      }
-      this.getProductList('');
+  constructor(public httpService:HttpServicesProvider,public config:ConfigProvider,public ele:ElementRef,public render2:Renderer2,public navCtrl: NavController, public navParams: NavParams) {
+    this.getProductList('');
   }
 
   ionViewDidLoad() {
@@ -62,15 +36,15 @@ export class ProductlistPage {
       this.render2.setStyle(sub,"top",headerHeight+'px');
     },100);
   }
-
   getProductList(infiniteScroll){
-    var api = 'v1/ProductManager/getProductOfCategory/'+this.cid;
+    var api = 'v1/HomePage/MemberArea';
     var params={
       "type":this.tag,
       "page":this.page,
       "pageNum":6
     }
     this.httpService.requestData(api,(data)=>{
+      console.log(data);
       if(this.page==0){  /*第一页 替换数据*/
         this.list=data.data;
       }else{
@@ -93,7 +67,7 @@ export class ProductlistPage {
       this.infiniteScroll.enable(true);
     }
     this.content.scrollToTop(0); /*回到顶部*/
-    var api = 'v1/ProductManager/getProductOfCategory/'+this.cid;
+    var api = 'v1/HomePage/MemberArea';
     var tag :(number);
     if(this.priceFlag){
       tag = 3;
@@ -113,14 +87,14 @@ export class ProductlistPage {
     this.elecFlag = false;
     this.selectTag = 'price';
   }
-  //按销量排序
-  search_sale(){
+   //按销量排序
+   search_sale(){
     this.page = 1;
     if(this.infiniteScroll!=undefined){
       this.infiniteScroll.enable(true);
     }
     this.content.scrollToTop(0); /*回到顶部*/
-    var api = 'v1/ProductManager/getProductOfCategory/'+this.cid;
+    var api = 'v1/HomePage/MemberArea';
     var param = {
       "page":0,
       "pageNum":6,
@@ -141,7 +115,7 @@ export class ProductlistPage {
       this.infiniteScroll.enable(true);
     }
     this.content.scrollToTop(0); /*回到顶部*/
-    var api = 'v1/ProductManager/getProductOfCategory/'+this.cid;
+    var api = 'v1/HomePage/MemberArea';
     var tag :(number);
     if(this.elecFlag){
       tag = 6;
@@ -161,8 +135,8 @@ export class ProductlistPage {
     this.priceFlag = false;
     this.selectTag = 'elec';
   }
-  //跳转详情页
-  goProduct(id){
+   //跳转详情页
+   goProduct(id){
     this.navCtrl.push('ProductDetailPage',{
       id : id
     });
@@ -176,5 +150,4 @@ export class ProductlistPage {
       this.infiniteScroll = infiniteScroll;
     }, 1000);
   }
-
 }

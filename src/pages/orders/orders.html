@@ -59,7 +59,7 @@
             <ion-row class="col_row">
                 <ion-col class="count" style="width: 100%">
                     <div class="btn" (tap)="pushcancelOrder(item,item.id)">取消订单</div>
-                    <div class="btn" style="color:red" (tap)="payNow()">立即支付</div>
+                    <div class="btn" style="color:red" (tap)="payNow(item.orderno)">立即支付</div>
                 </ion-col>
             </ion-row>
               </div>
