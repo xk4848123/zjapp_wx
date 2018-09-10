@@ -15,8 +15,6 @@ import { AlertController } from 'ionic-angular';
 
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
 
-import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
-
 /**
  * Generated class for the OrdersPage page.
  *
