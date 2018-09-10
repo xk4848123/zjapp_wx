@@ -1,4 +1,3 @@
-///<reference path="../../services/user_defined.d.ts"/>
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
@@ -27,11 +26,6 @@ export class PaysuccessPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad');
-  }
-
-  goToHome(){
-    // this.navCtrl.push(TabsPage);
-    global_wxFunciton.globalGoRoot();
   }
   goToMyWallet(){
     this.navCtrl.push('MywalletPage',{
