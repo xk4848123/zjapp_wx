@@ -45,7 +45,7 @@
         <div class="foot">共{{item.tolnum}}件商品&nbsp;合计:￥<span>{{item.totalamount}}</span></div>
         <div class="btnDiv" *ngIf="item.curstatus==-1">
             <div class="btn" (tap)="pushcancelOrder(item,item.id)">取消订单</div>
-            <div class="btn" (tap)="payNow()">立即支付</div>
+            <div class="btn" (tap)="payNow(item.orderno)">立即支付</div>
         </div>
 
         <div class="btnDiv" *ngIf="item.curstatus==0">

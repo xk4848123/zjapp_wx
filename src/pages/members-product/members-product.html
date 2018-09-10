@@ -1,7 +1,8 @@
+
 <ion-header>
 
   <ion-navbar class="title">
-        <ion-title>{{categoryname}}</ion-title>
+        <ion-title>会员专区</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -23,14 +24,14 @@
     
         <ion-list inset>
           <ng-container *ngFor="let item of list">
-            <ion-item (tap)="goProduct(item.product.id)" class="tlist" *ngIf="item.product.productphotos.length>0">
+            <ion-item (tap)="goProduct(item.id)" class="tlist" *ngIf="item.productphotos.length>0">
                 <ion-thumbnail  item-left>
-                  <img [src]="config.domain+item.product.productphotos[0].photo"/>            
+                  <img [src]="config.domain+item.productphotos[0].photo"/>            
                 </ion-thumbnail>
-                <h2 class="tpn"> {{item.product.productname}}</h2>
+                <h2 class="tpn"> {{item.productname}}</h2>
                 <p class="tp">
-                    <span style="color:red">¥</span><span style="color: red;font-size: 1.8rem" class="price">&nbsp;{{item.product.price}}</span>
-                    <span style="float: right;"><ion-icon style="color: #e0532d;" name="ios-redBack"></ion-icon><span style="color:#e0532d;font-size: 1.2rem">&nbsp;{{item.product.elecnum}}</span></span>
+                    <span style="color:red">¥</span><span style="color: red;font-size: 1.8rem" class="price">&nbsp;{{item.price}}</span>
+                    <span style="float: right;"><ion-icon style="color: #e0532d;" name="ios-redBack"></ion-icon><span style="color:#e0532d;font-size: 1.2rem">&nbsp;{{item.elecnum}}</span></span>
                 </p>
               </ion-item>
           </ng-container>  

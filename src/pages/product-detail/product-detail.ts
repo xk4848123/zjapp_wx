@@ -1,10 +1,11 @@
-import { Component,ElementRef,Renderer2 } from '@angular/core';
-import { IonicPage, NavController, NavParams,App, Navbar } from 'ionic-angular';
+import { Component,ElementRef,Renderer2,ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams,App,Content } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { ConfigProvider } from '../../providers/config/config';
 import { AlertProvider } from '../../providers/alert/alert';
 import { DomSanitizer } from '@angular/platform-browser';/*转译html标签*/
 import { CarModalComponent } from '../../components/car-modal/car-modal';
+import { CarMemberComponent } from '../../components/car-member/car-member';
 import { ShareComponent } from '../../components/share/share';
 import { StorageProvider } from '../../providers/storage/storage';
 import { CartPage } from '../../pages/cart/cart';
@@ -14,6 +15,7 @@ import { CartPage } from '../../pages/cart/cart';
   templateUrl: 'product-detail.html',
 })
 export class ProductDetailPage {
+  @ViewChild(Content) content: Content;
   public id :(number);
   public product :(any);
   public productText :(string);
@@ -21,6 +23,12 @@ export class ProductDetailPage {
   public starList=[];/**星星个数 */
   public comment :(string);
   public commentDetail:(any);
+  public beLongToVIP = false;
+  public commentHeight:(number);
+  public detailHeight:(number);
+  public topHeight:(number);
+  public username = "";
+  public headPic = "";
   constructor(private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
 
   }
@@ -29,6 +37,11 @@ export class ProductDetailPage {
       let footerHeight = footer.offsetHeight;
       let buy = this.eleref.nativeElement.querySelector('.buy');
       let join = this.eleref.nativeElement.querySelector('.join');
+      this.commentHeight = this.eleref.nativeElement.querySelector('.tcomment').offsetTop;
+      this.detailHeight = this.eleref.nativeElement.querySelector('.tproductText').offsetTop;
+      this.topHeight = this.eleref.nativeElement.querySelector('.t-title').offsetHeight;
+      footerHeight = footerHeight+2;
+      footerHeight = footerHeight+2;
       this.renderer2.setStyle(buy,'height',footerHeight+'px');
       this.renderer2.setStyle(join,'height',footerHeight+'px');
       this.id = this.navParams.get("id");
@@ -40,6 +53,7 @@ export class ProductDetailPage {
   }
 
   ionViewWillEnter(){
+    this.starList = [];
     if(this.id==undefined){
       this.id = this.storage.getSessionStorage("productId");
     }
@@ -55,6 +69,7 @@ export class ProductDetailPage {
         this.alertProvider.showAlert('数据获取异常','',['ok']);
         return;
       }
+      this.beLongToVIP = data.data.beLongToVIP;
       this.product = data.data.product;
       this.commentDetail = data.data.productComment;
       if(this.commentDetail==null){
@@ -65,6 +80,13 @@ export class ProductDetailPage {
           "star": 0,
           "productCommentPhotos": []
         } 
+      }else{
+        if(this.commentDetail.user==null){
+          this.username = "匿名用户";
+        }else{
+          this.username = this.commentDetail.user.truename;
+          this.headPic = this.commentDetail.user.headphoto;
+        }
       }
       this.comment = this.commentDetail.memo;
       if(this.comment.length>42){
@@ -77,6 +99,12 @@ export class ProductDetailPage {
         this.focusList.push(data.data.product.productphotos[i].photo);
       }
     },param)
+  }
+  /**跳转评论页 */
+  goevaluation(){
+    this.navCtrl.push('ProductCommentPage',{
+      "id":this.id
+    });
   }
   /**获取评论用户信息 */
   getUserInfo(){
@@ -92,7 +120,10 @@ export class ProductDetailPage {
         return;
       }
       var reg = new RegExp("/upload","g");
-      this.productText = data.data.replace(reg,this.config.domain+"/upload");
+      var reg1 = new RegExp("https://appnew.zhongjianmall.com/","g");
+      this.productText = data.data.replace(reg1,'');
+      this.productText = this.productText.replace(reg,this.config.domain+"/upload");
+      // this.productText = data.data;
     },param)
   }
   /**转译html标签 */
@@ -108,13 +139,13 @@ export class ProductDetailPage {
       text:"取消",
       role:'cancle',
       handler:()=>{
-        console.log("点击取消");
+       
       }
     },{
       text:"确认",
       role:"destructive",
       handler:()=>{
-        console.log("点击确认");
+       window.location.href = "tel:"+content;
       }
     }];
     this.alertProvider.showMoreAlert(title,content,ass,buttons);
@@ -127,19 +158,49 @@ export class ProductDetailPage {
   }
   /**加入购物车 */
   joinShop(){
-    this.alertProvider.showAlertM(CarModalComponent,this.product);
+    if(this.beLongToVIP == false){
+      this.alertProvider.showAlertM(CarModalComponent,{
+        "product":this.product
+      });
+    }
   }
   /**立即购买 */
   goBuy(){
-    this.alertProvider.showAlertM(CarModalComponent,{
-      "product":this.product
-    });
+    if(this.beLongToVIP == false){
+      this.alertProvider.showAlertM(CarModalComponent,{
+        "product":this.product
+      });
+    }else{
+      this.alertProvider.showAlertM(CarMemberComponent,{
+        "product":this.product
+      });
+    }
   }
   choiceSpec(){
-    this.alertProvider.showAlertM(CarModalComponent,this.product);
+    if(this.beLongToVIP == false){
+      this.alertProvider.showAlertM(CarModalComponent,{
+        "product":this.product
+      });
+    }else{
+      this.alertProvider.showAlertM(CarMemberComponent,{
+        "product":this.product
+      });
+    }
   }
   /**分享 */
   share(){
     this.alertProvider.showAlertM(ShareComponent,this.product);
+  }
+  /**跳转头部 */
+  goProductDiv(){
+      this.content.scrollTo(0, 0, 300);
+  }
+  /**跳转评价 */
+  goCommentDiv(){
+    this.content.scrollTo(0, this.commentHeight+this.topHeight, 300);
+  }
+  godetailDiv(){
+  /**跳转详情 */
+    this.content.scrollTo(0, this.detailHeight+this.topHeight, 300);
   }
 }

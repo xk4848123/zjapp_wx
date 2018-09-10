@@ -114,12 +114,16 @@ import {SplitrecordPageModule} from '../pages/splitrecord/splitrecord.module';
 import {SetattrPageModule} from '../pages/setattr/setattr.module';
 import {UpdatephonenumPageModule }from '../pages/updatephonenum/updatephonenum.module';
 import {UpdatephonenumnextPageModule } from '../pages/updatephonenumnext/updatephonenumnext.module';
+import { MembersProductPageModule } from '../pages/members-product/members-product.module';
+import { ConfirmVipOrderPageModule } from '../pages/confirm-vip-order/confirm-vip-order.module';
+import { ProductCommentPageModule } from '../pages/product-comment/product-comment.module';
 import {OrderhandletransferPageModule} from '../pages/orderhandletransfer/orderhandletransfer.module';
 /**分享 */
 import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
 //组件
 import { CarModalComponent } from '../components/car-modal/car-modal'; 
+import { CarMemberComponent } from '../components/car-member/car-member';
 import { ConfirmOrderPageModule } from '../pages/confirm-order/confirm-order.module';
 import { WechatProvider } from '../providers/wechat/wechat';
 import { WeblinkProvider } from '../providers/weblink/weblink';
@@ -136,6 +140,7 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     IonModleDComponent,
     IonModleGComponent,
     CarModalComponent,
+    CarMemberComponent,
     ShareComponent,
     HomePage,
     CategoryPage,
@@ -191,6 +196,9 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     SetattrPageModule,
     UpdatephonenumPageModule,
     UpdatephonenumnextPageModule,
+    MembersProductPageModule,
+    ConfirmVipOrderPageModule,
+    ProductCommentPageModule,
     OrderhandletransferPageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
@@ -211,6 +219,7 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     IonModleDComponent,
     IonModleGComponent,
     CarModalComponent,
+    CarMemberComponent,
     ShareComponent,
     HomePage,
     CategoryPage,
