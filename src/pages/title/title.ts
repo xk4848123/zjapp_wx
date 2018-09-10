@@ -47,7 +47,7 @@ public content='';
             console.log(i['id'])
             let api='v2/commercialcollege/coursedatahtmltext?' + 'id=' + i['id'];
           }
-        this.httpService.requestData(apis,(data)=>{
+        this.httpService.requestData(api,(data)=>{
         if(data.error_code==0){
                  this.content=data.data;
            }
