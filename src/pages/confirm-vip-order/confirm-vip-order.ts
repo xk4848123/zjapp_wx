@@ -459,16 +459,16 @@ export class ConfirmVipOrderPage {
           });
         }else if(data.data.type==2){
           this.navCtrl.push('PaymentPage',{
-            orderNo: data.data.datas.orderNoC,
-            realpay: data.data.datas.realpay,
-            orderType: data.data.datas.orderType
+            "orderNo": data.data.datas.orderNoC,
+            "realpay": data.data.datas.realpay,
+            "orderType": data.data.datas.orderType
           });
         }else if(data.data.type==3){
           this.passwordProvider.execute(this.navCtrl,()=>{
             this.navCtrl.push('PaymentPage',{
-              orderNo: data.data.datas.orderNoC,
-              realpay: data.data.datas.realpay,
-              orderType: data.data.datas.orderType
+              "orderNo": data.data.datas.orderNoC,
+              "realpay": data.data.datas.realpay,
+              "orderType": data.data.datas.orderType
             });
           });
         }

@@ -135,6 +135,9 @@ export class UserPage {
     if(moduleName == 'certification'){
       this.navCtrl.push('CertificationPage');
     }
+    if(moduleName == "qrcode"){
+      this.navCtrl.push("QrcodePage");
+    }
     // if(moduleName == 'paysuccesspage'){
     //   this.navCtrl.push('PaysuccessPage');
     // }
