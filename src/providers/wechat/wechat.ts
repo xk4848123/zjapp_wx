@@ -16,7 +16,7 @@ export class WechatProvider {
   wxConfig() {
     if (!global_wxFunciton.isloadWxConfig()) {
       let url = location.href.split('#')[0];//url不能写死
-      let api = 'wechat/wechatParam';
+      let api = 'wechat/wechatParam.wxpaydo';
       this.httpService.requestData(api, (data) => {
         wx.config({
           debug: true,////生产环境需要关闭debug模式
@@ -39,21 +39,6 @@ export class WechatProvider {
       }, { url: url });
     }
     wx.ready(() => {
-      // global_wxFunciton.setWxConfig();
-      wx.onMenuShareTimeline({
-        title:"测试分享",
-        link:"",
-        imgUrl:"",
-        success:function(){
-          console.log("分享成功");
-        },
-        cancle:function(){
-          console.log("取消分享");
-        }
-      })
-      wx.console.error(function(res){
-        console.log(res);
-      });
       
     });
   }

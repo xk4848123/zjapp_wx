@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { StorageProvider } from '../../providers/storage/storage';
 import { ToastProvider } from '../../providers/toast/toast';
+import { WeblinkProvider } from '../../providers/weblink/weblink';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
@@ -29,7 +30,8 @@ export class UpdaterankPage {
   private remainElec: number = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: StorageProvider, private noticeSer: ToastProvider,
-    private httpService: HttpServicesProvider, private rlogin: RloginprocessProvider, private verify: VerifypasswordProvider, private alert: AlertProvider) {
+    private httpService: HttpServicesProvider, private rlogin: RloginprocessProvider, private verify: VerifypasswordProvider, private alert: AlertProvider
+  ,private webLink:WeblinkProvider) {
   }
 
   ionViewWillEnter() {
@@ -116,17 +118,7 @@ export class UpdaterankPage {
             this.elecHandle(data.data);
           } else {
             let tempData = data.data;
-            //     datas.put("orderNo", (String) map.get("OrderNo"));
-            // datas.put("realpay", ((BigDecimal) map.get("TolAmout")).toString());
-            // datas.put("orderType", "3");
-            this.navCtrl.push('PaymentPage',
-              {
-                data: {
-                  orderNo: tempData.orderNo,
-                  realpay: tempData.realpay,
-                  orderType: tempData.orderType
-                }
-              });
+              this.webLink.wxGoWebPay(token,tempData.orderNo,tempData.realpay,tempData.orderType);
           }
         } else if (data.error_code == 3) {
           this.rlogin.rLoginProcessWithHistory(this.navCtrl);

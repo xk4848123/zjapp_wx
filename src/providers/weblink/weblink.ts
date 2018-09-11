@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StorageProvider } from '../../providers/storage/storage';
+import { ConfigProvider } from '../../providers/config/config';
 import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 /*
   Generated class for the WeblinkProvider provider.
@@ -10,7 +11,7 @@ import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 @Injectable()
 export class WeblinkProvider {
 
-  constructor(private storage: StorageProvider, private themeableBrowser: ThemeableBrowser) {
+  constructor(private storage: StorageProvider, private themeableBrowser: ThemeableBrowser,private config:ConfigProvider) {
     console.log('Hello WeblinkProvider Provider');
   }
 
@@ -42,5 +43,10 @@ export class WeblinkProvider {
    
       this.themeableBrowser.create(webUrl, '_blank', this.options);
 
+  }
+
+  wxGoWebPay(token,orderNo,realpay,orderType){
+    let web_url: string = this.config.domain + "/zjapp/wechat/wechatauth.wxpaydo?token=" + token + "&orderno=" + orderNo + "&realpay=" + realpay + "&ordertype=" + orderType;
+    window.location.href= web_url;
   }
 }

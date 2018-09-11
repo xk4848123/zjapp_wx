@@ -21,7 +21,7 @@ export class AddressPage {
   public datas = [];
   public callback: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private httpService: HttpServicesProvider,
+  constructor(public navCtrl: NavController, public navParams: NavParams, private httpService: HttpServicesProvider,
     private storage: StorageProvider, private noticeSer: ToastProvider, private rlogin: RloginprocessProvider) {
     if (this.navParams.get('action')) {
       this.callback = this.navParams.get('action');
@@ -32,10 +32,12 @@ export class AddressPage {
   }
 
 
-  backWithAdrress(addressId) {
-    if (this.callback) {
+  backWithAdrress($event, addressId) {
+    if ($event.target.className == 'button') {
+      this.addOrEdit(addressId);
+    } else {
       this.callback(addressId).then(() => { this.navCtrl.pop() });
-     
+
     }
   }
 
@@ -47,10 +49,10 @@ export class AddressPage {
       this.httpService.requestData(api, (data) => {
         if (data.error_code == 0) {//请求成功
           this.datas = data.data;
-         for (let index = 0; index < this.datas.length; index++) {
+          for (let index = 0; index < this.datas.length; index++) {
             this.datas[index].headName = this.getHeadName(this.datas[index].Name);
-           
-         }
+
+          }
         } else if (data.error_code == 3) {//token过期
           this.rlogin.rLoginProcessWithHistory(this.navCtrl);
         }
@@ -61,19 +63,19 @@ export class AddressPage {
     }
   }
 
-  getHeadName(name:string):string{
+  getHeadName(name: string): string {
     return name.substr(0, 1);
   }
 
-  addOrEdit(id:number){
-    if(id){
+  addOrEdit(id: number) {
+    if (id) {
       //修改地址
-    this.navCtrl.push('OperateaddressPage',{id:id});
+      this.navCtrl.push('OperateaddressPage', { id: id });
 
-    }else{
+    } else {
       //新增地址
       this.navCtrl.push('OperateaddressPage');
-      
+
     }
 
   }
