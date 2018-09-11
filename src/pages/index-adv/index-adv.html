@@ -2,7 +2,7 @@
   <div>
       <ion-slides *ngIf="focusList.length>0" class="adv" pager  loop="true" autoplay="3000">    
           <ion-slide *ngFor="let item of focusList">
-              <img src="{{item.img}}" (click)="go(item)"/>
+              <img src="{{config.domain+item.pic}}" (click)="goDetail(item)"/>
           </ion-slide>         
       </ion-slides>
   </div>

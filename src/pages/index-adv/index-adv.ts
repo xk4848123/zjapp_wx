@@ -5,13 +5,14 @@ import { WeblinkProvider } from '../../providers/weblink/weblink';
 import { ConfigProvider } from '../../providers/config/config';
 import { StorageProvider } from '../../providers/storage/storage';
 import { ToastProvider } from '../../providers/toast/toast';
+import { HttpServicesProvider } from '../../providers/http-services/http-services';
 @Component({
   selector: 'page-index-adv',
   templateUrl: 'index-adv.html',
 })
 export class IndexAdvPage {
   public focusList=[];  /*数组 轮播图*/
-  constructor(public toast:ToastProvider,public storage: StorageProvider,public config: ConfigProvider,public web:WeblinkProvider,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public noticeSer: ToastProvider,public httpService :HttpServicesProvider,public toast:ToastProvider,public storage: StorageProvider,public config: ConfigProvider,public web:WeblinkProvider,public navCtrl: NavController, public navParams: NavParams) {
     this.getFocus();
   }
 
@@ -19,24 +20,28 @@ export class IndexAdvPage {
     console.log('ionViewDidLoad IndexAdvPage');
   }
   /**轮播页跳转 */
-  go(item){
-    if(item.type==1){
+  goDetail(item){
+    if(item.picType==1){
+      this.web.goWeb(item.picUrl);
+    }else if(item.picType==2){
       this.navCtrl.push("ProductDetailPage",{
-        "id":item.productId
+        "id":item.picProductid
       });
-    }else if(item.type==2){
-      this.navCtrl.push("ProductlistPage",{
-        "id":item.key,
-        "categoryname":"热门推荐"
+    }else if(item.picType==3){
+      this.navCtrl.push("KeyProductListPage",{
+        "keywords":item.picKeyword
       });
     }
   }
   getFocus(){
-    this.focusList=[
-      {img:'assets/imgs/1.png',type:"2","productId":76,"key":"110"},
-      {img:'assets/imgs/2.png',type:"1","productId":76,"key":""},
-      {img:'assets/imgs/3.png',type:"1","productId":76,"key":""}
-    ];
+    var api = "v2/HomePage/initHomePage";
+    this.httpService.requestData(api,(data)=>{
+      if(data.error_code==0){
+        this.focusList = data.data[0].pageMoudles;
+      }else{
+        this.noticeSer.showToast(data.error_message);
+      }
+    })
   }
 
   commercial(){

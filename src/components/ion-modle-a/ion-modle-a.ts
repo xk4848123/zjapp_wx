@@ -27,9 +27,8 @@ export class IonModleAComponent {
         "id":this.picProductid
       });
     }else if(this.picType==3){
-      this.navCtrl.push("ProductlistPage",{
-        "id":this.picKeyword.split("/")[0],
-        "categoryname":this.picKeyword.split("/")[1]
+      this.navCtrl.push("KeyProductListPage",{
+        "keywords":this.picKeyword
       });
     }
   }
@@ -41,13 +40,15 @@ export class IonModleAComponent {
       this.picProductid = this.params.pageMoudles[0].picProductid;
       this.picKeyword = this.params.pageMoudles[0].picKeyword;
       this.picUrl = this.params.pageMoudles[0].picUrl;
+      this.title = this.params.title;
+      this.sort = this.params.sort;
     }
-    this.title = this.params.title;
-    this.sort = this.params.sort;
     if(this.title==''){
       let titleDom = document.querySelectorAll(".dis");
-      let titleDom1 = titleDom[this.sort-2].querySelectorAll(".style1");
-      titleDom1[0]['style'].display = "none";
+      if(this.sort!=undefined){
+        let titleDom1 = titleDom[this.sort-2].querySelectorAll(".style1");
+        titleDom1[0]['style'].display = "none";
+      }
     }
   }
 }
