@@ -13,7 +13,7 @@ export class WechatProvider {
 
   constructor(private httpService: HttpServicesProvider) {
   }
-  wxConfig() {
+  wxConfig(callback) {
     if (!global_wxFunciton.isloadWxConfig()) {
       let url = location.href.split('#')[0];//url不能写死
       let api = 'wechat/wechatParam.wxpaydo';
@@ -39,8 +39,7 @@ export class WechatProvider {
       }, { url: url });
     }
     wx.ready(() => {
-      
+      callback();
     });
   }
-
 }

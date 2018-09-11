@@ -12,34 +12,36 @@
 
 </ion-header>
 
-<ion-content style="background: #eeeeee;" padding>
+<ion-content style="background: #eeeeee;">
 
-    <div class="input_div">
-       <div>充值金额：</div>
-       <input type="number" [(ngModel)]="money" id="money" (tap)="inputClick()">
-    </div>
+    <ion-list>
+  <ion-item>
+    <ion-label>充值金额：</ion-label>
+    <ion-input type="number" [(ngModel)]="money" id="money" (tap)="inputClick()"></ion-input>
+  </ion-item>
+</ion-list>
 
   <div class="flow_divs" (tap)="choose($event)">
     <div class="flow_div_first">100</div>
     <div class="flow_div">500</div>
     <div class="flow_div">1000</div>
     <div class="flow_div">1500</div>
-   
+
   </div>
 
   <div class="flow_divs" (tap)="choose($event)">
-      <div class="flow_div_first">3000</div>
-      <div class="flow_div">6000</div>
-      <div class="flow_div">12000</div>
-      <div class="flow_div">24000</div>
+    <div class="flow_div_first">3000</div>
+    <div class="flow_div">6000</div>
+    <div class="flow_div">12000</div>
+    <div class="flow_div">24000</div>
   </div>
- 
+
   <!-- <button ion-button block color="danger" class="pay_button" ></button> -->
 </ion-content>
 <ion-footer>
-    <ion-toolbar>
-      <div class="payment" (tap)="pay()">
-          前往付款       
-      </div>
-    </ion-toolbar>
-  </ion-footer>
+  <ion-toolbar>
+    <div class="payment" (tap)="pay()">
+      前往付款
+    </div>
+  </ion-toolbar>
+</ion-footer>
