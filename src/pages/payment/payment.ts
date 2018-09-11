@@ -47,11 +47,12 @@ export class PaymentPage {
     }
   }
 
+
   ionViewDidEnter(){ 
     this.wechat.wxConfig();
     setTimeout(() => {
       this.openWexinClient();
-    }, 500);
+    }, 1000);
   }
 
   getQueryString() {
@@ -72,42 +73,42 @@ export class PaymentPage {
     return args;
   }
   wxpay() {
-    if (this.payPara.openid = 'init') {
-      let token = this.storage.get('token');
-      if (token) {
-        let api = 'v1/PersonalCenter/GetPersonalInfo/' + token;
-        this.httpService.requestData(api, (data) => {
-          if (data.error_code == 0) {//请求成功
-            let tempData = data.data;
-            if (tempData['personDataMap'].WxOpenId != '') {
-              //调支付
-              this.payPara.openid = tempData['personDataMap'].WxOpenId;
-              this.openWexinClient();
-            } else {
-              //微信授权获取openid
-              let token = this.storage.get('token');
-              if (token) {
-                let orderNo = this.payPara.orderNo;
-                let realpay = this.payPara.realpay;
-                let orderType = this.payPara.orderType;
-                let web_url: string = this.config.domain + "/zjapp/wechat/wechatauth.wxpaydo?token=" + token + "&orderno=" + orderNo + "&realpay=" + realpay + "&ordertype=" + orderType;
-                // this.webLink.goWeb(web_url);
-                window.location.href= web_url;
-              }
-            }
-          } else if (data.error_code == 3) {//token过期
-            this.rloginprocess.rLoginProcessWithHistory(this.navCtrl);
-          }
-          else {
-            this.noticeSer.showToast('数据获取异常：' + data.error_message);
-          }
-        });
-      }
-    } else {
-      //调支付
-      this.openWexinClient();
-    }
-
+    // if (this.payPara.openid = 'init') {
+    //   let token = this.storage.get('token');
+    //   if (token) {
+    //     let api = 'v1/PersonalCenter/GetPersonalInfo/' + token;
+    //     this.httpService.requestData(api, (data) => {
+    //       if (data.error_code == 0) {//请求成功
+    //         let tempData = data.data;
+    //         if (tempData['personDataMap'].WxOpenId != '') {
+    //           //调支付
+    //           this.payPara.openid = tempData['personDataMap'].WxOpenId;
+    //           this.openWexinClient();
+    //         } else {
+    //           //微信授权获取openid
+    //           let token = this.storage.get('token');
+    //           if (token) {
+    //             let orderNo = this.payPara.orderNo;
+    //             let realpay = this.payPara.realpay;
+    //             let orderType = this.payPara.orderType;
+    //             let web_url: string = this.config.domain + "/zjapp/wechat/wechatauth.wxpaydo?token=" + token + "&orderno=" + orderNo + "&realpay=" + realpay + "&ordertype=" + orderType;
+    //             // this.webLink.goWeb(web_url);
+    //             window.location.href= web_url;
+    //           }
+    //         }
+    //       } else if (data.error_code == 3) {//token过期
+    //         this.rloginprocess.rLoginProcessWithHistory(this.navCtrl);
+    //       }
+    //       else {
+    //         this.noticeSer.showToast('数据获取异常：' + data.error_message);
+    //       }
+    //     });
+    //   }
+    // } else {
+    //   //调支付
+    //   this.openWexinClient();
+    // }
+    this.openWexinClient();
   }
 
   openWexinClient() {

@@ -19,7 +19,7 @@ export class WechatProvider {
       let api = 'wechat/wechatParam.wxpaydo';
       this.httpService.requestData(api, (data) => {
         wx.config({
-          debug: true,////生产环境需要关闭debug模式
+          debug: false,////生产环境需要关闭debug模式
           appId: data.appid,//appId通过微信服务号后台查看
           timestamp: data.timestamp,//生成签名的时间戳
           nonceStr: data.nonceStr,//生成签名的随机字符串
