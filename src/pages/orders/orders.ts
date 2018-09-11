@@ -243,17 +243,17 @@ export class OrdersPage {
       }else if(data.data.type==2){
         //使用钱
         this.navCtrl.push('PaymentPage',{
-          orderNo: data.data.datas.orderNo,
-          realpay: data.data.datas.realpay,
-          orderType: data.data.datas.orderType
+          "orderNo": data.data.datas.orderNo,
+          "realpay": data.data.datas.realpay,
+          "orderType": data.data.datas.orderType
         });
       }else if(data.data.type==3){
         //使用虚拟货币使用钱
         this.passwordProvider.execute(this.navCtrl,()=>{
           this.navCtrl.push('PaymentPage',{
-            orderNo: data.data.datas.orderNo,
-            realpay: data.data.datas.realpay,
-            orderType: data.data.datas.orderType
+            "orderNo": data.data.datas.orderNo,
+            "realpay": data.data.datas.realpay,
+            "orderType": data.data.datas.orderType
           });
         });
       }
