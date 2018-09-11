@@ -4,13 +4,15 @@
   </div>
   <div class="product">
     <ion-row wrap>
-      <ion-col tappable col-6 *ngFor="let p of param" (click)="goDetails()">
-         <img src="{{config.domain+p.pic}}">
+      <ion-col tappable col-6 *ngFor="let p of param" tappable (click)="goDetail(p)" class="tcol">
+       <div class="point">
+        <img src="{{config.domain+p.pic}}" >
         <p>{{p.productName}}</p>
         <div class="list-price buy">
           <span class="price-new"><i>￥</i>{{p.productPrice}}</span>
           <i class="del">￥<span>100</span></i>
         </div>
+       </div>
       </ion-col>
     </ion-row>
   </div>
