@@ -34,8 +34,14 @@ export class ProductDetailPage {
   public sysId:(string);
   public usercode:(string);
   constructor(public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
+    this.id = this.navParams.get("id");
     this.usercode = this.getQueryString();
-    this.id = this.getQueryproductId();
+    if(this.id==undefined){
+      this.id = this.storage.getSessionStorage("productId");
+    }
+    if(this.id==undefined){
+      this.id = this.getQueryproductId();
+    }
     if(this.usercode!=undefined){
       this.storage.setSessionStorage("usercode",this.usercode);
     }
@@ -58,22 +64,18 @@ export class ProductDetailPage {
       footerHeight = footerHeight+2;
       this.renderer2.setStyle(buy,'height',footerHeight+'px');
       this.renderer2.setStyle(join,'height',footerHeight+'px');
-      this.id = this.navParams.get("id");
-      if(this.id==undefined){
-
-      }else{
-        this.storage.setSessionStorage("productId",this.id);
-      }  
   }
 
   ionViewWillEnter(){
     this.starList = [];
     this.focusList = []; 
-    if(this.id==undefined){
-      this.id = this.storage.getSessionStorage("productId");
-    }
     this.getFocus();
     this.getPicText();
+  }
+  ionViewWillLeave(){
+    if(this.id!=undefined){
+      this.storage.setSessionStorage("productId",this.id);
+    }
   }
   /**获取url中的父级邀请码 */
   getQueryString() {
@@ -117,7 +119,7 @@ export class ProductDetailPage {
   }
    /**分享*/
    share(title,picurl){
-     var url = this.config.apiUrl + "/v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
+     var url = this.config.apiUrl + "v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
     /**分享到朋友 */
     this.wechat.wxConfig(()=>{
       wx.onMenuShareAppMessage({
