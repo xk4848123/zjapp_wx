@@ -37,6 +37,8 @@ export class WechatProvider {
         });
         
       }, { url: url });
+    }else{
+      callback();
     }
     wx.ready(() => {
       callback();
