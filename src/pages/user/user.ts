@@ -13,6 +13,7 @@ import { ClearloginProvider } from '../../providers/clearlogin/clearlogin';
 import { ConfigProvider } from '../../providers/config/config';
 
 import { ToastProvider } from '../../providers/toast/toast';
+import { WeblinkProvider } from '../../providers/weblink/weblink';
 /**
  * Generated class for the UserPage page.
  *
@@ -49,7 +50,7 @@ export class UserPage {
   public isAuth: boolean=false;//是否实名认证通过
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public config: ConfigProvider, public storage: StorageProvider, public httpService: HttpServicesProvider, public alertProvider: AlertProvider, private el: ElementRef,
-    private renderer2: Renderer2, public clearlogin: ClearloginProvider,private noticeSer: ToastProvider) {
+    private renderer2: Renderer2, public clearlogin: ClearloginProvider,private noticeSer: ToastProvider,private webLink:WeblinkProvider) {
     //延迟清理第一次加载标记以确保不重复获取用户数据
     setTimeout(() => {
       this.isFirst = false;
@@ -77,7 +78,6 @@ export class UserPage {
 
   //进入各个子模块的入口
   mainEntrance(moduleName){
-  console.log(moduleName);
    if(this.userInfo){//登录以后才能获取进入子模块
     if(moduleName == 'fans'){
       this.navCtrl.push('FansPage');
@@ -138,9 +138,12 @@ export class UserPage {
     if(moduleName == "qrcode"){
       this.navCtrl.push("QrcodePage");
     }
-    // if(moduleName == 'paysuccesspage'){
-    //   this.navCtrl.push('PaysuccessPage');
-    // }
+    if(moduleName == "waterpurifier"){
+      this.webLink.goWeb(this.config.domain + "/html/waterPurifier.html?token=" + this.storage.get('token'));
+    }
+    if(moduleName == "mycourse"){
+      this.noticeSer.showToast('您还未有课程');
+    }
     //特殊的申请代理
     if(moduleName == 'proxyApply'){
       if(this.userInfo['personDataMap'].Lev==3 || (this.userInfo['personDataMap'].Lev==2 && this.userInfo['personDataMap'].IsSubProxy == 1)){
