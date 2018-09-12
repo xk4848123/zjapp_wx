@@ -2,12 +2,6 @@
 ///<reference path="../../services/user_defined.d.ts"/>
 import { Injectable } from '@angular/core';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
-/*
-  Generated class for the WechatProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class WechatProvider {
 
