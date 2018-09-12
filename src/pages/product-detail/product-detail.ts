@@ -119,7 +119,16 @@ export class ProductDetailPage {
   }
    /**分享*/
    share(title,picurl){
-     var url = this.config.apiUrl + "v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
+     console.log("-------");
+     console.log(picurl);
+     console.log("-------");
+     var url = '';
+     if(this.sysId){
+        url = this.config.apiUrl + "v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
+     }else{
+        url = this.config.apiUrl + "v2/wxshare/shareProduct?&productId="+this.id;
+     }
+     
     /**分享到朋友 */
     this.wechat.wxConfig(()=>{
       wx.onMenuShareAppMessage({
@@ -166,7 +175,7 @@ export class ProductDetailPage {
         this.alertProvider.showAlert('数据获取异常','',['ok']);
         return;
       }
-      this.share(data.data.product.productname,"https://appnew.zhongjianmall.com"+data.data.product.productphotos[0]);
+      this.share(data.data.product.productname,"https://appnew.zhongjianmall.com"+data.data.product.productphotos[0].photo);
       this.beLongToVIP = data.data.beLongToVIP;
       this.product = data.data.product;
       this.commentDetail = data.data.productComment;
