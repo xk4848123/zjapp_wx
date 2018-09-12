@@ -5,6 +5,7 @@ import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import {Jsonp} from "@angular/http";
 import { ToastProvider } from '../../providers/toast/toast';
+import { StorageProvider } from '../../providers/storage/storage';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -44,9 +45,13 @@ export class HomePage {
   public paramsG6 = new Array();/*G模块参数*/
   public testParams = new Array();
   public isRed = false;
-  
+  public usercode:(string);
 
-  constructor(public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider,private noticeSer: ToastProvider) {
+  constructor(public storage:StorageProvider,public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider,private noticeSer: ToastProvider) {
+    this.usercode = this.getQueryString();
+    if(this.usercode!=undefined){
+      this.storage.setSessionStorage("usercode",this.usercode);
+    }
     this.loadIndex();
   }
   /**加载首页数据 */
@@ -92,6 +97,26 @@ export class HomePage {
             this.search.nativeElement//获取html中标记为one的元素
         })
     })
+  }
+  /**获取url中的父级邀请码 */
+  getQueryString() {
+    let qs = location.search.substr(1), // 获取url中"?"符后的字串  
+      args = {}, // 保存参数数据的对象
+      items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+      item = null,
+      len = items.length;
+
+    for (let i = 0; i < len; i++) {
+      item = items[i].split("=");
+      let name = decodeURIComponent(item[0]),
+        value = decodeURIComponent(item[1]);
+      if (name) {
+        args[name] = value;
+      }
+      if(name="usercode"){
+        return args[name];
+      }
+    }
   }
   //加载首页收据
   getindex(){

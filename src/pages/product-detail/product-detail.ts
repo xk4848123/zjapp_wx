@@ -1,3 +1,4 @@
+///<reference path="../../services/jweixin.d.ts"/>
 import { Component,ElementRef,Renderer2,ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams,App,Content } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
@@ -6,9 +7,10 @@ import { AlertProvider } from '../../providers/alert/alert';
 import { DomSanitizer } from '@angular/platform-browser';/*转译html标签*/
 import { CarModalComponent } from '../../components/car-modal/car-modal';
 import { CarMemberComponent } from '../../components/car-member/car-member';
-import { ShareComponent } from '../../components/share/share';
 import { StorageProvider } from '../../providers/storage/storage';
 import { CartPage } from '../../pages/cart/cart';
+import { WechatProvider } from '../../providers/wechat/wechat';
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 @IonicPage()
 @Component({
   selector: 'page-product-detail',
@@ -29,8 +31,19 @@ export class ProductDetailPage {
   public topHeight:(number);
   public username = "";
   public headPic = "";
-  constructor(private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
-
+  public sysId:(string);
+  public usercode:(string);
+  constructor(public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
+    this.usercode = this.getQueryString();
+    if(this.usercode!=undefined){
+      this.storage.setSessionStorage("usercode",this.usercode);
+    }
+    var api = "v1/PersonalCenter/GetPersonalInfo/"+this.storage.get("token");
+    this.httpService.requestData(api,(data)=>{
+      if(data.error_code==0){
+        this.sysId = data.data.personDataMap.InviteCode;
+      }
+    })
   }
   ionViewDidLoad() {
       let footer = this.eleref.nativeElement.querySelector('.tfoot-left');
@@ -54,11 +67,71 @@ export class ProductDetailPage {
 
   ionViewWillEnter(){
     this.starList = [];
+    this.focusList = []; 
     if(this.id==undefined){
       this.id = this.storage.getSessionStorage("productId");
     }
     this.getFocus();
     this.getPicText();
+  }
+  /**获取url中的父级邀请码 */
+  getQueryString() {
+    let qs = location.search.substr(1), // 获取url中"?"符后的字串  
+      args = {}, // 保存参数数据的对象
+      items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+      item = null,
+      len = items.length;
+
+    for (let i = 0; i < len; i++) {
+      item = items[i].split("=");
+      let name = decodeURIComponent(item[0]),
+        value = decodeURIComponent(item[1]);
+      if (name) {
+        args[name] = value;
+      }
+      if(name="usercode"){
+        return args[name];
+      }
+    }
+  }
+   /**分享*/
+   share(title,picurl){
+    /**分享到朋友 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareAppMessage({
+        title: title,
+        desc: '一起买买买吧！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        imgUrl: picurl,
+      });
+    });
+     /**分享到朋友圈 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareTimeline({
+        title: title,
+        desc: '一起买买买吧！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        imgUrl: picurl,
+      });
+    });
+    /**分享到qq */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareQQ({
+        title: title,
+        desc: '一起买买买吧！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        imgUrl: picurl,
+      });
+    });
+    /**分享到qq空间 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareQZone({
+        title: title,
+        desc: '一起买买买吧！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        imgUrl: picurl,
+      });
+    });
   }
   /**获取商品详情 */
   getFocus(){
@@ -69,6 +142,8 @@ export class ProductDetailPage {
         this.alertProvider.showAlert('数据获取异常','',['ok']);
         return;
       }
+      console.log(data);
+      this.share(data.data.product.productname,"https://appnew.zhongjianmall.com"+data.data.product.productphotos[0]);
       this.beLongToVIP = data.data.beLongToVIP;
       this.product = data.data.product;
       this.commentDetail = data.data.productComment;
@@ -186,10 +261,6 @@ export class ProductDetailPage {
         "product":this.product
       });
     }
-  }
-  /**分享 */
-  share(){
-    this.alertProvider.showAlertM(ShareComponent,this.product);
   }
   /**跳转头部 */
   goProductDiv(){
