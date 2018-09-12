@@ -129,12 +129,7 @@ export class PaymentPage {
           signType: tempData.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
           paySign: tempData.paySign, // 支付签名
           success: (res)=> {
-             this.noticeSer.showToast(res.errMsg);
-             if(res.errMsg == 'ok'){
                this.goToSuccess();
-             }else{
-               this.noticeSer.showToast("支付失败");
-             }
           }
       });
       } else {

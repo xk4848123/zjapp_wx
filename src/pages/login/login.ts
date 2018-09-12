@@ -28,7 +28,8 @@ export class LoginPage {
   }
   public userinfo2 = {
     phoneNum: '',
-    verifyCode: ''
+    verifyCode: '',
+    inviteCode: null
   }
 
 
@@ -37,12 +38,19 @@ export class LoginPage {
 
   private interval: any = null;
 
+  private inviteCode:string = '';
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public httpService: HttpServicesProvider
     , public storage: StorageProvider, public noticeSer: ToastProvider, private el: ElementRef, private renderer2: Renderer2) {
     this.history = this.navParams.get('history');
     this.type = 1;
     if (this.navParams.get('type')) {
       this.type = this.navParams.get('type');
+    }
+    if(storage.getSessionStorage('usercode')){
+      this.inviteCode = storage.getSessionStorage('usercode');
+    }else{
+      this.inviteCode = 'no';
     }
   }
 
@@ -53,6 +61,7 @@ export class LoginPage {
       this.type = 1;
     }
   }
+
   getVerifyCode() {
     let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode'
     this.httpService.doPost(apiUrl, { phoneNum: this.userinfo2.phoneNum }, (res) => {
@@ -109,6 +118,9 @@ export class LoginPage {
         this.noticeSer.showToast('验证码不正确');
         return;
       }
+      if(this.inviteCode != 'no'){
+        this.userinfo2.inviteCode =  this.inviteCode;
+      }
       api = 'v2/LoginAndRegister/dynamicLogin';
       tempData = this.userinfo2;
     }
@@ -129,6 +141,9 @@ export class LoginPage {
       }
     });
   }
+
+
+
   ionViewWillUnload() {
     //清理定时器，收回资源
     if (this.interval) {
