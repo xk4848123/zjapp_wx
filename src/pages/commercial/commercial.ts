@@ -30,11 +30,10 @@ import { CommercialdetailPage } from '../commercialdetail/commercialdetail';
 export class CommercialPage {
   public commercialData = '';
   public page = 0;
-  public pageNum = 3;
+  public pageNum = 5;
   type: any = '1';
   public typeData = '';
   public temp = [];
-  enable: boolean = true;
   infiniteScroll: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,
     private config: ConfigProvider, private toastCtrl: ToastController, private alertCtrl: AlertController, private re: Renderer2, private el: ElementRef) {
@@ -49,16 +48,16 @@ export class CommercialPage {
   changeCss(attrOne, attrs) {
     for (let index = 0; index < attrs.length; index++) {
       this.re.setStyle(attrs[index], 'color', 'rgb(0, 0, 0)');
-      this.re.setStyle(attrs[index], 'text-decoration', 'none');
-      this.re.setStyle(attrs[index], 'margin-top', '0');
+      // this.re.setStyle(attrs[index], 'text-decoration', 'none');
+      // this.re.setStyle(attrs[index], 'margin-top', '0');
       this.re.setStyle(attrs[index], 'border-bottom', '0');
       this.re.setStyle(attrs[index], 'cursor ', 'auto');
     }
 
-    this.re.setStyle(attrOne, 'color', 'rgb(98, 145, 233)');
-    this.re.setStyle(attrOne, 'text-decoration', 'underline');
-    this.re.setStyle(attrOne, 'margin-top', '-0.5rem');
-    this.re.setStyle(attrOne, 'border-bottom', '1px solid rgb(98, 145, 233)');
+    this.re.setStyle(attrOne, 'color', '#f53d3d');
+   // this.re.setStyle(attrOne, 'text-decoration', 'underline');
+    //this.re.setStyle(attrOne, 'margin-top', '-0.5rem');
+    this.re.setStyle(attrOne, 'border-bottom', '1px solid #f53d3d');
     this.re.setStyle(attrOne, 'cursor ', 'pointer');
   }
   bindEvent(attrDom) {
@@ -92,11 +91,10 @@ export class CommercialPage {
     //刚进入该页或者点击时页数置0
     this.page = 0;
     this.getData();
-    //刚进入该页或者点击时上拉加载置为可以
-    this.enable = true;
+
     //从未下拉加载过就不执行
     if (this.infiniteScroll) {
-      this.infiniteScroll.enable(this.enable);
+      this.infiniteScroll.enable(true);
     }
     //数据清空
     this.temp = [];
@@ -139,15 +137,16 @@ export class CommercialPage {
     let apis = 'v2/commercialcollege/coursesbytype?' + 'type=' + this.type + '&page=' + this.page + '&pageNum=' + this.pageNum;
     this.httpService.requestData(apis, (res) => {
       if (res.error_code == 0) {
-        this.typeData = res.data;
         for (let i = 0; i < res.data.length; i++) {
           this.temp.push(res.data[i]);
         }
         if (res.data.length < this.pageNum) {
           //没有更多数据了
-          this.enable = false;
+          if(this.infiniteScroll){
+            this.infiniteScroll.enable(false);
+          }
+         
         }
-
         this.page++;
       } else {
         this.toast.showToast('数据获取异常');
@@ -160,7 +159,6 @@ export class CommercialPage {
     setTimeout(() => {
       this.getData();
       infiniteScroll.complete();
-      infiniteScroll.enable(this.enable);
       //把下拉事件提出来
       this.infiniteScroll = infiniteScroll;
     }, 1000);
@@ -174,4 +172,5 @@ export class CommercialPage {
       this.toast.showToast('加载成功');
     }, 1000);
   }
+  
 }

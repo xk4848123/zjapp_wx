@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-
 import { StorageProvider } from '../../providers/storage/storage';
 
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
@@ -35,23 +34,22 @@ public content='';
   assembleHTML(strHTML:any){
     return this.sanitizer.bypassSecurityTrustHtml(strHTML);
   }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TitlePage');
-  }
   ionViewWillEnter() {
+    //课程详细简介
     let api='v2/commercialcollege/coursedetailbrief?' + 'courseid=' + this.navParams.get('curId'); 
     this.httpService.requestData(api, (data) => {
       if(data.error_code==0){
        this.title=data.data['coursedatalist'];
-          for(let i of data.data['coursedatalist']){
-            console.log(i['id'])
-            let api='v2/commercialcollege/coursedatahtmltext?' + 'id=' + i['id'];
-          }
-        this.httpService.requestData(api,(data)=>{
-        if(data.error_code==0){
-                 this.content=data.data;
-           }
-        })
+       if(this.title.length == 1){
+         //课程资料详情
+        let api='v2/commercialcollege/coursedatahtmltext?' + 'id=' + this.title[0]['id'];
+      this.httpService.requestData(api,(data)=>{
+      if(data.error_code==0){
+               this.content=data.data;
+               console.log(this.content);
+         }
+      });
+    }
       }else{
         this.toast.showToast('数据获取异常');
       }

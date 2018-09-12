@@ -24,7 +24,7 @@
 
 <ion-content>
     <ion-list>
-        <ion-item  *ngFor="let item of typeData" (tap)="pushDetail(item.id)">
+        <ion-item  *ngFor="let item of temp" (tap)="pushDetail(item.id)">
 
             <ion-avatar item-start  class="itemImg">
                 <img [src]="config.domain+item.coursePhotos[0].photo">

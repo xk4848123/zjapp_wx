@@ -29,8 +29,8 @@
               </div>
         </div>
         <div> 
+            <p (tap)="pushDetail(detailPage.id)" style="color:#999797;">{{detailPage.coursename}}</p>
          <p>简介</p>
-         <p *ngIf="detailPage.coursetype==3" (tap)="pushDetail(detailPage.id)" style="color:#999797;">{{detailPage.coursename}}</p>
          <div [innerHTML]="assembleHTML(tempData)">
          </div>
         
