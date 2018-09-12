@@ -24,26 +24,42 @@ export class QrcodePage {
   }
   /**分享*/
   share(code){
+    /**分享到朋友 */
     this.wechat.wxConfig(()=>{
       wx.onMenuShareAppMessage({
         title: '众健商城',
-        desc: '来这里，买健康',
-        link: 'https://appnew.zhongjianmall.com/html/register.html?usercode='+code,
-        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/1.png',
-        trigger: function (res) {
-         
-        },
-        success: function (res) {
-         
-        },
-        cancel: function (res) {
-          
-        },
-        fail: function (res) {
-          
-        }
+        desc: '买得到的健康，看得见的品质！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
+        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
       });
-    })
+    });
+     /**分享到朋友圈 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareTimeline({
+        title: '众健商城',
+        desc: '买得到的健康，看得见的品质！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
+        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
+      });
+    });
+    /**分享到qq */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareQQ({
+        title: '众健商城',
+        desc: '买得到的健康，看得见的品质！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
+        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
+      });
+    });
+    /**分享到qq空间 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareQZone({
+        title: '众健商城',
+        desc: '买得到的健康，看得见的品质！',
+        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
+        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
+      });
+    });
   }
   
   ionViewDidLoad() {
@@ -68,7 +84,7 @@ export class QrcodePage {
         this.username = data.data.personDataMap.UserName;
         this.sysId = data.data.personDataMap.InviteCode;
         this.headpic = data.data.personDataMap.HeadPhoto;
-        var content = "https://appnew.zhongjianmall.com/html/register.html?usercode="+this.sysId;
+        var content = "https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode="+this.sysId;
         this.share(this.sysId);
         setTimeout(() => {
           global_wxFunciton.global_createCard(this.code,this.codeWidth,this.codeWidth,content);

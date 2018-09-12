@@ -121,7 +121,6 @@ import {OrderhandletransferPageModule} from '../pages/orderhandletransfer/orderh
 import { KeyProductListPageModule } from '../pages/key-product-list/key-product-list.module';
 import { QrcodePageModule } from '../pages/qrcode/qrcode.module';
 /**分享 */
-import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
 //组件
 import { CarModalComponent } from '../components/car-modal/car-modal'; 
@@ -143,7 +142,6 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     IonModleGComponent,
     CarModalComponent,
     CarMemberComponent,
-    ShareComponent,
     HomePage,
     CategoryPage,
     CartPage,
@@ -224,7 +222,6 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     IonModleGComponent,
     CarModalComponent,
     CarMemberComponent,
-    ShareComponent,
     HomePage,
     CategoryPage,
     CartPage,
