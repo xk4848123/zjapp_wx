@@ -120,6 +120,7 @@ export class LoginPage {
       }
       if(this.inviteCode != 'no'){
         this.userinfo2.inviteCode =  this.inviteCode;
+        this.storage.removeSessionStorage('usercode');
       }
       api = 'v2/LoginAndRegister/dynamicLogin';
       tempData = this.userinfo2;
