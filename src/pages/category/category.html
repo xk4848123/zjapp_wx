@@ -18,7 +18,7 @@
 
       <div class="cate_right">
           <ion-row>
-             <img style="width:100%; height: 100px;" src="assets/imgs/slide03.jpg" />
+             <img style="width:100%; height: 70px;" src="assets/imgs/slide03.png" />
               <ion-col col-4 *ngFor="let item of rightCate" [navPush]='ProductlistPage' [navParams]="{'id':item['id'],'categoryname':item['categoryname']}">              
                 
                     <img [src]="config.domain+item.icon" />

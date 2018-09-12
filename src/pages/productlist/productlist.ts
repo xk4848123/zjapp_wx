@@ -4,12 +4,6 @@ import { IonicPage, NavController, NavParams,Content } from 'ionic-angular';
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { StorageProvider } from '../../providers/storage/storage';
-/**
- * Generated class for the ProductlistPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -85,7 +79,6 @@ export class ProductlistPage {
       };
       this.page++;
     },params)
-
   }
    //按价格排序
    search_price(){
@@ -176,7 +169,6 @@ export class ProductlistPage {
       infiniteScroll.enable(this.enable);
       this.infiniteScroll = infiniteScroll;
     }, 1000);
-    
   }
 
 }

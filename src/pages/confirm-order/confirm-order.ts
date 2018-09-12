@@ -1,6 +1,6 @@
 ///<reference path="../../services/jquery.d.ts"/>
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,Events, Modal, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,Events } from 'ionic-angular';
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { StorageProvider } from '../../providers/storage/storage';
@@ -8,6 +8,7 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
 import { AlertProvider } from '../../providers/alert/alert';
 import { ToastProvider } from '../../providers/toast/toast';
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
+import { WeblinkProvider } from '../../providers/weblink/weblink';
 @IonicPage()
 @Component({
   selector: 'page-confirm-order',
@@ -19,7 +20,7 @@ export class ConfirmOrderPage {
   public specid:(any);
   public productid:(any);
   public price:(any);
-  public productname:(any);
+  public productname:(string);
   public buynum:(any);
   public img :(any);
   public deduRedback = 0;
@@ -46,8 +47,15 @@ export class ConfirmOrderPage {
   public isTwoAddress = false;
   public memo = '';
   public addressId = '';
-  constructor(public passwordProvider:VerifypasswordProvider,public toast: ToastProvider,public alert:AlertProvider,public navCtrl: NavController, public navParams: NavParams,private event: Events, public config:ConfigProvider,public httpservice : HttpServicesProvider,public storage:StorageProvider,public rlogin:RloginprocessProvider) {
+  constructor(public weblink: WeblinkProvider,public passwordProvider:VerifypasswordProvider,public toast: ToastProvider,public alert:AlertProvider,public navCtrl: NavController, public navParams: NavParams,private event: Events, public config:ConfigProvider,public httpservice : HttpServicesProvider,public storage:StorageProvider,public rlogin:RloginprocessProvider) {
     this.productArray = this.navParams.get("product");
+    /**处理商品名 */
+    for(var z=0;z<this.productArray.length;z++){
+      this.productname = this.productArray[z].productname;
+      if(this.productname.length>=15){
+        this.productArray[z].productname = this.productname.substr(0,8)+"..."+this.productname.substr(this.productname.length-5,5);
+      }
+    }
     /**总价 */
     for(var i=0;i<this.productArray.length;i++){
      this.allAmount = this.allAmount+this.productArray[i].buynum*this.productArray[i].specPrice;
@@ -377,22 +385,14 @@ export class ConfirmOrderPage {
             });
           });
         }else if(data.data.type==2){
-          this.navCtrl.push('PaymentPage',{
-            orderNo: data.data.datas.orderNoC,
-            realpay: data.data.datas.realpay,
-            orderType: data.data.datas.orderType
-          });
+          this.weblink.wxGoWebPay(this.token,data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
         }else if(data.data.type==3){
           this.passwordProvider.execute(this.navCtrl,()=>{
-            this.navCtrl.push('PaymentPage',{
-              orderNo: data.data.datas.orderNoC,
-              realpay: data.data.datas.realpay,
-              orderType: data.data.datas.orderType
-            });
+            this.weblink.wxGoWebPay(this.token,data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
           });
         }
       }else{
-        this.toast.showToast('服务器异常');
+        this.toast.showToast(data.error_message);
       }
     })
   }

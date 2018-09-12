@@ -1,19 +1,23 @@
-import { Component,ElementRef,Renderer2 } from '@angular/core';
-import { IonicPage, NavController, NavParams,App, Navbar } from 'ionic-angular';
+///<reference path="../../services/jweixin.d.ts"/>
+import { Component,ElementRef,Renderer2,ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams,App,Content } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { ConfigProvider } from '../../providers/config/config';
 import { AlertProvider } from '../../providers/alert/alert';
 import { DomSanitizer } from '@angular/platform-browser';/*转译html标签*/
 import { CarModalComponent } from '../../components/car-modal/car-modal';
-import { ShareComponent } from '../../components/share/share';
+import { CarMemberComponent } from '../../components/car-member/car-member';
 import { StorageProvider } from '../../providers/storage/storage';
 import { CartPage } from '../../pages/cart/cart';
+import { WechatProvider } from '../../providers/wechat/wechat';
+import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 @IonicPage()
 @Component({
   selector: 'page-product-detail',
   templateUrl: 'product-detail.html',
 })
 export class ProductDetailPage {
+  @ViewChild(Content) content: Content;
   public id :(number);
   public product :(any);
   public productText :(string);
@@ -21,14 +25,37 @@ export class ProductDetailPage {
   public starList=[];/**星星个数 */
   public comment :(string);
   public commentDetail:(any);
-  constructor(private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
-
+  public beLongToVIP = false;
+  public commentHeight:(number);
+  public detailHeight:(number);
+  public topHeight:(number);
+  public username = "";
+  public headPic = "";
+  public sysId:(string);
+  public usercode:(string);
+  constructor(public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
+    this.usercode = this.getQueryString();
+    this.id = this.getQueryproductId();
+    if(this.usercode!=undefined){
+      this.storage.setSessionStorage("usercode",this.usercode);
+    }
+    var api = "v1/PersonalCenter/GetPersonalInfo/"+this.storage.get("token");
+    this.httpService.requestData(api,(data)=>{
+      if(data.error_code==0){
+        this.sysId = data.data.personDataMap.InviteCode;
+      }
+    })
   }
   ionViewDidLoad() {
       let footer = this.eleref.nativeElement.querySelector('.tfoot-left');
       let footerHeight = footer.offsetHeight;
       let buy = this.eleref.nativeElement.querySelector('.buy');
       let join = this.eleref.nativeElement.querySelector('.join');
+      this.commentHeight = this.eleref.nativeElement.querySelector('.tcomment').offsetTop;
+      this.detailHeight = this.eleref.nativeElement.querySelector('.tproductText').offsetTop;
+      this.topHeight = this.eleref.nativeElement.querySelector('.t-title').offsetHeight;
+      footerHeight = footerHeight+2;
+      footerHeight = footerHeight+2;
       this.renderer2.setStyle(buy,'height',footerHeight+'px');
       this.renderer2.setStyle(join,'height',footerHeight+'px');
       this.id = this.navParams.get("id");
@@ -36,15 +63,97 @@ export class ProductDetailPage {
 
       }else{
         this.storage.setSessionStorage("productId",this.id);
-      }
+      }  
   }
 
   ionViewWillEnter(){
+    this.starList = [];
+    this.focusList = []; 
     if(this.id==undefined){
       this.id = this.storage.getSessionStorage("productId");
     }
     this.getFocus();
     this.getPicText();
+  }
+  /**获取url中的父级邀请码 */
+  getQueryString() {
+    let qs = location.search.substr(1), // 获取url中"?"符后的字串  
+      args = {}, // 保存参数数据的对象
+      items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+      item = null,
+      len = items.length;
+
+    for (let i = 0; i < len; i++) {
+      item = items[i].split("=");
+      let name = decodeURIComponent(item[0]),
+        value = decodeURIComponent(item[1]);
+      if (name) {
+        args[name] = value;
+      }
+      if(name==="usercode"){
+        return args[name];
+      }
+    }
+  }
+  /**获取url中的productId */
+  getQueryproductId() {
+    let qs = location.search.substr(1), // 获取url中"?"符后的字串  
+      args = {}, // 保存参数数据的对象
+      items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+      item = null,
+      len = items.length;
+
+    for (let i = 0; i < len; i++) {
+      item = items[i].split("=");
+      let name = decodeURIComponent(item[0]),
+        value = decodeURIComponent(item[1]);
+      if (name) {
+        args[name] = value;
+      }
+      if(name=="productId"){
+        return args[name];
+      }
+    }
+  }
+   /**分享*/
+   share(title,picurl){
+     var url = this.config.apiUrl + "/v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
+    /**分享到朋友 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareAppMessage({
+        title: title,
+        desc: '一起买买买吧！',
+        link: url,
+        imgUrl: picurl,
+      });
+    });
+     /**分享到朋友圈 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareTimeline({
+        title: title,
+        desc: '一起买买买吧！',
+        link: url,
+        imgUrl: picurl,
+      });
+    });
+    /**分享到qq */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareQQ({
+        title: title,
+        desc: '一起买买买吧！',
+        link: url,
+        imgUrl: picurl,
+      });
+    });
+    /**分享到qq空间 */
+    this.wechat.wxConfig(()=>{
+      wx.onMenuShareQZone({
+        title: title,
+        desc: '一起买买买吧！',
+        link: url,
+        imgUrl: picurl,
+      });
+    });
   }
   /**获取商品详情 */
   getFocus(){
@@ -55,6 +164,8 @@ export class ProductDetailPage {
         this.alertProvider.showAlert('数据获取异常','',['ok']);
         return;
       }
+      this.share(data.data.product.productname,"https://appnew.zhongjianmall.com"+data.data.product.productphotos[0]);
+      this.beLongToVIP = data.data.beLongToVIP;
       this.product = data.data.product;
       this.commentDetail = data.data.productComment;
       if(this.commentDetail==null){
@@ -65,6 +176,13 @@ export class ProductDetailPage {
           "star": 0,
           "productCommentPhotos": []
         } 
+      }else{
+        if(this.commentDetail.user==null){
+          this.username = "匿名用户";
+        }else{
+          this.username = this.commentDetail.user.truename;
+          this.headPic = this.commentDetail.user.headphoto;
+        }
       }
       this.comment = this.commentDetail.memo;
       if(this.comment.length>42){
@@ -78,9 +196,11 @@ export class ProductDetailPage {
       }
     },param)
   }
-  /**获取评论用户信息 */
-  getUserInfo(){
-
+  /**跳转评论页 */
+  goevaluation(){
+    this.navCtrl.push('ProductCommentPage',{
+      "id":this.id
+    });
   }
   /*获取图文详情*/
   getPicText(){
@@ -92,7 +212,9 @@ export class ProductDetailPage {
         return;
       }
       var reg = new RegExp("/upload","g");
-      this.productText = data.data.replace(reg,this.config.domain+"/upload");
+      var reg1 = new RegExp("https://appnew.zhongjianmall.com/","g");
+      this.productText = data.data.replace(reg1,'');
+      this.productText = this.productText.replace(reg,this.config.domain+"/upload");
     },param)
   }
   /**转译html标签 */
@@ -108,13 +230,13 @@ export class ProductDetailPage {
       text:"取消",
       role:'cancle',
       handler:()=>{
-        console.log("点击取消");
+       
       }
     },{
       text:"确认",
       role:"destructive",
       handler:()=>{
-        console.log("点击确认");
+       window.location.href = "tel:"+content;
       }
     }];
     this.alertProvider.showMoreAlert(title,content,ass,buttons);
@@ -127,19 +249,45 @@ export class ProductDetailPage {
   }
   /**加入购物车 */
   joinShop(){
-    this.alertProvider.showAlertM(CarModalComponent,this.product);
+    if(this.beLongToVIP == false){
+      this.alertProvider.showAlertM(CarModalComponent,{
+        "product":this.product
+      });
+    }
   }
   /**立即购买 */
   goBuy(){
-    this.alertProvider.showAlertM(CarModalComponent,{
-      "product":this.product
-    });
+    if(this.beLongToVIP == false){
+      this.alertProvider.showAlertM(CarModalComponent,{
+        "product":this.product
+      });
+    }else{
+      this.alertProvider.showAlertM(CarMemberComponent,{
+        "product":this.product
+      });
+    }
   }
   choiceSpec(){
-    this.alertProvider.showAlertM(CarModalComponent,this.product);
+    if(this.beLongToVIP == false){
+      this.alertProvider.showAlertM(CarModalComponent,{
+        "product":this.product
+      });
+    }else{
+      this.alertProvider.showAlertM(CarMemberComponent,{
+        "product":this.product
+      });
+    }
   }
-  /**分享 */
-  share(){
-    this.alertProvider.showAlertM(ShareComponent,this.product);
+  /**跳转头部 */
+  goProductDiv(){
+      this.content.scrollTo(0, 0, 300);
+  }
+  /**跳转评价 */
+  goCommentDiv(){
+    this.content.scrollTo(0, this.commentHeight+this.topHeight, 300);
+  }
+  godetailDiv(){
+  /**跳转详情 */
+    this.content.scrollTo(0, this.detailHeight+this.topHeight, 300);
   }
 }

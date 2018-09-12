@@ -23,9 +23,12 @@ export class CarModalComponent {
   public specName:(string);
   public product:(any);
   public productArray = [];
-  constructor(public rlogin :RloginprocessProvider,public appCtrl : App,public navCtrl :NavController,public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,public alert: AlertProvider,public httpservice:HttpServicesProvider) {
+  constructor(public rlogin :RloginprocessProvider,public appCtrl : App,public navCtrl :NavController,
+    public params: NavParams,public config :ConfigProvider,public viewCrl:ViewController,public storage:StorageProvider,
+    public alert: AlertProvider,public httpservice:HttpServicesProvider) {
     this.product = params.get("product");
     this.productname = this.product.productname;
+    this.productname = this.productname.substr(0,5)+"..."+this.productname.substr(this.productname.length-5,5);
     this.num = this.product.stocknum;
     this.price = this.product.price;
     this.elec = this.product.elecnum;

@@ -2,24 +2,18 @@
 ///<reference path="../../services/user_defined.d.ts"/>
 import { Injectable } from '@angular/core';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
-/*
-  Generated class for the WechatProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class WechatProvider {
 
   constructor(private httpService: HttpServicesProvider) {
   }
-  wxConfig() {
+  wxConfig(callback) {
     if (!global_wxFunciton.isloadWxConfig()) {
       let url = location.href.split('#')[0];//url不能写死
-      let api = 'wechat/wechatParam';
+      let api = 'wechat/wechatParam.wxpaydo';
       this.httpService.requestData(api, (data) => {
         wx.config({
-          debug: true,////生产环境需要关闭debug模式
+          debug: false,////生产环境需要关闭debug模式
           appId: data.appid,//appId通过微信服务号后台查看
           timestamp: data.timestamp,//生成签名的时间戳
           nonceStr: data.nonceStr,//生成签名的随机字符串
@@ -35,10 +29,13 @@ export class WechatProvider {
             'chooseImage'
           ]
         });
+        
       }, { url: url });
+    }else{
+      callback();
     }
     wx.ready(() => {
-      global_wxFunciton.setWxConfig();
+      callback();
     });
   }
 }

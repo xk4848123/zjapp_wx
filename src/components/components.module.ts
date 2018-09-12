@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
+import { CarMemberComponent } from './car-member/car-member';
 
 @NgModule({
-	declarations: [	
+	declarations: [CarMemberComponent	
     ],
 	imports: [
 		
 	],
-	exports: [
+	exports: [CarMemberComponent
 		
     ]
 })

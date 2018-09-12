@@ -14,7 +14,7 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let item of datas" (tap)="backWithAdrress(item.Id)">
+    <ion-item *ngFor="let item of datas" (tap)="backWithAdrress($event,item.Id)">
       <ion-avatar item-start>
         <div class="head">
           {{item.headName}}
@@ -26,7 +26,7 @@
       </div>
       <div class="address"><span [ngStyle]="{'display':item.IsDefault === 1 ? 'inline' : 'none' }">默认</span>&nbsp;<span>{{item.ProvinceName}}</span>&nbsp;<span>{{item.CityName}}</span>&nbsp;<span>{{item.RegionName}}</span>&nbsp;<span>{{item.DetailAddress}}</span></div>
       <ion-avatar item-right>
-        <div class="button" (tap)="addOrEdit(item.Id)">
+        <div class="button">
           编辑
         </div>
       </ion-avatar>

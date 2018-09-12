@@ -27,10 +27,6 @@ export class PaysuccessPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad');
   }
-
-  goToHome(){
-    this.navCtrl.push(TabsPage);
-  }
   goToMyWallet(){
     this.navCtrl.push('MywalletPage',{
       withoutRoot: 'withoutRoot'

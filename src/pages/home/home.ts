@@ -4,8 +4,8 @@ import { ConfigProvider } from '../../providers/config/config';
 
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import {Jsonp} from "@angular/http";
-
 import { ToastProvider } from '../../providers/toast/toast';
+import { StorageProvider } from '../../providers/storage/storage';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -13,11 +13,6 @@ import { ToastProvider } from '../../providers/toast/toast';
 export class HomePage {
   @ViewChild(Content) content: Content;
   @ViewChild('search') search;
-  public PcontentPage='PcontentPage';
-  public focusList=[];  /*数组 轮播图*/
-  public bestList=[];   /*精品推荐*/
-  public bestListWidth=''; /*精品推荐数据长度*/
-  public hotList=[];  /*热门商品 精品推荐*/
   public paramsA1 = new Array();/*A模块参数*/
   public paramsB1 = new Array();/*B模块参数*/
   public paramsC1 = new Array();/*C模块参数*/
@@ -50,36 +45,31 @@ export class HomePage {
   public paramsG6 = new Array();/*G模块参数*/
   public testParams = new Array();
   public isRed = false;
-  
+  public usercode:(string);
 
-  constructor(public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider,private noticeSer: ToastProvider) {
-   this.testParams = [{ "type": 1, "sort": 1, "title": "促/销/专/区", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
-    {
-      "type": 2, "sort": 2, "title": "", "content1": { "pic": "assets/imgs/modb1.png", "picType": 2, "picUrl": "" },
-      "content2": { "pic": "assets/imgs/modb2.png", "picType": 2, "picUrl": "" },
-      "content3": { "pic": "assets/imgs/modb3.png", "picType": 2, "picUrl": "" }
-    },
-    {
-      "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
-      "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
-    },
-    // { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
-    {
-      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
-      "content2": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" },
-      "content3": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" }
-    },
-    {
-      "type": 5, "sort": 6, "title": "你/会/喜/欢", "content1": { "pic": "assets/imgs/product2.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
-      "content2": { "pic": "assets/imgs/product1.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
-      "content3": { "pic": "assets/imgs/product3.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
-      "content4": { "pic": "assets/imgs/product4.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 }
+  constructor(public storage:StorageProvider,public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider,private noticeSer: ToastProvider) {
+    this.usercode = this.getQueryString();
+    if(this.usercode!=undefined){
+      this.storage.setSessionStorage("usercode",this.usercode);
     }
-    ];
-    this.getindex();
+    this.loadIndex();
+  }
+  /**加载首页数据 */
+  loadIndex(){
+    var api = "v2/HomePage/initHomePage";
+    this.httpService.requestData(api,(data)=>{
+      if(data.error_code==0){
+        this.testParams = data.data;
+        this.testParams.shift();
+        this.getindex();
+        this.get();
+      }else{
+        this.noticeSer.showToast(data.error_message);
+      }
+    })
   }
   ionViewWillEnter(){
-    this.get();
+    global_wxFunciton.hideGoRoot();
     this.content.ionScroll.subscribe(($event: any) => {
       this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
           let length = $event.scrollTop;//当前滑动的距离
@@ -92,138 +82,130 @@ export class HomePage {
       })
   })
   }
+  ionViewWillLeave(){
+    global_wxFunciton.showGoRoot();
+  }
   ionViewDidEnter() {
-    this.content.ionScroll.subscribe(($event: any) => {
-      this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
-          let length = $event.scrollTop;//当前滑动的距离
-          if(length>=219.4){
-            this.isRed = true;
-          }else{
-            this.isRed = false;
-          }
-          this.search.nativeElement//获取html中标记为one的元素
-      })
-  })
+      this.content.ionScroll.subscribe(($event: any) => {
+        this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
+            let length = $event.scrollTop;//当前滑动的距离
+            if(length>=219.4){
+              this.isRed = true;
+            }else{
+              this.isRed = false;
+            }
+            this.search.nativeElement//获取html中标记为one的元素
+        })
+    })
+  }
+  /**获取url中的父级邀请码 */
+  getQueryString() {
+    let qs = location.search.substr(1), // 获取url中"?"符后的字串  
+      args = {}, // 保存参数数据的对象
+      items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+      item = null,
+      len = items.length;
+
+    for (let i = 0; i < len; i++) {
+      item = items[i].split("=");
+      let name = decodeURIComponent(item[0]),
+        value = decodeURIComponent(item[1]);
+      if (name) {
+        args[name] = value;
+      }
+      if(name="usercode"){
+        return args[name];
+      }
+    }
   }
   //加载首页收据
   getindex(){
     for(let i=0;i<this.testParams.length;i++){
-      if(this.testParams[i].type==1){
+      if(this.testParams[i].type==2){
         if(i==0){
-          this.paramsA1 = [this.testParams[i].title,this.testParams[i].content1.pic,this.testParams[i].sort];
-        }else if(i==0){
-          this.paramsA2 = [this.testParams[i].title,this.testParams[i].content1.pic,this.testParams[i].sort];
-        }else if(i==2){
-          this.paramsA3 = [this.testParams[i].title,this.testParams[i].content1.pic,this.testParams[i].sort];
-        }
-        else if(i==3){
-          this.paramsA4 = [this.testParams[i].title,this.testParams[i].content1.pic,this.testParams[i].sort];
-        }
-        else if(i==4){
-          this.paramsA5 = [this.testParams[i].title,this.testParams[i].content1.pic,this.testParams[i].sort];
-        }
-        else if(i==5){
-          this.paramsA6 = [this.testParams[i].title,this.testParams[i].content1.pic,this.testParams[i].sort];
-        }
-      }else if(this.testParams[i].type==2){
-        if(i==0){
-          this.paramsB1 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsA1 = this.testParams[i];
         }else if(i==1){
-          this.paramsB2 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsA2 = this.testParams[i];
         }else if(i==2){
-          this.paramsB3 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsA3 = this.testParams[i];
         }
         else if(i==3){
-          this.paramsB4 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsA4 = this.testParams[i];
         }
         else if(i==4){
-          this.paramsB5 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsA5 = this.testParams[i];
         }
         else if(i==5){
-          this.paramsB6 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsA6 = this.testParams[i];
         }
       }else if(this.testParams[i].type==3){
         if(i==0){
-          this.paramsC1 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl}]];
+          this.paramsB1 = this.testParams[i];
         }else if(i==1){
-          this.paramsC2 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl}]];
+          this.paramsB2 = this.testParams[i];
         }else if(i==2){
-          this.paramsC3 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl}]];
+          this.paramsB3 =this.testParams[i];
         }
         else if(i==3){
-          this.paramsC4 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl}]];
+          this.paramsB4 = this.testParams[i];
         }
         else if(i==4){
-          this.paramsC5 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl}]];
+          this.paramsB5 = this.testParams[i];
         }
         else if(i==5){
-          this.paramsC6 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl}]];
+          this.paramsB6 = this.testParams[i];
         }
       }else if(this.testParams[i].type==4){
         if(i==0){
-          this.paramsD1 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsC1 = this.testParams[i];
         }else if(i==1){
-          this.paramsD2 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsC2 = this.testParams[i];
         }else if(i==2){
-          this.paramsD3 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsC3 = this.testParams[i];
+        }else if(i==3){
+          this.paramsC4 = this.testParams[i];
+        }else if(i==4){
+          this.paramsC5 = this.testParams[i];
+        }else if(i==5){
+          this.paramsC6 = this.testParams[i];
+        }
+       }else if(this.testParams[i].type==5){
+        if(i==0){
+          this.paramsD1 = this.testParams[i];
+        }else if(i==1){
+          this.paramsD2 = this.testParams[i];
+        }else if(i==2){
+          this.paramsD3 = this.testParams[i];
         }
         else if(i==3){
-          this.paramsD4 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsD4 = this.testParams[i];
         }
         else if(i==4){
-          this.paramsD5 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsD5 = this.testParams[i];
         }
         else if(i==5){
-          this.paramsD6 = [this.testParams[i].content1.picUrl,this.testParams[i].content1.pic,this.testParams[i].content2.picUrl,this.testParams[i].content2.pic,this.testParams[i].content3.picUrl,this.testParams[i].content3.pic,this.testParams[i].title,this.testParams[i].sort];
+          this.paramsD6 = this.testParams[i];
         }
-      }else if(this.testParams[i].type==5){
+       }else if(this.testParams[i].type==6){
         if(i==0){
-          this.paramsG1 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl,"picTitle":this.testParams[i].content1.picTitle,"oldPrice":this.testParams[i].content1.oldPrice,"newPrice":this.testParams[i].content1.newPrice},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl,"picTitle":this.testParams[i].content2.picTitle,"oldPrice":this.testParams[i].content2.oldPrice,"newPrice":this.testParams[i].content2.newPrice},{"img":this.testParams[i].content3.pic,"url":this.testParams[i].content3.picUrl,"picTitle":this.testParams[i].content3.picTitle,"oldPrice":this.testParams[i].content3.oldPrice,"newPrice":this.testParams[i].content3.newPrice},{"img":this.testParams[i].content4.pic,"url":this.testParams[i].content4.picUrl,"picTitle":this.testParams[i].content4.picTitle,"oldPrice":this.testParams[i].content4.oldPrice,"newPrice":this.testParams[i].content4.newPrice}]];
+          this.paramsG1 =  this.testParams[i];
         }else if(i==1){
-          this.paramsG2 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl,"picTitle":this.testParams[i].content1.picTitle,"oldPrice":this.testParams[i].content1.oldPrice,"newPrice":this.testParams[i].content1.newPrice},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl,"picTitle":this.testParams[i].content2.picTitle,"oldPrice":this.testParams[i].content2.oldPrice,"newPrice":this.testParams[i].content2.newPrice},{"img":this.testParams[i].content3.pic,"url":this.testParams[i].content3.picUrl,"picTitle":this.testParams[i].content3.picTitle,"oldPrice":this.testParams[i].content3.oldPrice,"newPrice":this.testParams[i].content3.newPrice},{"img":this.testParams[i].content4.pic,"url":this.testParams[i].content4.picUrl,"picTitle":this.testParams[i].content4.picTitle,"oldPrice":this.testParams[i].content4.oldPrice,"newPrice":this.testParams[i].content4.newPrice}]];
+          this.paramsG2 =  this.testParams[i];
         }else if(i==2){
-          this.paramsG3 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl,"picTitle":this.testParams[i].content1.picTitle,"oldPrice":this.testParams[i].content1.oldPrice,"newPrice":this.testParams[i].content1.newPrice},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl,"picTitle":this.testParams[i].content2.picTitle,"oldPrice":this.testParams[i].content2.oldPrice,"newPrice":this.testParams[i].content2.newPrice},{"img":this.testParams[i].content3.pic,"url":this.testParams[i].content3.picUrl,"picTitle":this.testParams[i].content3.picTitle,"oldPrice":this.testParams[i].content3.oldPrice,"newPrice":this.testParams[i].content3.newPrice},{"img":this.testParams[i].content4.pic,"url":this.testParams[i].content4.picUrl,"picTitle":this.testParams[i].content4.picTitle,"oldPrice":this.testParams[i].content4.oldPrice,"newPrice":this.testParams[i].content4.newPrice}]];
+          this.paramsG3 =  this.testParams[i];
         }else if(i==3){
-          this.paramsG4 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl,"picTitle":this.testParams[i].content1.picTitle,"oldPrice":this.testParams[i].content1.oldPrice,"newPrice":this.testParams[i].content1.newPrice},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl,"picTitle":this.testParams[i].content2.picTitle,"oldPrice":this.testParams[i].content2.oldPrice,"newPrice":this.testParams[i].content2.newPrice},{"img":this.testParams[i].content3.pic,"url":this.testParams[i].content3.picUrl,"picTitle":this.testParams[i].content3.picTitle,"oldPrice":this.testParams[i].content3.oldPrice,"newPrice":this.testParams[i].content3.newPrice},{"img":this.testParams[i].content4.pic,"url":this.testParams[i].content4.picUrl,"picTitle":this.testParams[i].content4.picTitle,"oldPrice":this.testParams[i].content4.oldPrice,"newPrice":this.testParams[i].content4.newPrice}]];
+          this.paramsG4 =  this.testParams[i];
         }else if(i==4){
-          this.paramsG5 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl,"picTitle":this.testParams[i].content1.picTitle,"oldPrice":this.testParams[i].content1.oldPrice,"newPrice":this.testParams[i].content1.newPrice},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl,"picTitle":this.testParams[i].content2.picTitle,"oldPrice":this.testParams[i].content2.oldPrice,"newPrice":this.testParams[i].content2.newPrice},{"img":this.testParams[i].content3.pic,"url":this.testParams[i].content3.picUrl,"picTitle":this.testParams[i].content3.picTitle,"oldPrice":this.testParams[i].content3.oldPrice,"newPrice":this.testParams[i].content3.newPrice},{"img":this.testParams[i].content4.pic,"url":this.testParams[i].content4.picUrl,"picTitle":this.testParams[i].content4.picTitle,"oldPrice":this.testParams[i].content4.oldPrice,"newPrice":this.testParams[i].content4.newPrice}]];
+          this.paramsG5 =  this.testParams[i];
         }else if(i==5){
-          this.paramsG6 = [this.testParams[i].title,this.testParams[i].sort,[{"img":this.testParams[i].content1.pic,"url":this.testParams[i].content1.picUrl,"picTitle":this.testParams[i].content1.picTitle,"oldPrice":this.testParams[i].content1.oldPrice,"newPrice":this.testParams[i].content1.newPrice},{"img":this.testParams[i].content2.pic,"url":this.testParams[i].content2.picUrl,"picTitle":this.testParams[i].content2.picTitle,"oldPrice":this.testParams[i].content2.oldPrice,"newPrice":this.testParams[i].content2.newPrice},{"img":this.testParams[i].content3.pic,"url":this.testParams[i].content3.picUrl,"picTitle":this.testParams[i].content3.picTitle,"oldPrice":this.testParams[i].content3.oldPrice,"newPrice":this.testParams[i].content3.newPrice},{"img":this.testParams[i].content4.pic,"url":this.testParams[i].content4.picUrl,"picTitle":this.testParams[i].content4.picTitle,"oldPrice":this.testParams[i].content4.oldPrice,"newPrice":this.testParams[i].content4.newPrice}]];
+          this.paramsG6 =  this.testParams[i];
         }
       }
     }
   }
-  //测试方法
-  say(){
-    console.log("设计师设计时尚");
-  }
   //下拉刷型界面
 doRefresh($event){
-  this.testParams = [{ "type": 1, "sort": 1, "title": "促/销/专/区", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
-    {
-      "type": 2, "sort": 2, "title": "", "content1": { "pic": "assets/imgs/modb1.png", "picType": 2, "picUrl": "" },
-      "content2": { "pic": "assets/imgs/modb2.png", "picType": 2, "picUrl": "" },
-      "content3": { "pic": "assets/imgs/modb3.png", "picType": 2, "picUrl": "" }
-    },
-    {
-      "type": 3, "sort": 3, "title": "畅/享/美/食", "content1": { "pic": "assets/imgs/modc1.png", "picType": 2, "picUrl": "" },
-      "content2": { "pic": "assets/imgs/modc2.png", "picType": 2, "picUrl": "" }
-    },
-    // { "type": 1, "sort": 4, "title": "活/力/无/限", "content1": { "pic": "assets/imgs/mod2.png", "picType": 1, "picUrl": "" } },
-    {
-      "type": 4, "sort": 5, "title": "有/机/食/品", "content1": { "pic": "assets/imgs/modd1.png", "picType": 2, "picUrl": "" },
-      "content2": { "pic": "assets/imgs/modd2.png", "picType": 2, "picUrl": "" },
-      "content3": { "pic": "assets/imgs/modd3.png", "picType": 2, "picUrl": "" }
-    },
-    {
-      "type": 5, "sort": 6, "title": "你/会/喜/欢", "content1": { "pic": "assets/imgs/product2.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
-      "content2": { "pic": "assets/imgs/product1.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
-      "content3": { "pic": "assets/imgs/product3.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 },
-      "content4": { "pic": "assets/imgs/product4.png", "picType": 2, "picUrl": "", "picTitle": "西门双子冰箱", "oldPrice": 1500, "newPrice": 1200 }
-    }
-    ];
-  this.getindex();
-  this.get();
+  this.loadIndex();
   setTimeout(() => { 
      $event.complete();
       this.noticeSer.showToast('加载成功');
@@ -233,19 +215,19 @@ doRefresh($event){
    get(){
     var a = document.querySelectorAll('.dis');
     for(let i=0;i<this.testParams.length;i++){
-      if(this.testParams[i].type==1){
+      if(this.testParams[i].type==2){
         var a1 = a[i].querySelectorAll("ion-modle-a");
         a1[0]['style'].display = '';
-      }else if(this.testParams[i].type==2){
+      }else if(this.testParams[i].type==3){
         var b1 = a[i].querySelectorAll("ion-modle-b");
         b1[0]['style'].display = '';
-      }else if(this.testParams[i].type==3){
+      }else if(this.testParams[i].type==4){
         var c1 = a[i].querySelectorAll("ion-modle-c");
         c1[0]['style'].display = '';
-      }else if(this.testParams[i].type==4){
+      }else if(this.testParams[i].type==5){
         var d1 = a[i].querySelectorAll("ion-modle-d");
         d1[0]['style'].display = '';
-      }else if(this.testParams[i].type==5){
+      }else if(this.testParams[i].type==6){
         var g1 = a[i].querySelectorAll("ion-modle-g");
         g1[0]['style'].display = '';
       }
@@ -256,5 +238,4 @@ doRefresh($event){
   goSearch(){
     this.navCtrl.push('SearchPage');
   }
-
 }

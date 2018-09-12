@@ -4,13 +4,13 @@
           <ion-segment-button navPop class="t-title1">
               <ion-icon class="t-back" ios="ios-arrow-back" md="md-arrow-back"></ion-icon>
           </ion-segment-button>
-          <ion-segment-button class="t-title" value="one">
+          <ion-segment-button class="t-title" value="one" tappable (click)="goProductDiv()">
             商品
           </ion-segment-button>
-          <ion-segment-button class="t-title" value="two">
+          <ion-segment-button class="t-title" value="two" tappable (click)="goCommentDiv()">
             评价
           </ion-segment-button>
-          <ion-segment-button class="t-title" value="three">
+          <ion-segment-button class="t-title" value="three" tappable (click)="godetailDiv()">
             详情
           </ion-segment-button>
           <ion-segment-button class="t-title" (tap)="share()">
@@ -23,7 +23,7 @@
     <div class="adv">
         <ion-slides *ngIf="focusList.length>0" pager loop="true" autoplay="3000">    
             <ion-slide style="height: 100%" *ngFor="let item of focusList">
-                <img [src]="config.domain+item" (click)="say()"/>
+                <img [src]="config.domain+item"/>
             </ion-slide>         
         </ion-slides>
     </div>
@@ -47,15 +47,15 @@
         <li><img src="assets/icon/youjiantou.png"/></li>
       </ul>
     </div>
-    <div class="tchoice">
+    <div class="tcomment" tappable (click)="goevaluation()">
         <ul>
           <li>商品评价</li>
           <li><img src="assets/icon/youjiantou.png"/></li>
         </ul>
         <div style="margin-top: 1rem;overflow: auto">
-          <div style="float: left;margin-left: 1rem">
-              <ion-icon ios="md-person" md="md-person"></ion-icon>
-              <p style="display: inline;margin-left: 0.5rem;color: #666666;">温暖</p>
+          <div style="float: left;margin-left: 1rem;display: flex">
+              <img onerror="this.src='assets/imgs/user.png'" class="headimg" src="{{config.domain+headPic}}">
+              <p class="pname">{{username}}</p>
           </div>
           <div style="float: right;margin-right: 0.5rem" *ngFor="let item of starList">
              <ion-icon ios="ios-star" md="ios-star" style="color: red"></ion-icon>
@@ -90,7 +90,7 @@
           </a>
         </div>  
         <div class="tfoot-right">
-          <button class="join" ion-button color="danger" (tap)="joinShop()">加入购物车</button>
+          <button class="join" ion-button (tap)="joinShop()" [ngStyle]="{'background-color':beLongToVIP === true ? '#C0C0C0' : '#f53d3d' }">加入购物车</button>
           <button class="buy" ion-button (tap)="goBuy()">立即购买</button>
         </div>
       </div>

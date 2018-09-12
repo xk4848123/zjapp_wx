@@ -26,26 +26,26 @@
                </span>
             </p>
       </div>
- </div>
- <div class="tbuyCount">
-    <ion-row>
-        <ion-col col-9>
-          <samp>购买数量：</samp>
-        </ion-col>
-        <ion-col col-1>
-          <button ion-button [disabled]='minus || disabled' (click)="onMinus()" clear>
-            <ion-icon name="remove-circle" color="primary" ></ion-icon>
-          </button>
-        </ion-col>
-        <ion-col col-1>
-          <input [(ngModel)]="buyNumber" readonly  value="1" #input >
-        </ion-col>
-        <ion-col col-1 text-right>
-          <button ion-button [disabled]='add || disabled' (click)="onAdd()" clear>
-            <ion-icon name="add-circle" color="primary"></ion-icon>
-          </button>
-        </ion-col>
-    </ion-row>
+      <div class="tbuyCount">
+        <ion-row>
+            <ion-col col-9>
+              <samp>购买数量：</samp>
+            </ion-col>
+            <ion-col col-1>
+              <button ion-button [disabled]='minus || disabled' (click)="onMinus()" clear>
+                <ion-icon name="remove-circle" color="primary" ></ion-icon>
+              </button>
+            </ion-col>
+            <ion-col col-1>
+              <input [(ngModel)]="buyNumber" readonly  value="1" #input >
+            </ion-col>
+            <ion-col col-1 text-right>
+              <button ion-button [disabled]='add || disabled' (click)="onAdd()" clear>
+                <ion-icon name="add-circle" color="primary"></ion-icon>
+              </button>
+            </ion-col>
+        </ion-row>
+     </div>
  </div>
  <div class="tfoot-right">
     <button class="join" ion-button color="danger" (tap)="addCart()">加入购物车</button>

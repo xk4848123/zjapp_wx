@@ -4,6 +4,7 @@ import { StorageProvider } from '../../providers/storage/storage';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
 import { ToastProvider } from '../../providers/toast/toast';
+import { WeblinkProvider } from '../../providers/weblink/weblink';
 /**
  * Generated class for the RechargePage page.
  *
@@ -23,7 +24,7 @@ export class RechargePage {
   public num: number = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private renderer2: Renderer2, private noticeSer: ToastProvider,
-    private el: ElementRef, private storage: StorageProvider, private httpService: HttpServicesProvider, private rloginprocess: RloginprocessProvider) {
+    private el: ElementRef, private storage: StorageProvider, private httpService: HttpServicesProvider, private rloginprocess: RloginprocessProvider,private webLink:WeblinkProvider) {
   }
 
   ionViewWillEnter() {
@@ -63,13 +64,7 @@ export class RechargePage {
       this.httpService.doFormPost(apiUrl, { money: this.money }, (data) => {
         if (data.error_code == 0) {//请求成功
           let tempData = data.data;
-          this.navCtrl.push('PaymentPage', {
-            data: {
-              orderNo: tempData.orderNo,
-              realpay: tempData.realpay,
-              orderType: tempData.orderType
-            }
-          });
+          this.webLink.wxGoWebPay(token,tempData.orderNo,tempData.realpay,tempData.orderType);
         } else if (data.error_code == 3) {
           this.rloginprocess.rLoginProcessWithHistory(this.navCtrl);
         } else {

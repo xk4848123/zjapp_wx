@@ -114,12 +114,17 @@ import {SplitrecordPageModule} from '../pages/splitrecord/splitrecord.module';
 import {SetattrPageModule} from '../pages/setattr/setattr.module';
 import {UpdatephonenumPageModule }from '../pages/updatephonenum/updatephonenum.module';
 import {UpdatephonenumnextPageModule } from '../pages/updatephonenumnext/updatephonenumnext.module';
+import { MembersProductPageModule } from '../pages/members-product/members-product.module';
+import { ConfirmVipOrderPageModule } from '../pages/confirm-vip-order/confirm-vip-order.module';
+import { ProductCommentPageModule } from '../pages/product-comment/product-comment.module';
 import {OrderhandletransferPageModule} from '../pages/orderhandletransfer/orderhandletransfer.module';
+import { KeyProductListPageModule } from '../pages/key-product-list/key-product-list.module';
+import { QrcodePageModule } from '../pages/qrcode/qrcode.module';
 /**分享 */
-import { ShareComponent } from '../components/share/share';
 import { AppshareProvider } from '../providers/appshare/appshare';
 //组件
 import { CarModalComponent } from '../components/car-modal/car-modal'; 
+import { CarMemberComponent } from '../components/car-member/car-member';
 import { ConfirmOrderPageModule } from '../pages/confirm-order/confirm-order.module';
 import { WechatProvider } from '../providers/wechat/wechat';
 import { WeblinkProvider } from '../providers/weblink/weblink';
@@ -136,7 +141,7 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     IonModleDComponent,
     IonModleGComponent,
     CarModalComponent,
-    ShareComponent,
+    CarMemberComponent,
     HomePage,
     CategoryPage,
     CartPage,
@@ -191,7 +196,12 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     SetattrPageModule,
     UpdatephonenumPageModule,
     UpdatephonenumnextPageModule,
+    MembersProductPageModule,
+    ConfirmVipOrderPageModule,
+    ProductCommentPageModule,
     OrderhandletransferPageModule,
+    KeyProductListPageModule,
+    QrcodePageModule,
     IonicModule.forRoot(MyApp,{
       mode:'ios',
       tabsHideOnSubPages: 'true', //隐藏全部子页面 tabs
@@ -211,7 +221,7 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     IonModleDComponent,
     IonModleGComponent,
     CarModalComponent,
-    ShareComponent,
+    CarMemberComponent,
     HomePage,
     CategoryPage,
     CartPage,
