@@ -388,11 +388,7 @@ export class ConfirmOrderPage {
           this.weblink.wxGoWebPay(this.token,data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
         }else if(data.data.type==3){
           this.passwordProvider.execute(this.navCtrl,()=>{
-            this.navCtrl.push('PaymentPage',{
-              "orderNo": data.data.datas.orderNoC,
-              "realpay": data.data.datas.realpay,
-              "orderType": data.data.datas.orderType
-            });
+            this.weblink.wxGoWebPay(this.token,data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
           });
         }
       }else{
