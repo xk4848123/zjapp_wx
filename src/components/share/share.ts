@@ -28,7 +28,8 @@ export class ShareComponent {
   /**分享 */
   share(num){
     if(num==1){
-      this.wechat.wxConfig();
+    
+      // this.wechat.wxConfig(a);
       // this.appshare.wxShare(0);
     }else if(num==2){
       this.appshare.wxShare(1);

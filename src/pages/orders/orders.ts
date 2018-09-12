@@ -243,11 +243,11 @@ export class OrdersPage {
         });
       }else if(data.data.type==2){
         //使用钱
-        this.weblink.wxGoWebPay(this.storage.get('token'),data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
+        this.weblink.wxGoWebPay(this.storage.get('token'),data.data.datas.orderNo,data.data.datas.realpay,data.data.datas.orderType);
       }else if(data.data.type==3){
         //使用虚拟货币使用钱
         this.passwordProvider.execute(this.navCtrl,()=>{
-          this.weblink.wxGoWebPay(this.storage.get('token'),data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
+          this.weblink.wxGoWebPay(this.storage.get('token'),data.data.datas.orderNo,data.data.datas.realpay,data.data.datas.orderType);
         });
       }
     });
