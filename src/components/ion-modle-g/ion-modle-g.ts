@@ -30,6 +30,9 @@ export class IonModleGComponent {
   ngOnChanges(){
     if(this.params.pageMoudles!=null){
       this.param = this.params.pageMoudles;
+      for(let i=0;i<this.param.length;i++){
+        this.param[i].oldPrice = this.param[i].productPrice*5/4;
+      }
       this.title="促/销/专/区";
       this.sort = this.params.sort;
     }
