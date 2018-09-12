@@ -14,6 +14,7 @@ import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
+import { WeblinkProvider } from '../../providers/weblink/weblink';
 
 /**
  * Generated class for the OrdersPage page.
@@ -35,7 +36,7 @@ export class OrdersPage {
   infiniteScroll: any;
   public cancer='';
   public confirm='';
-  constructor(public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,
+  constructor(public weblink:WeblinkProvider,public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,
     private config: ConfigProvider, private toastCtrl: ToastController, private alertCtrl: AlertController,
     private re: Renderer2, private el: ElementRef,private rclogin: RloginprocessProvider) {
     if (this.navParams.get('type')) {
@@ -242,11 +243,7 @@ export class OrdersPage {
         });
       }else if(data.data.type==2){
         //使用钱
-        this.navCtrl.push('PaymentPage',{
-          "orderNo": data.data.datas.orderNo,
-          "realpay": data.data.datas.realpay,
-          "orderType": data.data.datas.orderType
-        });
+        this.weblink.wxGoWebPay(this.storage.get('token'),data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
       }else if(data.data.type==3){
         //使用虚拟货币使用钱
         this.passwordProvider.execute(this.navCtrl,()=>{

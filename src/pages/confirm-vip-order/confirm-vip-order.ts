@@ -8,6 +8,7 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
 import { AlertProvider } from '../../providers/alert/alert';
 import { ToastProvider } from '../../providers/toast/toast';
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
+import { WeblinkProvider } from '../../providers/weblink/weblink';
 
 @IonicPage()
 @Component({
@@ -50,11 +51,8 @@ export class ConfirmVipOrderPage {
   public isTwoAddress = false;
   public memo = '';
   public addressId = '';
-  constructor(public passwordProvider:VerifypasswordProvider,public toast: ToastProvider,public alert:AlertProvider,public navCtrl: NavController, public navParams: NavParams,private event: Events, public config:ConfigProvider,public httpservice : HttpServicesProvider,public storage:StorageProvider,public rlogin:RloginprocessProvider) {
+  constructor(public weblink:WeblinkProvider,public passwordProvider:VerifypasswordProvider,public toast: ToastProvider,public alert:AlertProvider,public navCtrl: NavController, public navParams: NavParams,private event: Events, public config:ConfigProvider,public httpservice : HttpServicesProvider,public storage:StorageProvider,public rlogin:RloginprocessProvider) {
     this.productArray = this.navParams.get("product");
-    console.log("-----------");
-    console.log(this.productArray);
-    console.log("-----------");
     /**处理商品名 */
     for(var z=0;z<this.productArray.length;z++){
       this.productname = this.productArray[z].productname;
@@ -83,9 +81,6 @@ export class ConfirmVipOrderPage {
         if(data.error_code==3){
           this.rlogin.rLoginProcessWithHistory(this.navCtrl);
         }else{
-          console.log("-----------");
-          console.log(data);
-          console.log("-----------");
           this.res={
             "redBak":data.data.personDataMap.Coupon,
             "buy":data.data.personDataMap.RemainPoints,
@@ -465,11 +460,7 @@ export class ConfirmVipOrderPage {
           });
         }else if(data.data.type==3){
           this.passwordProvider.execute(this.navCtrl,()=>{
-            this.navCtrl.push('PaymentPage',{
-              "orderNo": data.data.datas.orderNoC,
-              "realpay": data.data.datas.realpay,
-              "orderType": data.data.datas.orderType
-            });
+            this.weblink.wxGoWebPay(this.token,data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
           });
         }
       }else{

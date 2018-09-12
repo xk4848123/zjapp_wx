@@ -9,7 +9,7 @@ import { ToastProvider } from '../../providers/toast/toast';
 import { ConfigProvider } from '../../providers/config/config';
 import { VerifypasswordProvider } from '../../providers/verifypassword/verifypassword';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
-
+import { WeblinkProvider } from '../../providers/weblink/weblink';
 
 /**
  * Generated class for the OrderlistPage page.
@@ -30,7 +30,7 @@ export class OrderlistPage {
   public cancer='';
   public confirm='';
   public orderData:(any);
-  constructor(public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider, private config: ConfigProvider) {
+  constructor(public weblink:WeblinkProvider,public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider, private config: ConfigProvider) {
     this.pageStackLength  = this.navCtrl.length();
   }
 
@@ -154,11 +154,7 @@ export class OrderlistPage {
         });
       }else if(data.data.type==2){
         //使用钱
-        this.navCtrl.push('PaymentPage',{
-          "orderNo": data.data.datas.orderNo,
-          "realpay": data.data.datas.realpay,
-          "orderType": data.data.datas.orderType
-        });
+        this.weblink.wxGoWebPay(this.storage.get('token'),data.data.datas.orderNoC,data.data.datas.realpay,data.data.datas.orderType);
       }else if(data.data.type==3){
         //使用虚拟货币使用钱
         this.passwordProvider.execute(this.navCtrl,()=>{
