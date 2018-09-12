@@ -42,6 +42,9 @@ export class CartPage {
     console.log("购物车第一次加载！");
   }
   ionViewWillEnter(){
+    if(this.isIndex === true){
+      global_wxFunciton.hideGoRoot();
+    }
     this.num = this.storage.getSessionStorage("carNum")==null ? 1 : this.storage.getSessionStorage("carNum");
     this.getCartsData();
   }
@@ -156,6 +159,7 @@ export class CartPage {
     this.hasData = false;
     this.productName = null;
     this.length=0;
+    global_wxFunciton.showGoRoot();
    }
 
    //全选反选

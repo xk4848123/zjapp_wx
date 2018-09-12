@@ -64,6 +64,7 @@ export class HomePage {
     })
   }
   ionViewWillEnter(){
+    global_wxFunciton.hideGoRoot();
     this.content.ionScroll.subscribe(($event: any) => {
       this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
           let length = $event.scrollTop;//当前滑动的距离
@@ -76,21 +77,8 @@ export class HomePage {
       })
   })
   }
-  ngAfterViewInit(){
-    var divs = document.querySelectorAll("div.product");
-    var row = divs[4].querySelectorAll(".row");
-    var col = row[0].childNodes;
-    let nodes = col[0].nextSibling.nextSibling.parentElement.getElementsByTagName("ion-col");
-    console.log(nodes);
-    // console.log(nodes.length);
-    // var a = nodes.length;
-    // console.log(a);
-    for(var i=0;i<nodes.length;i++){
-      console.log("1+1");
-    }
-    // for(let i=0;i<nodes.length;i++){
-    //   console.log(nodes[i].clientHeight);
-    // }
+  ionViewWillLeave(){
+    global_wxFunciton.showGoRoot();
   }
   ionViewDidEnter() {
       this.content.ionScroll.subscribe(($event: any) => {

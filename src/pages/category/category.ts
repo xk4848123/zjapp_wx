@@ -24,9 +24,12 @@ export class CategoryPage {
   }
 
   ionViewWillEnter(){
-   this.getLeftCateData();/*左侧分类*/ 
+    global_wxFunciton.hideGoRoot();
+    this.getLeftCateData();/*左侧分类*/ 
   }
-
+  ionViewWillLeave(){
+    global_wxFunciton.showGoRoot();
+  }
   //左侧分类的方法
   getLeftCateData(){
     let api='v1/ProductManager/getProductOfCategory';
