@@ -35,6 +35,7 @@ export class ProductDetailPage {
   public usercode:(string);
   constructor(public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
     this.usercode = this.getQueryString();
+    this.id = this.getQueryproductId();
     if(this.usercode!=undefined){
       this.storage.setSessionStorage("usercode",this.usercode);
     }
@@ -62,7 +63,7 @@ export class ProductDetailPage {
 
       }else{
         this.storage.setSessionStorage("productId",this.id);
-      }
+      }  
   }
 
   ionViewWillEnter(){
@@ -89,19 +90,40 @@ export class ProductDetailPage {
       if (name) {
         args[name] = value;
       }
-      if(name="usercode"){
+      if(name==="usercode"){
+        return args[name];
+      }
+    }
+  }
+  /**获取url中的productId */
+  getQueryproductId() {
+    let qs = location.search.substr(1), // 获取url中"?"符后的字串  
+      args = {}, // 保存参数数据的对象
+      items = qs.length ? qs.split("&") : [], // 取得每一个参数项,
+      item = null,
+      len = items.length;
+
+    for (let i = 0; i < len; i++) {
+      item = items[i].split("=");
+      let name = decodeURIComponent(item[0]),
+        value = decodeURIComponent(item[1]);
+      if (name) {
+        args[name] = value;
+      }
+      if(name=="productId"){
         return args[name];
       }
     }
   }
    /**分享*/
    share(title,picurl){
+     var url = this.config.apiUrl + "/v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
     /**分享到朋友 */
     this.wechat.wxConfig(()=>{
       wx.onMenuShareAppMessage({
         title: title,
         desc: '一起买买买吧！',
-        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        link: url,
         imgUrl: picurl,
       });
     });
@@ -110,7 +132,7 @@ export class ProductDetailPage {
       wx.onMenuShareTimeline({
         title: title,
         desc: '一起买买买吧！',
-        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        link: url,
         imgUrl: picurl,
       });
     });
@@ -119,7 +141,7 @@ export class ProductDetailPage {
       wx.onMenuShareQQ({
         title: title,
         desc: '一起买买买吧！',
-        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        link: url,
         imgUrl: picurl,
       });
     });
@@ -128,7 +150,7 @@ export class ProductDetailPage {
       wx.onMenuShareQZone({
         title: title,
         desc: '一起买买买吧！',
-        link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+this.sysId,
+        link: url,
         imgUrl: picurl,
       });
     });
@@ -142,7 +164,6 @@ export class ProductDetailPage {
         this.alertProvider.showAlert('数据获取异常','',['ok']);
         return;
       }
-      console.log(data);
       this.share(data.data.product.productname,"https://appnew.zhongjianmall.com"+data.data.product.productphotos[0]);
       this.beLongToVIP = data.data.beLongToVIP;
       this.product = data.data.product;
@@ -181,10 +202,6 @@ export class ProductDetailPage {
       "id":this.id
     });
   }
-  /**获取评论用户信息 */
-  getUserInfo(){
-
-  }
   /*获取图文详情*/
   getPicText(){
     var api =  "v1/ProductManager/getProductImgAndText";
@@ -198,7 +215,6 @@ export class ProductDetailPage {
       var reg1 = new RegExp("https://appnew.zhongjianmall.com/","g");
       this.productText = data.data.replace(reg1,'');
       this.productText = this.productText.replace(reg,this.config.domain+"/upload");
-      // this.productText = data.data;
     },param)
   }
   /**转译html标签 */
