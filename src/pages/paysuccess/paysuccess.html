@@ -1,10 +1,5 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>完成支付</ion-title>
-  </ion-navbar>
-</ion-header>
 <ion-content style="background: #eeeeee;">
-        <img class="img" src="assets/imgs/success3.jpg"/>
+        <img class="img" src="assets/imgs/success3.png"/>
             <button class="home_button" ion-button block color="danger" onclick="globalGoRoot()">返回首页</button>
             <button class="other_button" ion-button block color="danger" *ngIf="orderType=='1'" (tap)="goToOrders()">返回订单</button>
             <button class="other_button" ion-button block color="danger" *ngIf="orderType=='2'" (tap)="goToMyWallet()">查看现金</button>

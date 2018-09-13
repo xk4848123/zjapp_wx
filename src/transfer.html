@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>众健商城</title>
+
+<script>
+window.onload=function(){
+	  //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+	  var ua = window.navigator.userAgent.toLowerCase();
+		//获取url中的参数
+	    var url = location.search;
+	    var theRequest = new Object();
+	    if (url.indexOf("?") != -1) {
+	        var str = url.substr(1);
+	        strs = str.split("&");
+	        for (var i = 0; i < strs.length; i++) {
+	            theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+	        }
+	    }
+	   var goWx = "https://appnew.zhongjianmall.com/zjapp/wechat/index.html";
+	   var goRegister = 'https://appnew.zhongjianmall.com/html/register.html';
+	  //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+	 
+	  if(theRequest.usercode){
+		  if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+
+			  window.location.href= goWx + '?usercode=' +  theRequest.usercode;
+		  }else{
+			  window.location.href= goRegister + '?usercode=' +  theRequest.usercode;
+		  } 
+	  }else{
+		  if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+
+			  window.location.href= goWx;
+		  }else{
+			  window.location.href= goRegister;
+		  }	  
+	  }
+
+}
+</script>
+</head>
+
+<body>
+
+</body>
+
+</html>

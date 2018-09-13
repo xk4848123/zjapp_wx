@@ -23,7 +23,6 @@ export class MywalletPage {
   public WithdrawPage = 'WithdrawPage';
   public UpdaterankPage ='UpdaterankPage';
   public myHome = TabsPage;
-  public canGoHome: string = '0';
   public userInfo = '';
   public imgs = {
     img1: '',
@@ -106,10 +105,7 @@ export class MywalletPage {
     let goldOriginalHeight = mygoldDiv.offsetHeight;
     let expandHeight = goldOriginalHeight + 99 + 'px';
     this.renderer2.setStyle(mygoldDiv, 'height', expandHeight);
-    //看情况增加调回首页按钮
-    if (this.navParams.get('withoutRoot')) {
-      this.canGoHome = '1';
-    }
+
   }
 
   ionViewWillEnter() {

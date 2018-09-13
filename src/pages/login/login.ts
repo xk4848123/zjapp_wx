@@ -62,8 +62,20 @@ export class LoginPage {
     }
   }
 
+  verifyPhone(phoneNum){
+      var myreg=/^[1][3,4,5,6,7,8][0-9]{9}$/;
+      if (!myreg.test(phoneNum)) {
+          return false;
+      } else {
+          return true;
+      }
+  }
   getVerifyCode() {
-    let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode'
+    if(!this.verifyPhone(this.userinfo2.phoneNum)){
+      this.noticeSer.showToast('手机格式不正确');
+      return;
+    }
+    let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode';
     this.httpService.doPost(apiUrl, { phoneNum: this.userinfo2.phoneNum }, (res) => {
       if (res.error_code == 0) {//请求成功
         let button = this.el.nativeElement.querySelector('#button');
@@ -82,7 +94,7 @@ export class LoginPage {
         }, 1000);
       } 
       else {
-        this.noticeSer.showToast('服务异常：' + res.error_message);
+        this.noticeSer.showToast(res.error_message);
       }
     });
   }

@@ -33,8 +33,21 @@ export class UpdatephonenumnextPage {
 
   private verifycode: number;
 
+  verifyPhone(phoneNum) {
+    var myreg = /^[1][3,4,5,6,7,8][0-9]{9}$/;
+    if (!myreg.test(phoneNum)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   getVerifyCode() {
-    let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode'
+    if (!this.verifyPhone(this.phoneNum)) {
+      this.noticeSer.showToast('手机格式不正确');
+      return;
+    }
+    let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode';
     this.httpService.doPost(apiUrl, { phoneNum: this.phoneNum }, (res) => {
       if (res.error_code == 0) {//请求成功
         let button = this.el.nativeElement.querySelector('#button');
@@ -51,24 +64,24 @@ export class UpdatephonenumnextPage {
             clearInterval(this.interval);
           }
         }, 1000);
-      } 
+      }
       else {
-        this.noticeSer.showToast( res.error_message);
+        this.noticeSer.showToast(res.error_message);
       }
     });
   }
   confirm() {
     let apiUrl = 'v1/LoginAndRegister/verifyUpdateUserName/' + this.navParams.get('Certficate');
     let token = this.storage.get('token');
-    if(this.phoneNum.toString().length !=11){
+    if (this.phoneNum.toString().length != 11) {
       this.noticeSer.showToast("手机号格式不正确");
       return;
     }
     if (this.verifycode && this.verifycode.toString().length == 4) {
-      this.httpService.doFormPost(apiUrl, { token: token, verifyCode: this.verifycode ,userName: this.phoneNum}, (res) => {
+      this.httpService.doFormPost(apiUrl, { token: token, verifyCode: this.verifycode, userName: this.phoneNum }, (res) => {
         if (res.error_code == 0) {//请求成功
           console.log(this.navCtrl.length());
-          this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length() -  3));
+          this.navCtrl.popTo(this.navCtrl.getByIndex(this.navCtrl.length() - 3));
         } else if (res.error_code == 3) {//token过期
           this.rlogin.rLoginProcess(this.navCtrl);
         }

@@ -51,7 +51,7 @@ export class SetpaypasswordPage {
   }
 
   getVerifyCode() {
-    let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode'
+    let apiUrl = 'v1/LoginAndRegister/SendRegisterVerifyCode';
     this.httpService.doPost(apiUrl, { phoneNum: this.phoneNum }, (res) => {
       if (res.error_code == 0) {//请求成功
         let button = this.el.nativeElement.querySelector('#button');

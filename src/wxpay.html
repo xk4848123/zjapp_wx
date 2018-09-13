@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>众健商城</title>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style type="text/css">
+        body {
+            background: #eeeeee;
+        }
+
+        .head {
+            margin-top: 12%;
+            text-align: center;
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        .money {
+            margin-top: 3%;
+            text-align: center;
+            font-weight: 780;
+        }
+
+        .money>span:last-child {
+            font-size: 60px;
+        }
+
+        .money>span:first-child {
+            font-size: 50px;
+        }
+
+        .button {
+            background-color: #f53d3d;
+            color: #fff;
+            text-align: center;
+            width: 85%;
+            margin: 6% auto 0 auto;
+            height: 45px;
+            line-height: 45px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            font-size: 19px;
+
+        }
+
+        .lineDiv>span:last-child {
+            float: right;
+        }
+
+        .lineDiv>span:first-child {
+            float: left;
+        }
+
+        .lineDiv {
+            width: 85%;
+            margin: 15% auto 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">众健微信商城</div>
+    <div class="money">
+        <span>￥</span>
+        <span id="money">11.90</span>
+    </div>
+    <div class="lineDiv">
+        <span>收款方</span>
+        <span>杭州众健网络科技</span>
+    </div>
+    <div style="clear:both;"></div>
+    <div class="button">立即支付</div>
+</body>
+
+<script src="assets/js/jquery.min.js"></script>
+<script>
+    var theRequest = new Object();
+    var wxpay = function () {
+        $.ajax({
+            url: "/zjapp/wechat/createwxpayparam.wxpaydo",
+            type: "post",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({ 'total_fee': theRequest.realpay, 'out_trade_no': theRequest.orderno, 'type': theRequest.ordertype, 'openid': theRequest.openid }),
+            datatype: "json",
+            cache: true,
+            success: (data) => {
+                if (data.error_code == 0) {
+                    var tempData = data.data;
+                    globalToWxPay(tempData.appId, tempData.timeStamp, tempData.nonceStr, tempData.package, tempData.signType, tempData.paySign);
+                }
+                else {
+                    alert(data.error_message);
+                }
+            }
+        });
+
+
+    }
+
+
+    var globalOnBridgeReady = function (appId, timeStamp, nonceStr, package, signType, paySign) {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+                "appId": appId,     //公众号名称，由商户传入     
+                "timeStamp": timeStamp,         //时间戳，自1970年以来的秒数     
+                "nonceStr": nonceStr, //随机串     
+                "package": package,
+                "signType": signType,         //微信签名方式：     
+                "paySign": paySign //微信签名 
+            },
+            function (res) {
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    window.location.href = "/zjapp/wechat/paysuccess.html?type=" + theRequest.ordertype;
+                    // 使用以上方式判断前端返回,微信团队郑重提示：
+                    //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                    alert("期待您的支付哦！");
+                } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+                    alert("支付失败");
+                } else {
+                }
+            });
+    }
+
+    var globalToWxPay = function (appId, timeStamp, nonceStr, package, signType, paySign) {
+        if (typeof WeixinJSBridge == "undefined") {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', globalOnBridgeReady(appId, timeStamp, nonceStr, package, signType, paySign), false);
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', globalOnBridgeReady(appId, timeStamp, nonceStr, package, signType, paySign));
+                document.attachEvent('onWeixinJSBridgeReady', globalOnBridgeReady(appId, timeStamp, nonceStr, package, signType, paySign));
+            }
+        } else {
+            globalOnBridgeReady(appId, timeStamp, nonceStr, package, signType, paySign);
+        }
+    }
+    window.onload = function () {
+        //获取url中的参数
+        var url = location.search;
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+            }
+        }
+        //显示金额
+        var moneyDiv = document.getElementById("money");
+        moneyDiv.innerHTML = theRequest.realpay;
+        $(".button").on("tap",  ()=> {
+            wxpay();
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>众健商城</title>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style type="text/css">
+        body {
+            background: #eeeeee;
+        }
+
+        img {
+            width: 90%;
+            margin: 0 auto 0 auto;
+            display: block;
+        }
+
+        .home_button {
+            background-color: #f53d3d;
+            margin: 10% auto 0 auto;
+            width: 90%;
+            color: #fff;
+            text-align: center;
+            height: 45px;
+            line-height: 45px;
+            letter-spacing: 1px;
+
+        }
+
+        .other_button {
+            background-color: #f53d3d;
+            margin: 5% auto 0 auto;
+            color: #fff;
+            text-align: center;
+            width: 90%;
+            height: 45px;
+            line-height: 45px;
+            letter-spacing: 1px;
+            display: none;
+        }
+    </style>
+</head>
+
+
+
+
+<body>
+    <img src="assets/imgs/success3.png" />
+    <div onclick="goHome()" class="home_button">返回首页</div>
+    <div onclick="goOrder()" id="button1" class="other_button">返回订单</div>
+    <div onclick="goUser()" id="button2" class="other_button">查看现金</div>
+    <div onclick="goUser()" id="button3" class="other_button">查看等级</div>
+</body>
+<script>
+    var theRequest = new Object();
+    var chooseDiv = function () {
+        if (theRequest.type == 1) {
+            var button1 = document.getElementById("button1");
+            button1.style.display = "block";
+        }
+        else if (theRequest.type == 2) {
+            var button2 = document.getElementById("button2");
+            button2.style.display = "block";
+        }
+        else {
+            var button3 = document.getElementById("button3");
+            button3.style.display = "block";
+        }
+
+    }
+    var goHome = function () {
+        window.location.href = "https://appnew.zhongjianmall.com/zjapp/wechat/index.html";
+    }
+    var goOrder = function () {
+        window.location.href = "https://appnew.zhongjianmall.com/zjapp/wechat/index.html#/orders";
+    }
+    var goUser = function () {
+        window.location.href = "https://appnew.zhongjianmall.com/zjapp/wechat/index.html#/mywallet";
+    }
+    window.onload = function () {
+        //获取url中的参数
+        var url = location.search;
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1]);
+            }
+        }
+        chooseDiv();
+
+    }
+</script>
+
+</html>
