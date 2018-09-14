@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { LoadingController,IonicPage, NavController, NavParams } from 'ionic-angular';
 import {StorageProvider} from '../../providers/storage/storage';
 import { ConfigProvider } from '../../providers/config/config';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
@@ -17,7 +17,7 @@ export class ProductCommentPage {
   public hasComment = false;
   public infiniteScroll:(any);
   public enable = true;
-  constructor(public httpservice:HttpServicesProvider,public config :ConfigProvider,public storage:StorageProvider,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public loadingCtrl: LoadingController,public httpservice:HttpServicesProvider,public config :ConfigProvider,public storage:StorageProvider,public navCtrl: NavController, public navParams: NavParams) {
     this.id = navParams.get("id");
     if(this.id==null){
       this.id = storage.getSessionStorage("productcommentId");
@@ -26,12 +26,14 @@ export class ProductCommentPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProductCommentPage');
+    
   }
   ionViewWillEnter(){
     this.getComment('');
   }
   getComment(infiniteScroll){
+    var loading = this.loadingCtrl.create({ showBackdrop: false });
+    loading.present();
     var api = "v1/ProductManager/getProductCommentById";
     var params = {
       "productId":this.id,
@@ -41,7 +43,7 @@ export class ProductCommentPage {
     }
     this.httpservice.requestData(api,(data)=>{
       if(data.error_code==0){
-        console.log(data.data.productComments);
+        loading.dismiss();
         if(this.page==0){ /*第一页 替换数据*/
           this.commentArray=data.data.productComments;
         }else{

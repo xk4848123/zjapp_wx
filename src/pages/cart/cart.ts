@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController,NavParams } from 'ionic-angular';
-
 import { ConfigProvider } from '../../providers/config/config';
 import { StorageProvider } from '../../providers/storage/storage';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { ToastProvider } from '../../providers/toast/toast';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
-import { HomePage }from '../home/home';
-
 @Component({
   selector: 'page-cart',
   templateUrl: 'cart.html'
@@ -39,7 +36,7 @@ export class CartPage {
     }
   }
   ionViewDidLoad(){
-    console.log("购物车第一次加载！");
+    
   }
   ionViewWillEnter(){
     if(this.isIndex === true){
@@ -91,7 +88,6 @@ export class CartPage {
     },params);
     this.isChencked = false;
     this.allPrice = 0;
-    // this.sumPrice();
   }
   changeCarts(){
     if(this.getChenckNum()==this.length){

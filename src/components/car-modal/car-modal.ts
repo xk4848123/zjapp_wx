@@ -91,7 +91,9 @@ export class CarModalComponent {
     for(let i=0;i<this.productspecs.length;i++){
       if(this.productspecs[i].id==specid){
         this.product.specPrice = this.productspecs[i].price;
+        this.price = this.productspecs[i].price;
         this.product.specElec = this.productspecs[i].elecNum;
+        this.elec = this.productspecs[i].elecNum;
         this.product.specName = this.productspecs[i].specname;
       }
     }

@@ -1,7 +1,6 @@
 // import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoadingController, Platform } from 'ionic-angular';
-
 declare var Wechat;
 declare var QQSDK;
 @Injectable()

@@ -1,5 +1,5 @@
 import { Component,ViewChild,ElementRef,Renderer2 } from '@angular/core';
-import { IonicPage, NavController, NavParams,Content,AlertController  } from 'ionic-angular';
+import { LoadingController,IonicPage, NavController, NavParams,Content,AlertController  } from 'ionic-angular';
 
 
 import { ConfigProvider } from '../../providers/config/config';
@@ -46,18 +46,20 @@ export class SearchPage {
   
   public selectTag = "sale";/**默认按销量排序 */
 
-  constructor(public ele:ElementRef,public render2:Renderer2,public navCtrl: NavController, public navParams: NavParams,public config:ConfigProvider,public httpService:HttpServicesProvider,public storage:StorageProvider,public alertCtrl: AlertController) {
+  constructor(public loadingCtrl: LoadingController,public ele:ElementRef,public render2:Renderer2,public navCtrl: NavController, public navParams: NavParams,public config:ConfigProvider,public httpService:HttpServicesProvider,public storage:StorageProvider,public alertCtrl: AlertController) {
       
     //获取历史记录
     this.getHistory();
   }
 
-  ionViewDidLoad() { 
-    
+  ionViewDidLoad() {
+   
   }
 
 
   getSearchList(infiniteScroll){
+     var loading = this.loadingCtrl.create({ showBackdrop: false });
+     loading.present();
      if(!infiniteScroll){  /*点击搜索按钮*/
         this.page=1;
         // this.hasData=true; 
@@ -70,8 +72,10 @@ export class SearchPage {
       this.httpService.doFormPost(api,param,(data)=>{
           if(this.page==1){  /*第一页 替换数据*/
             this.list=data.data;
+            loading.dismiss();
           }else{
             this.list=this.list.concat(data.data);  /*拼接数据*/
+            loading.dismiss();
           }         
           this.flag=true;  /*显示商品列表*/
           if(this.flag==true){
@@ -82,17 +86,14 @@ export class SearchPage {
               headerHeight = headerHeight+6;
               this.render2.setStyle(sub,"top",headerHeight+'px');
             },100)
-            // console.log(sub);
-          }
-          if(infiniteScroll){
-            //告诉ionic 请求数据完成
-            infiniteScroll.complete();
           }
       })
   } 
   //按价格排序
   search_price(){
     this.content.scrollToTop(0); /*回到顶部*/
+    var loading = this.loadingCtrl.create({ showBackdrop: false });
+    loading.present();
     var api='v1/ProductManager/searchProduct';
     var tag :(number);
     if(this.priceFlag){
@@ -103,9 +104,11 @@ export class SearchPage {
     var param = {"key":this.keywords,"type":tag};
     this.httpService.doFormPost(api,param,(data)=>{
         if(this.page==1){  /*第一页 替换数据*/
-          this.list=data.data;           
+          this.list=data.data;   
+          loading.dismiss();        
         }else{
           this.list=this.list.concat(data.data);  /*拼接数据*/
+          loading.dismiss();
         }         
         this.flag=true;  /*显示商品列表*/
     })
@@ -116,13 +119,17 @@ export class SearchPage {
   //按销量排序
   search_sale(){
     this.content.scrollToTop(0); /*回到顶部*/
+    var loading = this.loadingCtrl.create({ showBackdrop: false });
+    loading.present();
     var api='v1/ProductManager/searchProduct';
     var param = {"key":this.keywords,"type":1};
     this.httpService.doFormPost(api,param,(data)=>{ 
         if(this.page==1){  /*第一页 替换数据*/
-          this.list=data.data;           
+          this.list=data.data;
+          loading.dismiss();
         }else{
           this.list=this.list.concat(data.data);  /*拼接数据*/
+          loading.dismiss();
         }         
         this.flag=true;  /*显示商品列表*/
     })
@@ -133,6 +140,8 @@ export class SearchPage {
   //按积分排序
   search_elec(){
     this.content.scrollToTop(0); /*回到顶部*/
+    var loading = this.loadingCtrl.create({ showBackdrop: false });
+    loading.present();
     var api='v1/ProductManager/searchProduct';
     var tag :(number);
     if(this.elecFlag){
@@ -143,9 +152,11 @@ export class SearchPage {
     var param = {"key":this.keywords,"type":tag};
     this.httpService.doFormPost(api,param,(data)=>{
         if(this.page==1){  /*第一页 替换数据*/
-          this.list=data.data;           
+          this.list=data.data;
+          loading.dismiss();
         }else{
           this.list=this.list.concat(data.data);  /*拼接数据*/
+          loading.dismiss();
         }         
         this.flag=true;  /*显示商品列表*/
     })
@@ -184,9 +195,13 @@ export class SearchPage {
 
     //2.判断历史记录存在不存在
     if(history){ /*有*/
-      if(history.indexOf(this.keywords)==-1 && this.keywords!=''){
+      if(history.indexOf(this.keywords)==-1 && this.keywords!='' && history.length<15){
         history.push(this.keywords);
         //重新写入
+        this.storage.set('historyData',history);
+      }else if(history.indexOf(this.keywords)==-1 && this.keywords!='' && history.length>=15){
+        history.push(this.keywords);
+        history.shift();
         this.storage.set('historyData',history);
       }
     }else{ /*以前没有*/

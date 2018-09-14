@@ -9,6 +9,8 @@ import { WeblinkProvider } from '../../providers/weblink/weblink';
 export class IonModleGComponent {
   @Input() params:(any);
   public param : Array<any>;
+  public paramOdd = [];/**奇数 */
+  public paramEven = [];/**偶数 */
   public title = "";
   public sort :number;
   constructor(public navCtrl:NavController,public config: ConfigProvider,public web: WeblinkProvider,public ele:ElementRef,public ren :Renderer2) {
@@ -28,10 +30,19 @@ export class IonModleGComponent {
     }
   }
   ngOnChanges(){
+    this.paramOdd= [];
+    this.paramEven = [];
     if(this.params.pageMoudles!=null){
       this.param = this.params.pageMoudles;
+      for(let j=0;j<this.param.length;j++){
+        this.param[j].oldPrice = Math.ceil(this.param[j].productPrice*5/4);
+      }
       for(let i=0;i<this.param.length;i++){
-        this.param[i].oldPrice = this.param[i].productPrice*5/4;
+        if(i%2==0){
+          this.paramOdd.push(this.param[i]);
+        }else{
+          this.paramEven.push(this.param[i]);
+        }
       }
       this.title="促/销/专/区";
       this.sort = this.params.sort;
@@ -44,14 +55,4 @@ export class IonModleGComponent {
       }
     }
   }
-  // ngAfterViewInit(){
-  //   var divs = document.querySelectorAll("div.product");
-  //   var row = divs[4].querySelectorAll(".row");
-  //   var col = row[0].childNodes;
-  //   let nodes = col[0].nextSibling.nextSibling.parentElement.getElementsByTagName("ion-col")
-  //   console.log(nodes);
-  //   for(let i=0;i<nodes.length;i++){
-  //     console.log(nodes[i].clientHeight);
-  //   }
-  // }
 }
