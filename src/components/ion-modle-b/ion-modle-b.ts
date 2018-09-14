@@ -69,21 +69,21 @@ export class IonModleBComponent {
   }
   ngOnChanges(){
     if(this.params.pageMoudles!=null){
-      this.picProductid1 = this.params.pageMoudles[0].picProductid;
-      this.img1 = this.params.pageMoudles[0].pic;
-      this.picType1= this.params.pageMoudles[0].picType;
-      this.picKeyword1 = this.params.pageMoudles[0].picKeyword;
-      this.picUrl1 = this.params.pageMoudles[0].picUrl;
+      this.picProductid1 = this.params.pageMoudles[2].picProductid;
+      this.img1 = this.params.pageMoudles[2].pic;
+      this.picType1= this.params.pageMoudles[2].picType;
+      this.picKeyword1 = this.params.pageMoudles[2].picKeyword;
+      this.picUrl1 = this.params.pageMoudles[2].picUrl;
       this.picProductid2 = this.params.pageMoudles[1].picProductid;
       this.img2 = this.params.pageMoudles[1].pic;
       this.picType2= this.params.pageMoudles[1].picType;
       this.picKeyword2 = this.params.pageMoudles[1].picKeyword;
       this.picUrl2 = this.params.pageMoudles[1].picUrl;
-      this.picProductid3 = this.params.pageMoudles[2].picProductid;
-      this.img3 = this.params.pageMoudles[2].pic;
-      this.picType3= this.params.pageMoudles[2].picType;
-      this.picKeyword3 = this.params.pageMoudles[2].picKeyword;
-      this.picUrl3 = this.params.pageMoudles[2].picUrl;
+      this.picProductid3 = this.params.pageMoudles[0].picProductid;
+      this.img3 = this.params.pageMoudles[0].pic;
+      this.picType3= this.params.pageMoudles[0].picType;
+      this.picKeyword3 = this.params.pageMoudles[0].picKeyword;
+      this.picUrl3 = this.params.pageMoudles[0].picUrl;
       this.title = this.params.title;
       this.sort = this.params.sort;
     }
