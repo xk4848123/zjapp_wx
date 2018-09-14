@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, ItemContent } from 'ionic-angular';
+import { Component,ViewChild } from '@angular/core';
+import { NavController, NavParams,Slides } from 'ionic-angular';
 
 import { WeblinkProvider } from '../../providers/weblink/weblink';
 import { ConfigProvider } from '../../providers/config/config';
@@ -11,13 +11,21 @@ import { HttpServicesProvider } from '../../providers/http-services/http-service
   templateUrl: 'index-adv.html',
 })
 export class IndexAdvPage {
+  @ViewChild(Slides) slides: Slides; 
   public focusList=[];  /*数组 轮播图*/
   constructor(public noticeSer: ToastProvider,public httpService :HttpServicesProvider,public toast:ToastProvider,public storage: StorageProvider,public config: ConfigProvider,public web:WeblinkProvider,public navCtrl: NavController, public navParams: NavParams) {
     this.getFocus();
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad IndexAdvPage');
+    
+  }
+  /**轮播图bug解决 */
+  ionViewDidEnter(){
+    this.slides.startAutoplay();
+  }
+  ionViewDidLeave(){
+    this.slides.stopAutoplay();
   }
   /**轮播页跳转 */
   goDetail(item){
@@ -43,7 +51,6 @@ export class IndexAdvPage {
       }
     })
   }
-
   commercial(){
     this.navCtrl.push('CommercialPage')
   }
