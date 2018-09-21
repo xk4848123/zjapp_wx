@@ -1,68 +1,101 @@
 page-category{
-   .cate_content{
+    .tsearch{
+        border-bottom: 0 !important;
+        margin-left: 6.8% !important;
+        background: rgba(0, 0, 0, 0);
+        input{
+           width: 85% !important;
+           border-radius: 15rem !important;
+           border:0.1rem solid #ece5e5 !important;
+           padding-left: 9% !important;
+           background-color: rgba(0, 0, 0, 0.05) !important;
+        }
+        div{
+            div{
+                top: 0.99rem !important;
+                left: 3.9% !important;
+            }
+        }
+    }
+.changecolor{
+    background-color: #ffffff;
+}
+.my_content{
+    margin-top: 1%;
     width:100%;
     height: 100%;  /*首先看高度100% 是否管用  如果没有作用我们要给元素设置绝对定位*/
     display: flex;
 
-    .cate_left{
-        width: 100px;
+    .left{
+        flex-wrap: nowrap;
+        flex: 0 0 28%;
         height: 100%;
-        border-right: 0.2rem solid #eee;
+        background-color: #eeeeee;
+        color: #9E9E9E;
+        font-size: 15px;
         overflow-y: auto;
-        color: #666;
-
-        ion-label{
-            font-size: 1rem;
-            overflow: visible;
-            white-space: normal ;
-            //position:absolute;
-        }
-
-
-    }
-    .cate_right{
-        height: 100%;
-        flex:1;
-        overflow-y: auto;
-        ion-label{
-            font-size: 1rem;
-        }
-
-        ion-col{
-            border:0.05rem solid #eee;
-            margin-left: -0.05rem;
-            margin-top: -0.05rem;
-            p{
-                text-align: center;
-                color:#666;
-            }
-            img{
-                display: block;
-                margin: 0 auto;
-                max-width: 90%;
-            }
-        }
-        ion-col:nth-child(3n){
-
-            border-right: 0px;
-        }
-        
-    }
-    .list{
-        p{
-        font-size: 1.3rem;
-        color: black;
-        }
-    }
-}
-    .label-ios{
-        margin:0 auto;
-    }
-    .search{
+        text-align: center;
         div{
+            position: relative;
+            padding: 10px 5px;
+            margin: 15px 0;
+            span{
+                height: 50px;
+                line-height :150%;
+                
+                word-break: break-all;
+                word-wrap: break-word;
+            }
             div{
-                top:11px !important;
+                display: none;
+                width: 5px;
+                height:40%;
+                padding: 0;
+                margin: 0;
+                background-color:  #f53d3d;
+                position:absolute;
+                left: 0px;
+                top: 30%;
             }
         }
+      
     }
+    .right{
+        height: 100%;
+        flex: 0 0 72%;
+        overflow-y: auto;
+        overflow-x: auto;
+        
+        img{
+            padding: 5px;
+            width:100%; 
+            height: 70px;
+        }
+        .box {      
+           display: grid;
+           grid-template-columns: 1fr 1fr 1fr;
+           width: 100%;
+           .every_box {
+               height: 120px;
+             .img_div{
+                margin: 0 auto;
+                width: 70px;
+                img{
+                    width:70px; 
+                    height: 70px;
+                }
+            }
+              .font_div{
+                width: 70px;
+                margin: 0 auto;
+                font-size: 13px;
+                text-align:center; 
+                font-weight: 700;
+                color: #555555;
+              }
+            }
+          
+        }
+}
+}
 }

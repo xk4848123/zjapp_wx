@@ -44,7 +44,7 @@ export class CategoryPage {
         }else{
           this.getRightCateData(this.leftId);
         }
-    })
+    });
   }
 
   getRightCateData(id){
