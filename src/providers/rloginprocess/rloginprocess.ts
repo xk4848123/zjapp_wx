@@ -39,7 +39,6 @@ export class RloginprocessProvider {
       {
         text: '关闭',
         handler: () => {
-          navCtrl.pop();
         }
       },
       {

@@ -35,6 +35,7 @@ export class WechatProvider {
       callback();
     }
     wx.ready(() => {
+      global_wxFunciton.setWxConfig();
       callback();
     });
   }
