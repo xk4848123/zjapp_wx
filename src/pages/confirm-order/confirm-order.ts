@@ -1,4 +1,3 @@
-///<reference path="../../services/jquery.d.ts"/>
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,Events } from 'ionic-angular';
 import { ConfigProvider } from '../../providers/config/config';

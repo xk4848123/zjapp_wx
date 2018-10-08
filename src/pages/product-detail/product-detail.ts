@@ -42,6 +42,7 @@ export class ProductDetailPage {
     if(this.id==undefined){
       this.id = this.getQueryproductId();
     }
+    this.storage.setSessionStorage("productId",this.id);
     if(this.usercode!=undefined){
       this.storage.setSessionStorage("usercode",this.usercode);
     }
@@ -71,11 +72,6 @@ export class ProductDetailPage {
     this.focusList = []; 
     this.getFocus();
     this.getPicText();
-  }
-  ionViewWillLeave(){
-    if(this.id!=undefined){
-      this.storage.setSessionStorage("productId",this.id);
-    }
   }
   /**获取url中的父级邀请码 */
   getQueryString() {

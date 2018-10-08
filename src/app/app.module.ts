@@ -38,8 +38,6 @@ import { ProductlistPageModule } from '../pages/productlist/productlist.module';
 
 import { PersonalPageModule } from '../pages/personal/personal.module';
 
-//选择支付方式
-import { PaymentPageModule } from '../pages/payment/payment.module';
 //设置页面
 import { SettingPageModule } from '../pages/setting/setting.module';
 
@@ -157,7 +155,6 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     SearchPageModule,
     ProductlistPageModule,
     PersonalPageModule,
-    PaymentPageModule,
     SettingPageModule,
     FansPageModule,
     MywalletPageModule,
