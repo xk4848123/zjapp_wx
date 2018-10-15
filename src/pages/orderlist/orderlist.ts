@@ -25,13 +25,8 @@ import { WeblinkProvider } from '../../providers/weblink/weblink';
 })
 export class OrderlistPage {
 
-  public tempData='';
-  public pageStackLength = 0; 
-  public cancer='';
-  public confirm='';
   public orderData:(any);
   constructor(public weblink:WeblinkProvider,public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider, private config: ConfigProvider) {
-    this.pageStackLength  = this.navCtrl.length();
   }
 
 
@@ -43,7 +38,6 @@ export class OrderlistPage {
       let api = 'v1/PersonalCenter/getOrderDetails/' + token + '/' + this.navParams.get('orderId');
       this.httpService.requestData(api, (data) => {
         if (data.error_code == 0) {
-          this.tempData = data.data;
           this.orderData = data.data;
         } else if(data.error_code == 3){
           //抢登处理
@@ -57,30 +51,27 @@ export class OrderlistPage {
 
   }
   //申请退款
-  pushrefund(orderNo,item){
+  pushrefund(){
     this.navCtrl.push('RefundPage',
     {
-      orderNo:this.navParams.get('orderNo'),
-      item:this.navParams.get('item')
+      orderNo:this.orderData.orderno
     });
   }
    //申请退货
-   pushsale(orderNo,item){
-    this.navCtrl.push('RefundPage',
+   pushsale(){
+    this.navCtrl.push('SalereturnPage',
     {
-      orderNo:this.navParams.get('orderNo'),
-      item:this.navParams.get('item')
+      orderNo:this.orderData.orderno
     });
   }
    //取消订单
-   pushcancelOrder(item) {
-    this.cancer=item.orderno;
+   pushcancelOrder() {
     let token = this.storage.get('token');
     if (token) {
       //api请求
       let api = 'v1/PersonalCenter/cancelOrder/' +token;
        //发送请求提交退款申请
-       this.httpService.doFormPost(api,{orderNo:this.cancer } ,(data) => {
+       this.httpService.doFormPost(api,{orderNo:this.orderData.orderno} ,(data) => {
           if (data.error_code == 0) {
 
             //取消订单后
@@ -96,14 +87,13 @@ export class OrderlistPage {
     }
   }
   //确认收货
-  confirmorder(item){
-    this.confirm=item.orderno;
+  confirmorder(){
     let token = this.storage.get('token');
     if (token) {
       //api请求
       let api = 'v1/PersonalCenter/confirmOrder/' +token;
       //发送请求提交退款申请
-      this.httpService.doFormPost(api,{orderNo:this.confirm } ,(data) => {
+      this.httpService.doFormPost(api,{orderNo:this.orderData.orderno} ,(data) => {
           if (data.error_code == 0) {
            //确认收货后处理
            this.navCtrl.push('OrderhandletransferPage',{type: '2'})
@@ -119,11 +109,10 @@ export class OrderlistPage {
     }
   }
   //查看物流
-  information(orderId,orderNo,item){
+  information(){
     this.navCtrl.push('InformationPage',
-    {orderId: orderId,
-    orderNo: orderNo,
-    item:item 
+    {
+    orderNo: this.orderData.orderno
     });
   }
   //立即支付

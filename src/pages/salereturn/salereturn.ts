@@ -22,14 +22,10 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
   templateUrl: 'salereturn.html',
 })
 export class SalereturnPage {
-  public  temp='';
   public  getSelectedText='';
-  oderId:number;
   orderNo:string;
   constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,
     public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,private rclogin: RloginprocessProvider) {
-    this.oderId = this.navParams.get('orderId');
-    this.temp=this.navParams.get('item');
     this.orderNo = this.navParams.get('orderNo');
   }
   confirm(){

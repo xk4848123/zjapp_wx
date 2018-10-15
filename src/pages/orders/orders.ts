@@ -34,8 +34,6 @@ export class OrdersPage {
   pageNum: number = 3;
   enable: boolean = true;
   infiniteScroll: any;
-  public cancer='';
-  public confirm='';
   constructor(public weblink:WeblinkProvider,public rlogin:RloginprocessProvider,public passwordProvider:VerifypasswordProvider,public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,
     private config: ConfigProvider, private toastCtrl: ToastController, private alertCtrl: AlertController,
     private re: Renderer2, private el: ElementRef,private rclogin: RloginprocessProvider) {
@@ -177,14 +175,13 @@ export class OrdersPage {
     this.getData();
   }
   //取消订单
-  pushcancelOrder(item,orderId) {
-      this.cancer=item.orderno;
+  pushcancelOrder(orderno) {
       let token = this.storage.get('token');
       if (token) {
         //api请求
         let api = 'v1/PersonalCenter/cancelOrder/' +token;
          
-         this.httpService.doFormPost(api,{orderNo:this.cancer } ,(data) => {
+         this.httpService.doFormPost(api,{orderNo: orderno} ,(data) => {
             if (data.error_code == 0) {
               this.navCtrl.push('OrderhandletransferPage',{type: '1'});
            } else if(data.error_code == 3){
@@ -253,30 +250,27 @@ export class OrdersPage {
     });
   }
   //申请退款
-  pushrefund(orderId,orderNo,item){
+  pushrefund(orderno){
     this.navCtrl.push('RefundPage',
-    {orderId: orderId,
-     orderNo: orderNo,
-     item:item 
+    {
+      orderNo:orderno 
     });
   }
   //申请退货
-  pushsale(orderId,orderNo,item){
+  pushsale(orderno){
     this.navCtrl.push('SalereturnPage',
-    {orderId: orderId,
-     orderNo: orderNo,
-     item:item 
+    {
+      orderNo:orderno 
     });
   }
   //确认收货
 confirmorder(item){
-  this.confirm=item.orderno;
   let token = this.storage.get('token');
   if (token) {
     //api请求
     let api = 'v1/PersonalCenter/confirmOrder/' +token;
      //发送请求提交退款申请
-     this.httpService.doFormPost(api,{orderNo:this.confirm } ,(data) => {
+     this.httpService.doFormPost(api,{orderNo:item.orderno } ,(data) => {
         if (data.error_code == 0) {
           this.navCtrl.push('OrderhandletransferPage',{type: '2'});
        } else if(data.error_code == 3){
@@ -290,11 +284,10 @@ confirmorder(item){
   }
 }
 //查看物流
-information(orderId,orderNo,item){
+information(orderNo){
   this.navCtrl.push('InformationPage',
-  {orderId: orderId,
-   orderNo: orderNo,
-   item:item 
+  {
+   orderNo: orderNo
   });
 }
 //评价

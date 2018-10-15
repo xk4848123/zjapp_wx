@@ -22,33 +22,23 @@ import { ConfigProvider } from '../../providers/config/config';
   templateUrl: 'refund.html',
 })
 export class RefundPage {
-public  temp='';
+orderNo:string;
 public  getSelectedText='';
   constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,public storage: StorageProvider,
      public httpService: HttpServicesProvider, public toast: ToastProvider,private rclogin: RloginprocessProvider) {
-
-  }
-
-
-  ionViewWillEnter() {
-    this.temp=this.navParams.get('item');
-    console.log(this.temp)
+      this.orderNo = this.navParams.get('orderNo');
   }
   confirm(){
-    console.log(this.getSelectedText)
     let token = this.storage.get('token');
     if (token) {
       //api请求
       let api = 'v1/PersonalCenter/ApplyRefund/' + token; 
-      // +'?' + 'orderNo=' + this.navParams.get('orderNo') + '&' + 'memo=' + this.getSelectedText;
       console.log(api);
        //发送请求提交退款申请
-      this.httpService.doFormPost(api,{orderNo: this.navParams.get('orderNo'),memo: this.getSelectedText} ,(data) => {
+      this.httpService.doFormPost(api,{orderNo: this.orderNo,memo: this.getSelectedText} ,(data) => {
         console.log(data);
-          if (data.error_code == 0) {
-            
+          if (data.error_code == 0) {           
            //申请退款处理
-
            this.navCtrl.push('OrderhandletransferPage',{type: '3',behindHandle:'behindHandle'});
          } else if(data.error_code == 3){
            //抢登处理

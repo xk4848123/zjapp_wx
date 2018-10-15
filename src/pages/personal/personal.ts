@@ -21,8 +21,6 @@ export class PersonalPage {
     headPhoto: ''
   }
 
-  public test = '';
-
   constructor(public navCtrl: NavController, public navParams: NavParams, public storage: StorageProvider, private noticeSer: ToastProvider,
     private config: ConfigProvider, public httpService: HttpServicesProvider, private rlogin: RloginprocessProvider) {
   }

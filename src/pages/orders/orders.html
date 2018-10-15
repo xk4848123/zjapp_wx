@@ -44,17 +44,17 @@
 
         <div class="foot">共{{item.tolnum}}件商品&nbsp;合计:￥<span>{{item.totalamount}}</span></div>
         <div class="btnDiv" *ngIf="item.curstatus==-1">
-            <div class="btn" (tap)="pushcancelOrder(item,item.id)">取消订单</div>
+            <div class="btn" (tap)="pushcancelOrder(item.orderno)">取消订单</div>
             <div class="btn" (tap)="payNow(item.orderno)">立即支付</div>
         </div>
 
         <div class="btnDiv" *ngIf="item.curstatus==0">
-            <div class="btn" (tap)="pushrefund(item.id,item.orderno,item)">申请退款</div>
+            <div class="btn" (tap)="pushrefund(item.orderno)">申请退款</div>
         </div>
         <div class="btnDiv" *ngIf="item.curstatus==1">
-            <div class="btn" (tap)="information(item.id,item.orderno,item)">查看物流</div>
+            <div class="btn" (tap)="information(item.orderno)">查看物流</div>
             <div class="btn" (tap)="confirmorder(item)">确认收货</div>
-            <div class="btn" (tap)="pushsale(item.id,item.orderno,item)">申请退货</div>
+            <div class="btn" (tap)="pushsale(item.orderno)">申请退货</div>
         </div>
         <div class="btnDiv" *ngIf="item.curstatus==2">
             <div class="btn" (tap)="comment(item.id,item.orderno,item)">评价</div>

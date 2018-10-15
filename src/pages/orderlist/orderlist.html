@@ -61,16 +61,16 @@
             <button class="col-cc">订单已取消</button>
         </div>
         <div *ngIf="tempData.curstatus==-1">
-            <button class="col-cc" (tap)="pushcancelOrder(tempData,tempData.id)">取消订单</button>
+            <button class="col-cc" (tap)="pushcancelOrder()">取消订单</button>
             <button class="col-cc" (tap)="payNow()">立即支付</button>
         </div>
         <div *ngIf="tempData.curstatus==0">
-            <button class="col-cc" (tap)="pushrefund(tempData.orderno,tempData)">申请退款</button>
+            <button class="col-cc" (tap)="pushrefund()">申请退款</button>
         </div>
         <div *ngIf="tempData.curstatus==1">
-            <button class="col-cc" (tap)="information(tempData.id,tempData.orderno,tempData)">查看物流</button>
-            <button class="col-cc" (tap)="pushsale(tempData.orderno,tempData)">申请退货</button>
-            <button class="col-cc" (tap)="confirmorder(tempData)">确认收货</button>
+            <button class="col-cc" (tap)="information()">查看物流</button>
+            <button class="col-cc" (tap)="pushsale()">申请退货</button>
+            <button class="col-cc" (tap)="confirmorder()">确认收货</button>
         </div>
         <div *ngIf="tempData.curstatus==2">
             <button class="col-cc">评价</button>

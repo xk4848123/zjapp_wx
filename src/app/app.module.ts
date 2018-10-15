@@ -171,7 +171,7 @@ import { AddressmodelComponent} from '../components/addressmodel/addressmodel';
     AddbankacountPageModule,
     OrderlistPageModule,
     RefundPageModule,
-    RefundPageModule,
+    SalereturnPageModule,
     InformationPageModule,
     CommentPageModule,
     CommercialPageModule,

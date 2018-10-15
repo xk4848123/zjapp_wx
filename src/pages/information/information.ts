@@ -22,35 +22,23 @@ import { ConfigProvider } from '../../providers/config/config';
   templateUrl: 'information.html',
 })
 export class InformationPage {
- public temps='';
- public messages='';
-  constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider) {
-          console.log(this.navParams.get('orderId'))
-          console.log(this.navParams.get('orderNo'))
-          console.log(this.navParams.get('item'))
-      }
+  public messages = '';
+  constructor(public navCtrl: NavController, public navParams: NavParams, private config: ConfigProvider, public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider) {
+  }
 
-  // ionViewDidLoad() {
-  //   console.log('ionViewDidLoad InformationPage');
-  // }
   ionViewWillEnter() {
-   this.temps=this.navParams.get('item')
-   let token = this.storage.get('token');
-   if (token) {
-     //api请求
-     let api = 'v1/PersonalCenter/getLogisticsInformation/' + token; 
-     console.log(api);
-      //发送请求提交退款申请
-     this.httpService.doFormPost(api,{orderNo: this.navParams.get('orderNo')},(data) => {
-       console.log(data);
-       if(data.error_code==0){
-           this.messages=data.data;
-           console.log(this.messages);
-       }
-       else{
-        this.toast.showToast('数据获取异常');
-       }
-     });
-   }
+    let token = this.storage.get('token');
+    if (token) {
+      //api请求
+      let api = 'v1/PersonalCenter/getLogisticsInformation/' + token;
+      this.httpService.doFormPost(api, { orderNo: this.navParams.get('orderNo') }, (data) => {
+        if (data.error_code == 0) {
+          this.messages = data.data;
+        }
+        else {
+          this.toast.showToast('数据获取异常');
+        }
+      });
+    }
   }
 }

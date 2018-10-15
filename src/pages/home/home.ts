@@ -79,24 +79,11 @@ export class HomePage {
             this.isRed = false;
           }
           this.search.nativeElement//获取html中标记为one的元素
-      })
-  })
+      });
+  });
   }
   ionViewWillLeave(){
     global_wxFunciton.showGoRoot();
-  }
-  ionViewDidEnter() {
-      this.content.ionScroll.subscribe(($event: any) => {
-        this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
-            let length = $event.scrollTop;//当前滑动的距离
-            if(length>=219.4){
-              this.isRed = true;
-            }else{
-              this.isRed = false;
-            }
-            this.search.nativeElement//获取html中标记为one的元素
-        })
-    })
   }
   /**获取url中的父级邀请码 */
   getQueryString() {
