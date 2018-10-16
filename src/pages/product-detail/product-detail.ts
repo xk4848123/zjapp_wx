@@ -33,7 +33,7 @@ export class ProductDetailPage {
   public headPic = "";
   public sysId:(string);
   public usercode:(string);
-  constructor(public loadingCtrl: LoadingController,public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
+  constructor(public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
     this.id = this.navParams.get("id");
     this.usercode = this.getQueryString();
     if(this.id==undefined){
@@ -115,7 +115,7 @@ export class ProductDetailPage {
   }
    /**分享*/
    share(title,picurl){
-     var url = '';
+     let url = '';
      if(this.sysId){
         url = this.config.apiUrl + "v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
      }else{
@@ -208,8 +208,6 @@ export class ProductDetailPage {
   }
   /*获取图文详情*/
   getPicText(){
-    var loading = this.loadingCtrl.create({ showBackdrop: false });
-    loading.present();
     var api =  "v1/ProductManager/getProductImgAndText";
     var param = {"productId":this.id};
     this.httpService.requestData(api,(data)=>{
@@ -221,7 +219,6 @@ export class ProductDetailPage {
       var reg1 = new RegExp("https://appnew.zhongjianmall.com/","g");
       this.productText = data.data.replace(reg1,'');
       this.productText = this.productText.replace(reg,this.config.domain+"/upload");
-      loading.dismiss();
     },param)
   }
   /**转译html标签 */

@@ -289,7 +289,7 @@ export class UserPage {
   }
 doRefresh($event){
   this.refreshUser();
-
+  this.setDot();
   setTimeout(() => { 
      $event.complete();
       this.noticeSer.showToast('加载成功');
