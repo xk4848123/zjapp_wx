@@ -45,12 +45,12 @@ export class UserPage {
 
   public canAgentApply: boolean = false;//是否具有代理申请资格
 
-  public isAgentApply: boolean=false;//是否代理申请过了
+  public isAgentApply: boolean = false;//是否代理申请过了
 
-  public isAuth: boolean=false;//是否实名认证通过
+  public isAuth: boolean = false;//是否实名认证通过
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public config: ConfigProvider, public storage: StorageProvider, public httpService: HttpServicesProvider, public alertProvider: AlertProvider, private el: ElementRef,
-    private renderer2: Renderer2, public clearlogin: ClearloginProvider,private noticeSer: ToastProvider,private webLink:WeblinkProvider) {
+    private renderer2: Renderer2, public clearlogin: ClearloginProvider, private noticeSer: ToastProvider, private webLink: WeblinkProvider) {
     //延迟清理第一次加载标记以确保不重复获取用户数据
     setTimeout(() => {
       this.isFirst = false;
@@ -64,114 +64,118 @@ export class UserPage {
       this.refreshUser();
     }
   }
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     //  console.log("3.0 ionViewDidEnter 当进入页面时触发");
     setTimeout(() => {
       this.setDot();
     }, 100);
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave() {
     global_wxFunciton.showGoRoot();
     this.clearDot();
   }
 
   //进入各个子模块的入口
-  mainEntrance(moduleName){
-   if(this.userInfo){//登录以后才能获取进入子模块
-    if(moduleName == 'fans'){
-      this.navCtrl.push('FansPage');
+  mainEntrance(moduleName) {
+    if (moduleName == "agency") {
+      this.webLink.goWeb("http://wxsp.iot.zhongjianmall.com/login.html");
+      return;
     }
-    if(moduleName == 'mywallet'){
-      this.navCtrl.push('MywalletPage');
-    }
-    if(moduleName == 'allorders'){
-      this.navCtrl.push('OrdersPage',{
-        type:'all'
-      });
-    }else if(moduleName == 'pay'){
-      this.navCtrl.push('OrdersPage',{
-        type:'wp'
-      });
-    }else if(moduleName == 'setGoods'){
-      this.navCtrl.push('OrdersPage',{
-        type:'ws'
-      });
-    }else if(moduleName == 'receiving'){
-      this.navCtrl.push('OrdersPage',{
-        type:'wr'
-      });
-    }else if(moduleName == 'remain'){
-      this.navCtrl.push('OrdersPage',{
-        type:'wc'
-      });
-    }
-    if(moduleName == 'wporders'){
-      this.navCtrl.push('OrdersPage',{
-        type:'wp'
-      });
-    }
-    if(moduleName == 'wsorders'){
-      this.navCtrl.push('OrdersPage',{
-        type:'ws'
-      });
-    }
-    if(moduleName == 'wrorders'){
-      this.navCtrl.push('OrdersPage',{
-        type:'wr'
-      });
-    }
-    if(moduleName == 'wcorders'){
-      this.navCtrl.push('OrdersPage',{
-        type:'wc'
-      });
-    }
-    if(moduleName == 'vippresent'){
-      this.navCtrl.push('VippresentPage');
-    }
-    if(moduleName == 'callcenter'){
-      this.navCtrl.push('CallcenterPage');
-    }
-    if(moduleName == 'certification'){
-      this.navCtrl.push('CertificationPage');
-    }
-    if(moduleName == "qrcode"){
-      this.navCtrl.push("QrcodePage");
-    }
-    if(moduleName == "waterpurifier"){
-      this.webLink.goWeb(this.config.domain + "/html/waterPurifier.html?token=" + this.storage.get('token'));
-    }
-    if(moduleName == "mycourse"){
-      this.noticeSer.showToast('您还未有课程');
-    }
-    //特殊的申请代理
-    if(moduleName == 'proxyApply'){
-      if(this.userInfo['personDataMap'].Lev==3 || (this.userInfo['personDataMap'].Lev==2 && this.userInfo['personDataMap'].IsSubProxy == 1)){
-        this.navCtrl.push('ProxyapplyPage');
-      }else{
-        this.alertProvider.showAlert('您还不是代理哦', '', ['ok']);
+    if (this.userInfo) {//登录以后才能获取进入子模块
+      if (moduleName == 'fans') {
+        this.navCtrl.push('FansPage');
       }
-    }
-   }else{
-    this.alertProvider.showAlert('客观请登录', '', [
-      {
-        text: '关闭',
-        handler: () => {
-        }
-      },
-      {
-        text: '登录',
-        handler: () => {
-          this.navCtrl.push('LoginPage');
+      if (moduleName == 'mywallet') {
+        this.navCtrl.push('MywalletPage');
+      }
+      if (moduleName == 'allorders') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'all'
+        });
+      } else if (moduleName == 'pay') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'wp'
+        });
+      } else if (moduleName == 'setGoods') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'ws'
+        });
+      } else if (moduleName == 'receiving') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'wr'
+        });
+      } else if (moduleName == 'remain') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'wc'
+        });
+      }
+      if (moduleName == 'wporders') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'wp'
+        });
+      }
+      if (moduleName == 'wsorders') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'ws'
+        });
+      }
+      if (moduleName == 'wrorders') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'wr'
+        });
+      }
+      if (moduleName == 'wcorders') {
+        this.navCtrl.push('OrdersPage', {
+          type: 'wc'
+        });
+      }
+      if (moduleName == 'vippresent') {
+        this.navCtrl.push('VippresentPage');
+      }
+      if (moduleName == 'callcenter') {
+        this.navCtrl.push('CallcenterPage');
+      }
+      if (moduleName == 'certification') {
+        this.navCtrl.push('CertificationPage');
+      }
+      if (moduleName == "qrcode") {
+        this.navCtrl.push("QrcodePage");
+      }
+      if (moduleName == "waterpurifier") {
+        this.webLink.goWeb(this.config.domain + "/html/waterPurifier.html?token=" + this.storage.get('token'));
+      }
+      if (moduleName == "mycourse") {
+        this.noticeSer.showToast('您还未有课程');
+      }
+      //特殊的申请代理
+      if (moduleName == 'proxyApply') {
+        if (this.userInfo['personDataMap'].Lev == 3 || (this.userInfo['personDataMap'].Lev == 2 && this.userInfo['personDataMap'].IsSubProxy == 1)) {
+          this.navCtrl.push('ProxyapplyPage');
+        } else {
+          this.alertProvider.showAlert('您还不是代理哦', '', ['ok']);
         }
       }
-    ]);
-   }
-  
+    } else {
+      this.alertProvider.showAlert('客观请登录', '', [
+        {
+          text: '关闭',
+          handler: () => {
+          }
+        },
+        {
+          text: '登录',
+          handler: () => {
+            this.navCtrl.push('LoginPage');
+          }
+        }
+      ]);
+    }
+
   }
 
 
-  setDot(){
+  setDot() {
     //申请代理的小红点提示
     let dotDomOne = this.el.nativeElement.querySelector('#dot_one');
     let imgDom = this.el.nativeElement.querySelector('#img');
@@ -179,23 +183,23 @@ export class UserPage {
     let ajustRightPx = rightPx - 5.5;
     let ajustTopPx = -5.5;
     if (this.userInfo && !this.isAgentApply) {
-      this.renderer2.setStyle(dotDomOne,'display','block');
+      this.renderer2.setStyle(dotDomOne, 'display', 'block');
       this.renderer2.setStyle(dotDomOne, 'right', ajustRightPx + 'px');
       this.renderer2.setStyle(dotDomOne, 'top', ajustTopPx + 'px');
     }
     //实名认证的小红点提示
     let dotDomTwo = this.el.nativeElement.querySelector('#dot_two');
     if (this.userInfo && !this.isAuth) {
-      this.renderer2.setStyle(dotDomTwo,'display','block');
+      this.renderer2.setStyle(dotDomTwo, 'display', 'block');
       this.renderer2.setStyle(dotDomTwo, 'right', ajustRightPx + 'px');
       this.renderer2.setStyle(dotDomTwo, 'top', ajustTopPx + 'px');
     }
   }
-  clearDot(){
+  clearDot() {
     let dotDomOne = this.el.nativeElement.querySelector('#dot_one');
     let dotDomTwo = this.el.nativeElement.querySelector('#dot_two');
-    this.renderer2.setStyle(dotDomOne,'display','none');
-    this.renderer2.setStyle(dotDomTwo,'display','none');
+    this.renderer2.setStyle(dotDomOne, 'display', 'none');
+    this.renderer2.setStyle(dotDomTwo, 'display', 'none');
   }
   refreshUser() {
     let token = this.storage.get('token');
@@ -240,12 +244,12 @@ export class UserPage {
             this.isAgentApply = true;
           }
           //实名认证栏目设置
-          if(this.userInfo['isAlreadyAuth']){
-            this.isAuth=true;
-          }else{
-            this.isAuth=false;
+          if (this.userInfo['isAlreadyAuth']) {
+            this.isAuth = true;
+          } else {
+            this.isAuth = false;
           }
-        } else if (data.error_code == 3)  {//token过期
+        } else if (data.error_code == 3) {//token过期
           this.userInfo = '';
           this.rank = '';
           this.canAgentApply = false;
@@ -284,15 +288,15 @@ export class UserPage {
       this.canAgentApply = false;
     }
   }
-  register(){
-    this.navCtrl.push('LoginPage',{type:2});
+  register() {
+    this.navCtrl.push('LoginPage', { type: 2 });
   }
-doRefresh($event){
-  this.refreshUser();
-  this.setDot();
-  setTimeout(() => { 
-     $event.complete();
+  doRefresh($event) {
+    this.refreshUser();
+    this.setDot();
+    setTimeout(() => {
+      $event.complete();
       this.noticeSer.showToast('加载成功');
-  }, 1000);
-}
+    }, 1000);
+  }
 }

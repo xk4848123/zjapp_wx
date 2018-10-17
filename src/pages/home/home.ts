@@ -11,6 +11,7 @@ import { StorageProvider } from '../../providers/storage/storage';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  @ViewChild("indexAdv") child_index_adv;//定义子组件对象
   @ViewChild(Content) content: Content;
   @ViewChild('search') search;
   public paramsA1 = new Array();/*A模块参数*/
@@ -46,6 +47,7 @@ export class HomePage {
   public testParams = new Array();
   public isRed = false;
   public usercode:(string);
+  public isSetSlides = false;
 
   constructor(public storage:StorageProvider,public ngzone: NgZone,public navCtrl: NavController,public config:ConfigProvider,public jsonp:Jsonp,public httpService:HttpServicesProvider,private noticeSer: ToastProvider) {
     this.usercode = this.getQueryString();
@@ -69,6 +71,7 @@ export class HomePage {
     })
   }
   ionViewWillEnter(){
+    this.setSlides();
     global_wxFunciton.hideGoRoot();
     this.content.ionScroll.subscribe(($event: any) => {
       this.ngzone.run(() => {//如果在页面滑动过程中对数据进行修改，页面是不会重构的。所以在对应的操作中需要使用如下方法，使页面能够重构。
@@ -84,6 +87,18 @@ export class HomePage {
   }
   ionViewWillLeave(){
     global_wxFunciton.showGoRoot();
+  }
+  setSlides(){
+    if (this.child_index_adv.slides) {
+      if(!this.isSetSlides){
+        this.child_index_adv.slides.autoplayDisableOnInteraction = false;
+        this.isSetSlides = true;
+      }
+    }else{
+      setTimeout(() => {
+        this.setSlides();
+      }, 100);
+    }
   }
   /**获取url中的父级邀请码 */
   getQueryString() {
