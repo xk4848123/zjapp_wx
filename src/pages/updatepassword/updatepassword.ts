@@ -22,17 +22,12 @@ export class UpdatepasswordPage {
     private storage: StorageProvider, private noticeSer: ToastProvider, private rlogin: RloginprocessProvider) {
   }
 
-  public oldpassword: string;
 
   public newpassword: string;
 
   public newpasswordagain: string;
 
   confirm() {
-    if (!this.oldpassword) {
-      this.noticeSer.showToast('旧密码不能为空');
-      return;
-    }
     if (!this.newpassword) {
       this.noticeSer.showToast('新密码不能为空');
       return;
@@ -43,12 +38,11 @@ export class UpdatepasswordPage {
     }
 
     let token = this.storage.get('token');
-    let api = 'v1/LoginAndRegister/modifyPassword';
+    let api = 'v2/LoginAndRegister/modifyPassword';
     this.httpService.doPost(
       api,
       {
         token: token,
-        oldPassword: this.oldpassword,
         newPassword: this.newpassword,
         newPasswordAgain: this.newpasswordagain
       },
