@@ -17,16 +17,6 @@ export class IndexAdvPage {
     this.getFocus();
   }
 
-  ionViewDidLoad() {
-    
-  }
-  /**轮播图bug解决 */
-  ionViewDidEnter(){
-    this.slides.startAutoplay();
-  }
-  ionViewDidLeave(){
-    this.slides.stopAutoplay();
-  }
   /**轮播页跳转 */
   goDetail(item){
     if(item.picType==1){

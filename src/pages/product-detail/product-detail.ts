@@ -1,6 +1,6 @@
 ///<reference path="../../services/jweixin.d.ts"/>
 import { Component,ElementRef,Renderer2,ViewChild } from '@angular/core';
-import { LoadingController,IonicPage, NavController, NavParams,App,Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,App,Content,Slides } from 'ionic-angular';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { ConfigProvider } from '../../providers/config/config';
 import { AlertProvider } from '../../providers/alert/alert';
@@ -17,6 +17,7 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
   templateUrl: 'product-detail.html',
 })
 export class ProductDetailPage {
+  @ViewChild(Slides) slides: Slides; 
   @ViewChild(Content) content: Content;
   public id :(number);
   public product :(any);
@@ -33,7 +34,9 @@ export class ProductDetailPage {
   public headPic = "";
   public sysId:(string);
   public usercode:(string);
-  constructor(public loadingCtrl: LoadingController,public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
+  private isSetSlides = false;
+
+  constructor(public rlogin:RloginprocessProvider,public wechat:WechatProvider,private renderer2: Renderer2,public eleref:ElementRef,public navCtrl: NavController, public navParams: NavParams,public httpService: HttpServicesProvider,public config:ConfigProvider,public alertProvider:AlertProvider,public sanitizer: DomSanitizer,public app:App,public storage:StorageProvider) {
     this.id = this.navParams.get("id");
     this.usercode = this.getQueryString();
     if(this.id==undefined){
@@ -72,6 +75,20 @@ export class ProductDetailPage {
     this.focusList = []; 
     this.getFocus();
     this.getPicText();
+    this.setSlides();
+  }
+  setSlides(){
+    if (this.slides) {
+      if(!this.isSetSlides){
+        this.slides.autoplayDisableOnInteraction = false;
+        this.isSetSlides = true;
+        console.log('设置');
+      }
+    }else{
+      setTimeout(() => {
+        this.setSlides();
+      }, 100);
+    }
   }
   /**获取url中的父级邀请码 */
   getQueryString() {
@@ -115,7 +132,7 @@ export class ProductDetailPage {
   }
    /**分享*/
    share(title,picurl){
-     var url = '';
+     let url = '';
      if(this.sysId){
         url = this.config.apiUrl + "v2/wxshare/shareProduct?usercode="+this.sysId+"&productId="+this.id;
      }else{
@@ -208,8 +225,6 @@ export class ProductDetailPage {
   }
   /*获取图文详情*/
   getPicText(){
-    var loading = this.loadingCtrl.create({ showBackdrop: false });
-    loading.present();
     var api =  "v1/ProductManager/getProductImgAndText";
     var param = {"productId":this.id};
     this.httpService.requestData(api,(data)=>{
@@ -221,7 +236,6 @@ export class ProductDetailPage {
       var reg1 = new RegExp("https://appnew.zhongjianmall.com/","g");
       this.productText = data.data.replace(reg1,'');
       this.productText = this.productText.replace(reg,this.config.domain+"/upload");
-      loading.dismiss();
     },param)
   }
   /**转译html标签 */

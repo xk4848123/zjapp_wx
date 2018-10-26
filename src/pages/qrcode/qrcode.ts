@@ -30,7 +30,7 @@ export class QrcodePage {
         title: '众健商城',
         desc: '买得到的健康，看得见的品质！',
         link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
-        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
+        imgUrl: 'https://appnew.zhongjianmall.com/upload/pics/logo.png',
       });
     });
      /**分享到朋友圈 */
@@ -39,7 +39,7 @@ export class QrcodePage {
         title: '众健商城',
         desc: '买得到的健康，看得见的品质！',
         link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
-        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
+        imgUrl: 'https://appnew.zhongjianmall.com/upload/pics/logo.png',
       });
     });
     /**分享到qq */
@@ -48,7 +48,7 @@ export class QrcodePage {
         title: '众健商城',
         desc: '买得到的健康，看得见的品质！',
         link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
-        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
+        imgUrl: 'https://appnew.zhongjianmall.com/upload/pics/logo.png',
       });
     });
     /**分享到qq空间 */
@@ -57,7 +57,7 @@ export class QrcodePage {
         title: '众健商城',
         desc: '买得到的健康，看得见的品质！',
         link: 'https://appnew.zhongjianmall.com/zjapp/wechat/transfer.html?usercode='+code,
-        imgUrl: 'https://appnew.zhongjianmall.com/zjapp/wechat/assets/imgs/logo.png',
+        imgUrl: 'https://appnew.zhongjianmall.com/upload/pics/logo.png',
       });
     });
   }
