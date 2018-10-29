@@ -82,7 +82,6 @@ export class ProductDetailPage {
       if(!this.isSetSlides){
         this.slides.autoplayDisableOnInteraction = false;
         this.isSetSlides = true;
-        console.log('设置');
       }
     }else{
       setTimeout(() => {
