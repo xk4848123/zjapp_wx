@@ -57,7 +57,8 @@ export class ConfirmOrderPage {
     }
     /**总价 */
     for(var i=0;i<this.productArray.length;i++){
-     this.allAmount = this.allAmount+this.productArray[i].buynum*this.productArray[i].specPrice;
+    //  this.allAmount = this.allAmount+this.productArray[i].buynum*this.productArray[i].specPrice;
+     this.allAmount = this.add(this.allAmount,this.mul(this.productArray[i].buynum,this.productArray[i].specPrice));
    }
    this.realpay = this.allAmount;
    /**可使用红包数 */
@@ -145,6 +146,30 @@ export class ConfirmOrderPage {
   }
   focusInput(){
     this.isup = true;
+  }
+   /**乘法 */
+   mul(num1,num2){
+    var m=0,s1=num1.toString(),s2=num2.toString(); 
+    try{m+=s1.split(".")[1].length}catch(e){};
+    try{m+=s2.split(".")[1].length}catch(e){};
+    return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
+  }
+  /**加法 精度问题 */
+  add(num1,num2){
+    var r1,r2,m;
+       try{
+           r1 = num1.toString().split('.')[1].length;
+       }catch(e){
+           r1 = 0;
+       }
+       try{
+           r2=num2.toString().split(".")[1].length;
+       }catch(e){
+           r2=0;
+       }
+       m=Math.pow(10,Math.max(r1,r2));
+       // return (num1*m+num2*m)/m;
+       return Math.round(num1*m+num2*m)/m;
   }
   /**处理减法精度丢失 */
     subDouble(f,s,digit){

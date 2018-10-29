@@ -5,6 +5,7 @@ import { StorageProvider } from '../../providers/storage/storage';
 import { HttpServicesProvider } from '../../providers/http-services/http-services';
 import { ToastProvider } from '../../providers/toast/toast';
 import { RloginprocessProvider } from '../../providers/rloginprocess/rloginprocess';
+import { AlertProvider } from '../../providers/alert/alert';
 @Component({
   selector: 'page-cart',
   templateUrl: 'cart.html'
@@ -29,7 +30,7 @@ export class CartPage {
 
   public num = 1;/**记录第几次进入购物车且未登陆 */
 
-  constructor(public rlogin:RloginprocessProvider,public navCtrl: NavController,public navParams: NavParams,public config:ConfigProvider,public storage:StorageProvider,public httpservice :HttpServicesProvider,public toast:ToastProvider) {
+  constructor(public alertProvider:AlertProvider,public rlogin:RloginprocessProvider,public navCtrl: NavController,public navParams: NavParams,public config:ConfigProvider,public storage:StorageProvider,public httpservice :HttpServicesProvider,public toast:ToastProvider) {
     this.isIndex = navParams.get("isIndex");
     if(this.isIndex==undefined){
       this.isIndex = true;
@@ -97,19 +98,42 @@ export class CartPage {
     }
     this.sumPrice();  
   }
+  /**加法 精度问题 */
+  add(num1,num2){
+    var r1,r2,m;
+       try{
+           r1 = num1.toString().split('.')[1].length;
+       }catch(e){
+           r1 = 0;
+       }
+       try{
+           r2=num2.toString().split(".")[1].length;
+       }catch(e){
+           r2=0;
+       }
+       m=Math.pow(10,Math.max(r1,r2));
+       // return (num1*m+num2*m)/m;
+       return Math.round(num1*m+num2*m)/m;
+  }
+  /**乘法 */
+  mul(num1,num2){
+    var m=0,s1=num1.toString(),s2=num2.toString(); 
+    try{m+=s1.split(".")[1].length}catch(e){};
+    try{m+=s2.split(".")[1].length}catch(e){};
+    return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
+  }
 /*计算总价*/
   sumPrice(){
       var tempAllPrice=0;
       for(let i=0;i<this.list.length;i++){
         for(let j=0;j<this.list[i].productList.length;j++){
           if(this.list[i].productList[j].checked==true){
-            tempAllPrice+=this.list[i].productList[j].productnum*this.list[i].productList[j].productSpec.price;
+            tempAllPrice = this.add(tempAllPrice,this.mul(this.list[i].productList[j].productnum,this.list[i].productList[j].productSpec.price));
           }
         }
       }
       this.allPrice=tempAllPrice;
   }
-
   //数量变化  双向数据绑定
 
   decCount(item){
@@ -275,7 +299,7 @@ export class CartPage {
           "product":tempArr
         });
       }else{
-        alert('您还没有选中数据');
+        this.alertProvider.showAlert("未选中数据",'',['确定']);
       }
    }
 }

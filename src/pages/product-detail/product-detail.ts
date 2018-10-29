@@ -182,7 +182,7 @@ export class ProductDetailPage {
     var param = {"productId":this.id};
     this.httpService.requestData(api,(data)=>{
       if(data.error_code!=0){
-        this.alertProvider.showAlert('数据获取异常','',['ok']);
+        this.alertProvider.showAlert('数据获取异常','',['确定']);
         return;
       }
       this.share(data.data.product.productname,"https://appnew.zhongjianmall.com"+data.data.product.productphotos[0].photo);
