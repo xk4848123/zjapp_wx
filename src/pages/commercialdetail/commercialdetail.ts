@@ -14,8 +14,6 @@ import { AlertController } from 'ionic-angular';
 
 import { DomSanitizer } from '@angular/platform-browser';
 
-
-import { TitlePage } from '../title/title';
 /**
  * Generated class for the CommercialdetailPage page.
  *
@@ -62,13 +60,5 @@ export class CommercialdetailPage {
               this.toast.showToast('数据获取异常');
             }
           });
-  }
-  //课程详情页
-  pushDetail(curId){
-    this.navCtrl.push('TitlePage',{
-       curId:curId
-    })
-
-    
   }
 }
