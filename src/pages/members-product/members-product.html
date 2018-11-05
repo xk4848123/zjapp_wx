@@ -4,23 +4,23 @@
   <ion-navbar class="title">
         <ion-title>会员专区</ion-title>
   </ion-navbar>
-
+  <div class="sub_header">
+    <div (tap)="search_sale()">
+      <span [ngClass]="{'tcl':selectTag=='sale'}">销量</span>
+    </div>
+    <div (tap)="search_price()" [ngClass]="{'down':priceFlag}" class="up">
+        <span [ngClass]="{'tcl':selectTag=='price'}">价格</span>
+    </div>
+    <div (tap)="search_elec()" [ngClass]="{'down':elecFlag}" class="up">
+        <span [ngClass]="{'tcl':selectTag=='elec'}">积分</span>
+    </div>
+</div>
 </ion-header>
 
 
 <ion-content>       
       <div class="list_content">
-        <div class="sub_header">
-          <div (tap)="search_sale()">
-            <span [ngClass]="{'tcl':selectTag=='sale'}">销量</span>
-          </div>
-          <div (tap)="search_price()" [ngClass]="{'down':priceFlag}" class="up">
-              <span [ngClass]="{'tcl':selectTag=='price'}">价格</span>
-          </div>
-          <div (tap)="search_elec()" [ngClass]="{'down':elecFlag}" class="up">
-              <span [ngClass]="{'tcl':selectTag=='elec'}">积分</span>
-          </div>
-      </div>
+      
     
         <ion-list inset>
           <ng-container *ngFor="let item of list">
