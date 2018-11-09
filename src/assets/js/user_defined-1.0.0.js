@@ -12,9 +12,12 @@ global_wxFunciton.isloadWxConfig = function () {
 }
 global_wxFunciton.global_wxIsLoad = 0;
 
-
-window.onload = function () {
+var globalHideLoading = function(){
   $("#global-loading").hide();
+}
+window.onload = function () {
+  
+  setTimeout(globalHideLoading,500);
   //1.app增添全局漂浮首页导航
   var globalRootDiv = document.getElementById("globalRoot");
   var globalClientWidth = this.document.body.clientWidth;
