@@ -14,6 +14,7 @@ global_wxFunciton.global_wxIsLoad = 0;
 
 
 window.onload = function () {
+  $("#global-loading").hide();
   //1.app增添全局漂浮首页导航
   var globalRootDiv = document.getElementById("globalRoot");
   var globalClientWidth = this.document.body.clientWidth;

@@ -57,6 +57,7 @@
     <div onclick="goOrder()" id="button1" class="other_button">返回订单</div>
     <div onclick="goUser()" id="button2" class="other_button">查看现金</div>
     <div onclick="goUser()" id="button3" class="other_button">查看等级</div>
+    <div onclick="goActivity()" id="button4" class="other_button">返回双11活动</div>
 </body>
 <script>
     var theRequest = new Object();
@@ -69,9 +70,12 @@
             var button2 = document.getElementById("button2");
             button2.style.display = "block";
         }
-        else {
+        else if (theRequest.type == 3) {
             var button3 = document.getElementById("button3");
             button3.style.display = "block";
+        }else{
+            var button4 = document.getElementById("button4");
+            button4.style.display = "block";
         }
 
     }
@@ -83,6 +87,9 @@
     }
     var goUser = function () {
         window.location.href = "https://appnew.zhongjianmall.com/zjapp/wechat/index.html#/mywallet";
+    }
+    var goActivity = function (){
+        window.location.href = "https://appnew.zhongjianmall.com/activity";
     }
     window.onload = function () {
         //获取url中的参数
