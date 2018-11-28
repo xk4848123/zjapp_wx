@@ -359,6 +359,15 @@ export class ConfirmVipOrderPage {
       this.deduCash = 0;
       this.deduVip = this.allAmount>=this.remainVip ? this.remainVip : this.allAmount;
       this.realpay = this.subDouble(this.allAmount,this.deduVip,2);
+    }else{
+      this.redBak = false;
+      this.buy = false;
+      this.cash = false;
+      this.deduRedback = 0;
+      this.dedubuy = 0;
+      this.deduCash = 0;
+      this.deduVip = 0;
+      this.realpay = this.subDouble(this.allAmount,this.deduVip,2);
     }
   }
   goBuy(){
