@@ -19,8 +19,6 @@
 
 <ion-content>
   <div class="list_content">
-
-
     <ion-list inset>
       <ng-container *ngFor="let item of list">
         <ion-item (tap)="goProduct(item.product.id)" class="tlist" *ngIf="item.product.productphotos.length>0">
@@ -31,7 +29,7 @@
           <p class="tp">
             <span style="color:red">¥</span><span style="color: red;font-size: 1.8rem" class="price">&nbsp;{{item.product.price}}</span>
             <span style="float: right;">
-              <ion-icon style="color: #e0532d;" name="ios-redBack"></ion-icon><span style="color:#e0532d;font-size: 1.2rem">&nbsp;{{item.product.elecnum}}</span>
+              <ion-icon style="color: #e0532d;" name="ios-redBack"></ion-icon><span style="color:#e0532d;font-size: 1.2rem">&nbsp;{{item.product.elecnum/2}}</span>
             </span>
           </p>
         </ion-item>
