@@ -18,15 +18,15 @@
 </ion-header>
 
 
-<ion-content>       
+<ion-content>
       <div class="list_content">
-      
-    
+
+
         <ion-list inset>
           <ng-container *ngFor="let item of list">
             <ion-item (tap)="goProduct(item.id)" class="tlist" *ngIf="item.productphotos.length>0">
                 <ion-thumbnail  item-left>
-                  <img [src]="config.domain+item.productphotos[0].photo"/>            
+                  <img [src]="config.domain+item.productphotos[0].photo"/>
                 </ion-thumbnail>
                 <h2 class="tpn"> {{item.productname}}</h2>
                 <p class="tp">
@@ -34,12 +34,12 @@
                     <span style="float: right;"><ion-icon style="color: #e0532d;" name="ios-redBack"></ion-icon><span style="color:#e0532d;font-size: 1.2rem">&nbsp;{{item.elecnum/2}}</span></span>
                 </p>
               </ion-item>
-          </ng-container>  
+          </ng-container>
         </ion-list>
         <ion-infinite-scroll (ionInfinite)="doLoadMore($event)" thr>
             <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="加载中...">
             </ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </div>
-    
+
 </ion-content>
