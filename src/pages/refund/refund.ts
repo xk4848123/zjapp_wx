@@ -23,20 +23,20 @@ import { ConfigProvider } from '../../providers/config/config';
 })
 export class RefundPage {
 orderNo:string;
+temp:any;
 public  getSelectedText='';
   constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,public storage: StorageProvider,
      public httpService: HttpServicesProvider, public toast: ToastProvider,private rclogin: RloginprocessProvider) {
       this.orderNo = this.navParams.get('orderNo');
+      this.temp = this.navParams.get('item');
   }
   confirm(){
     let token = this.storage.get('token');
     if (token) {
       //api请求
       let api = 'v1/PersonalCenter/ApplyRefund/' + token; 
-      console.log(api);
        //发送请求提交退款申请
       this.httpService.doFormPost(api,{orderNo: this.orderNo,memo: this.getSelectedText} ,(data) => {
-        console.log(data);
           if (data.error_code == 0) {           
            //申请退款处理
            this.navCtrl.push('OrderhandletransferPage',{type: '3',behindHandle:'behindHandle'});

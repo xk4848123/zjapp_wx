@@ -24,19 +24,19 @@ import { RloginprocessProvider } from '../../providers/rloginprocess/rloginproce
 export class SalereturnPage {
   public  getSelectedText='';
   orderNo:string;
+  temp:any;
   constructor(public navCtrl: NavController, public navParams: NavParams,private config: ConfigProvider,
     public storage: StorageProvider, public httpService: HttpServicesProvider, public toast: ToastProvider,private rclogin: RloginprocessProvider) {
     this.orderNo = this.navParams.get('orderNo');
+    this.temp = this.navParams.get('item');
   }
   confirm(){
     let token = this.storage.get('token');
     if (token) {
       //api请求
       let api = 'v1/PersonalCenter/ApplySaleReturn/' +token;
-      console.log(api);
        //发送请求提交退货申请
        this.httpService.doFormPost(api,{orderNo:this.orderNo,memo: this.getSelectedText} ,(data) => {
-        console.log(data);
           if (data.error_code == 0) {
             //申请退货后处理
             this.navCtrl.push('OrderhandletransferPage',{type: '4',behindHandle:'behindHandle'});
